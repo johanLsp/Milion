@@ -20,6 +20,17 @@
       <FILE id="qdQQEM" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RVO1xU" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="RVO1xA" name="DigitalResonator.cpp" compile="1" resource="0"
+            file="Source/DigitalResonator.cpp"/>
+      <FILE id="RVO1xB" name="DigitalResonator.h" compile="0" resource="0"
+            file="Source/DigitalResonator.h"/>
+      <FILE id="RVO1xC" name="ImpulseGenerator.cpp" compile="1" resource="0"
+            file="Source/ImpulseGenerator.cpp"/>
+      <FILE id="RVO1xD" name="ImpulseGenerator.h" compile="0" resource="0"
+            file="Source/ImpulseGenerator.h"/>
+      <FILE id="RVO1xE" name="VoicingSource.cpp" compile="1" resource="0"
+            file="Source/VoicingSource.cpp"/>
+      <FILE id="RVO1xF" name="VoicingSource.h" compile="0" resource="0" file="Source/VoicingSource.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

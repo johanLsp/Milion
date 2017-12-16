@@ -2,6 +2,7 @@
 #define MILION_MILIONAUDIOPROCESSOR_H_
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "VoicingSource.h"
 
 class MilionAudioProcessor  : public AudioProcessor {
  public:
@@ -44,6 +45,7 @@ class MilionAudioProcessor  : public AudioProcessor {
     float m_frequency;
     float m_currentPhase;
     float m_phaseIncrement;
+    VoicingSource m_voicingSource;
 };
 
 #endif  // MILION_MILIONAUDIOPROCESSOR_H_

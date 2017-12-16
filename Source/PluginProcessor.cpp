@@ -120,6 +120,9 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+
+    m_voicingSource.processBlock(buffer);
+    /*
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
@@ -131,6 +134,8 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
             channelData[sample] = sin(m_currentPhase);
         }
     }
+
+*/
 }
 
 //==============================================================================
