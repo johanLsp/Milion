@@ -6,14 +6,15 @@
 
 class ImpulseGenerator {
  public:
-    ImpulseGenerator(double sampleRate);
+    ImpulseGenerator(int sampleRate);
     ~ImpulseGenerator();
 
     void processBlock(AudioSampleBuffer& buffer);
+    void setFrequency(int frequency);
 
  private:
-    double m_sampleRate;
-    double m_frequency;
+    int m_sampleRate;
+    int m_frequency;
     uint64_t m_currentTick;
 };
 

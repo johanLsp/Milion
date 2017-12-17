@@ -14,6 +14,7 @@ MilionAudioProcessor::MilionAudioProcessor()
 #endif
 {
     m_currentPhase = 0;
+    file.open("test.dat");
 }
 
 MilionAudioProcessor::~MilionAudioProcessor() {
@@ -77,8 +78,7 @@ void MilionAudioProcessor::changeProgramName(int index, const String& newName) {
 
 //==============================================================================
 void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    m_voicingSource.prepareToPlay(getNumInputChannels(), sampleRate, samplesPerBlock);
 }
 
 void MilionAudioProcessor::releaseResources() {
@@ -121,21 +121,12 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
 
-    m_voicingSource.processBlock(buffer);
-    /*
-    for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
+    m_voicingSource.processBlock(buffer, midiMessages);
+    const float* channelData = buffer.getReadPointer(0);
 
     for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
-        m_currentPhase += m_phaseIncrement;
-        for (int channel = 0; channel < totalNumInputChannels; ++channel) {
-            float* channelData = buffer.getWritePointer(channel);
-
-            channelData[sample] = sin(m_currentPhase);
-        }
+        file << channelData[sample] << std::endl;
     }
-
-*/
 }
 
 //==============================================================================
@@ -164,3 +155,22 @@ void MilionAudioProcessor::setStateInformation(const void* data, int sizeInBytes
 AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
     return new MilionAudioProcessor();
 }
+
+
+
+void MilionAudioProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
+    m_voicingSource.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    //processor->noteOn(midiChannel, midiNoteNumber, velocity);
+    //MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
+    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
+    //sendToOutputs (m);
+}
+
+//==============================================================================
+void MilionAudioProcessor::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
+{
+    //MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber, velocity));
+    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
+    //sendToOutputs (m);
+}
+

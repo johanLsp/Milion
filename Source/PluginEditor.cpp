@@ -14,7 +14,7 @@ MilionAudioProcessorEditor::MilionAudioProcessorEditor(MilionAudioProcessor& p)
     m_frequencyKnob.setTextValueSuffix(" Hz");
     m_frequencyKnob.addListener(this);
 
-    m_keyboardState.addListener (this);
+    m_keyboardState.addListener(&processor);
 
 
     addAndMakeVisible(&m_frequencyKnob);
@@ -26,7 +26,6 @@ MilionAudioProcessorEditor::~MilionAudioProcessorEditor() {
 }
 
 void MilionAudioProcessorEditor::sliderValueChanged(Slider* slider) {
-    processor.setFrequency(m_frequencyKnob.getValue());
 }
 
 //==============================================================================
@@ -42,20 +41,4 @@ void MilionAudioProcessorEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(50));
     m_frequencyKnob.setBounds(area.reduced(50));
-}
-
-
-void MilionAudioProcessorEditor::handleNoteOn (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
-{
-    //MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
-    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
-    //sendToOutputs (m);
-}
-
-//==============================================================================
-void MilionAudioProcessorEditor::handleNoteOff (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
-{
-    //MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber, velocity));
-    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
-    //sendToOutputs (m);
 }

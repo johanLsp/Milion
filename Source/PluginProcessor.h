@@ -3,8 +3,10 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "VoicingSource.h"
+#include <fstream>
 
-class MilionAudioProcessor  : public AudioProcessor {
+class MilionAudioProcessor  : public AudioProcessor, 
+                              public MidiKeyboardStateListener {
  public:
     MilionAudioProcessor();
     ~MilionAudioProcessor();
@@ -37,6 +39,8 @@ class MilionAudioProcessor  : public AudioProcessor {
 
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
+    void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
  private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionAudioProcessor)
@@ -46,6 +50,7 @@ class MilionAudioProcessor  : public AudioProcessor {
     float m_currentPhase;
     float m_phaseIncrement;
     VoicingSource m_voicingSource;
+    std::ofstream file;
 };
 
 #endif  // MILION_MILIONAUDIOPROCESSOR_H_

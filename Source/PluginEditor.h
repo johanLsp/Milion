@@ -5,16 +5,13 @@
 #include "PluginProcessor.h"
 
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,
-                                    private Slider::Listener,
-                                    private MidiKeyboardStateListener {
+                                    private Slider::Listener {
  public:
     explicit MilionAudioProcessorEditor(MilionAudioProcessor&);
     ~MilionAudioProcessorEditor();
 
     void paint(Graphics&) override;
     void resized() override;
-    void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
-    void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
  private:
     void sliderValueChanged(Slider* slider) override;
