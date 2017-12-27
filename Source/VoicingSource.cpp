@@ -20,14 +20,64 @@ VoicingSource::VoicingSource() {
     m_AVS = pow(10, 20/10);
 }
 
+const String VoicingSource::getName() const {
+    return "Voicing Source Processor";
+}
+
+void VoicingSource::releaseResources() {
+}
+
+double VoicingSource::getTailLengthSeconds() const {
+    return 0.0;
+}
+
+bool VoicingSource::acceptsMidi() const {
+    return false;
+}
+
+bool VoicingSource::producesMidi() const {
+    return false;
+}
+
+AudioProcessorEditor* VoicingSource::createEditor() {
+
+}
+
+bool VoicingSource::hasEditor() const {
+    return false;
+}
+
+int VoicingSource::getNumPrograms() {
+    return 1;
+}
+
+int VoicingSource::getCurrentProgram() {
+    return 0;
+}
+
+void VoicingSource::setCurrentProgram(int index) {
+}
+
+const String VoicingSource::getProgramName(int index) {
+    return {};
+}
+
+void VoicingSource::changeProgramName(int index, const String& newName) {
+}
+
+void VoicingSource::getStateInformation(MemoryBlock& destData) {
+}
+
+void VoicingSource::setStateInformation(const void* data, int sizeInBytes) {
+}
 
 void VoicingSource::setFrequency(int frequency) {
     m_pImpulseGenerator->setFrequency(frequency);
 }
 
 
-void VoicingSource::prepareToPlay(int numChannels, double sampleRate, int samplesPerBlock) {
-    m_RGZBuffer.setSize(numChannels, samplesPerBlock);
+void VoicingSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    m_RGZBuffer.setSize(getNumInputChannels(), samplesPerBlock);
 }
 
 
