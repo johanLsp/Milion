@@ -78,7 +78,40 @@ void MilionAudioProcessor::changeProgramName(int index, const String& newName) {
 
 //==============================================================================
 void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
-    m_voicingSource.prepareToPlay(getNumInputChannels(), sampleRate, samplesPerBlock);
+    m_graph.setPlayConfigDetails(
+        getNumInputChannels(),
+        getNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+    m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
+    m_graph.prepareToPlay(sampleRate, samplesPerBlock);
+
+    AudioProcessorGraph::AudioGraphIOProcessor* input = 
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
+
+    AudioProcessorGraph::AudioGraphIOProcessor* output = 
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
+
+    m_voicingSource.setPlayConfigDetails(
+        getNumInputChannels(),
+        getNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+        m_graph.addNode(input, 1);
+        m_graph.addNode(output, 2);
+        m_graph.addNode(&m_voicingSource, 3);
+
+        m_graph.addConnection(1, 0, 3, 0);
+        m_graph.addConnection(1, 1, 3, 1);
+        m_graph.addConnection(3, 0, 2, 0);
+        m_graph.addConnection(3, 1, 2, 1);
+
+
+
+    //m_voicingSource.prepareToPlay(getNumInputChannels(), sampleRate, samplesPerBlock);
 }
 
 void MilionAudioProcessor::releaseResources() {
@@ -121,12 +154,12 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
 
-    m_voicingSource.processBlock(buffer, midiMessages);
+    m_graph.processBlock(buffer, midiMessages);
     const float* channelData = buffer.getReadPointer(0);
 
-    for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
-        file << channelData[sample] << std::endl;
-    }
+    //for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
+    //    file << channelData[sample] << std::endl;
+    //}
 }
 
 //==============================================================================

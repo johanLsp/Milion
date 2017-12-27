@@ -49,6 +49,8 @@ class MilionAudioProcessor  : public AudioProcessor,
     float m_frequency;
     float m_currentPhase;
     float m_phaseIncrement;
+
+    AudioProcessorGraph m_graph;
     VoicingSource m_voicingSource;
     std::ofstream file;
 };
