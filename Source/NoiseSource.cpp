@@ -62,8 +62,6 @@ void NoiseSource::setFrequency(int frequency) {
 
 
 void NoiseSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
-    m_LPF.setCenterFrequency(0);
-    m_LPF.setBandwidth(100);
 
     m_graph.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -92,6 +90,9 @@ void NoiseSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
+    m_LPF.setType(DifferenceProcessor::Type::LOWPASS);
+
+
 
 
     m_graph.addNode(input, 1);

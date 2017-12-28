@@ -60,8 +60,10 @@ void AntiResonator::setStateInformation(const void* data, int sizeInBytes) {
 void AntiResonator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     setCenterFrequency(1000);
     setBandwidth(100);
-    m_x = 0;
-    m_xx = 0;
+    for (int channel = 0; channel < 2; channel++) {
+        m_x[channel] = 0;
+        m_xx[channel] = 0;
+    }
 }
 
 void AntiResonator::setCenterFrequency(double frequency) {
@@ -88,24 +90,17 @@ void AntiResonator::setBandwidth(double bandwidth) {
     m_A = 1 / m_A;
 }
 
-double AntiResonator::tick(double input) {
-    double output = m_A * input
-                  + m_B * m_x
-                  + m_C * m_xx;
-    m_xx = m_x;
-    m_x = input;
-    return output;
-}
-
-
 void AntiResonator::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMessages) {
-    float* channelData = buffer.getWritePointer(0);
-    for (int i = 0; i < buffer.getNumSamples(); i++) {
-        double input = channelData[i];
-        channelData[i] = m_A * input
-                       + m_B * m_x
-                       + m_C * m_xx;
-        m_x = m_x;
-        m_x = input;
+
+    for (int channel = 0; channel < getTotalNumInputChannels(); channel++) {
+        float* channelData = buffer.getWritePointer(channel);
+        for (int i = 0; i < buffer.getNumSamples(); i++) {
+            double input = channelData[i];
+            channelData[i] = m_A * input
+                        + m_B * m_x[channel]
+                        + m_C * m_xx[channel];
+            m_xx[channel] = m_x[channel];
+            m_x[channel] = input;
+        }
     }
 }

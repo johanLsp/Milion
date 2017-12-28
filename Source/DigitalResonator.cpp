@@ -1,10 +1,6 @@
 #include "DigitalResonator.h"
 
 DigitalResonator::DigitalResonator() {
-    setCenterFrequency(1000);
-    setBandwidth(100);
-    m_y = 0;
-    m_yy = 0;
 }
 
 DigitalResonator::~DigitalResonator() {
@@ -62,6 +58,12 @@ void DigitalResonator::setStateInformation(const void* data, int sizeInBytes) {
 }
 
 void DigitalResonator::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    setCenterFrequency(1000);
+    setBandwidth(100);
+    for (int channel = 0; channel < 2; channel++) {
+        m_y[channel] = 0;
+        m_yy[channel] = 0;
+    }
 }
 
 void DigitalResonator::setCenterFrequency(double frequency) {
@@ -80,23 +82,15 @@ void DigitalResonator::setBandwidth(double bandwidth) {
     m_A = 1 - m_B - m_C;
 }
 
-double DigitalResonator::tick(double input) {
-    double output = m_A * input
-                  + m_B * m_y
-                  + m_C * m_yy;
-    m_yy = m_y;
-    m_y = output;
-    return output;
-}
-
-
 void DigitalResonator::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMessages) {
-    float* channelData = buffer.getWritePointer(0);
-    for (int i = 0; i < buffer.getNumSamples(); i++) {
-        channelData[i] = m_A * channelData[i]
-                       + m_B * m_y
-                       + m_C * m_yy;
-        m_yy = m_y;
-        m_y = channelData[i];
+    for(int channel = 0; channel < getTotalNumInputChannels(); channel++) {
+        float* channelData = buffer.getWritePointer(channel);
+        for (int i = 0; i < buffer.getNumSamples(); i++) {
+            channelData[i] = m_A * channelData[i]
+                        + m_B * m_y[channel]
+                        + m_C * m_yy[channel];
+            m_yy[channel] = m_y[channel];
+            m_y[channel] = channelData[i];
+        }
     }
 }

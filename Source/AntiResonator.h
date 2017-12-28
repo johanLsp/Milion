@@ -32,7 +32,6 @@ class AntiResonator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    double tick(double input);
     void setCenterFrequency(double frequency);
     void setBandwidth(double bandwidth);
 
@@ -43,7 +42,7 @@ class AntiResonator : public AudioProcessor {
     double m_A;
     double m_B;
     double m_C;
-    double m_x, m_xx;
+    double m_x[2];
+    double m_xx[2];
 };
-
 #endif  // MILION_MILIONANTIRESONATOR_H

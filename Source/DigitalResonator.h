@@ -32,7 +32,6 @@ class DigitalResonator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    double tick(double input);
     void setCenterFrequency(double frequency);
     void setBandwidth(double bandwidth);
 
@@ -43,7 +42,8 @@ class DigitalResonator : public AudioProcessor {
     double m_A;
     double m_B;
     double m_C;
-    double m_y, m_yy;
+    double m_y[2];
+    double m_yy[2];
 };
 
 #endif  // MILION_MILIONDIGITALRESONATOR_H

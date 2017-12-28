@@ -10,6 +10,8 @@
 
 class DifferenceProcessor : public AudioProcessor {
  public:
+    enum class Type {LOWPASS, HIGHPASS};
+ public:
     DifferenceProcessor();
     ~DifferenceProcessor();
 
@@ -32,8 +34,11 @@ class DifferenceProcessor : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
+    void setType(Type type);
+
  private:
-    double m_xx;
+    double m_xx[2];
+    int m_sign;
 };
 
 #endif  // MILION_MILIONDIFFERENCEPROCESSOR_H

@@ -2,7 +2,7 @@
 #define MILION_MILIONNOISESOURCE_H_
 
 #include "RandomGenerator.h"
-#include "DigitalResonator.h"
+#include "DifferenceProcessor.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class NoiseSource : public AudioProcessor {
@@ -34,7 +34,7 @@ class NoiseSource : public AudioProcessor {
     AudioProcessorGraph m_graph;
 
     RandomGenerator m_randomGenerator;
-    DigitalResonator m_LPF;
+    DifferenceProcessor m_LPF;
 };
 
 #endif  // MILION_MILIONNOISESOURCE_H_

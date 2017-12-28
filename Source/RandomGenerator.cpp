@@ -72,6 +72,9 @@ void RandomGenerator::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMe
 
     for (int i = 0; i < buffer.getNumSamples(); i++) {
         m_currentTick++;
-        channelData[i] = (2 * m_random.nextDouble() - 1) * cos(2 * M_PI * m_currentTick / period);
+        for (int channel = 0; channel < getTotalNumInputChannels(); channel++) {
+            float* channelData = buffer.getWritePointer(channel);
+            channelData[i] = (2 * m_random.nextDouble() - 1) * cos(2 * M_PI * m_currentTick / period);
+        }
     }
 }
