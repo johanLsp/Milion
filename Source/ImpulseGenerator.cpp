@@ -5,7 +5,8 @@ ImpulseGenerator::ImpulseGenerator()
     m_frequency = 1000;
 }
 
-
+ImpulseGenerator::~ImpulseGenerator() {
+}
 
 const String ImpulseGenerator::getName() const {
     return "Impulse Generator Processor";
@@ -27,7 +28,6 @@ bool ImpulseGenerator::producesMidi() const {
 }
 
 AudioProcessorEditor* ImpulseGenerator::createEditor() {
-
 }
 
 bool ImpulseGenerator::hasEditor() const {
@@ -58,10 +58,14 @@ void ImpulseGenerator::getStateInformation(MemoryBlock& destData) {
 void ImpulseGenerator::setStateInformation(const void* data, int sizeInBytes) {
 }
 
+void ImpulseGenerator::prepareToPlay(double sampleRate, int samplesPerBlock) {
+}
+
 void ImpulseGenerator::setFrequency(int frequency) {
     m_frequency = frequency;
 }
-void ImpulseGenerator::processBlock(AudioSampleBuffer& buffer) {
+
+void ImpulseGenerator::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMessages) {
     int period = getSampleRate() / m_frequency;
     float* channelData = buffer.getWritePointer(0);
 

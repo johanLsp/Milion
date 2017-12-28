@@ -6,7 +6,7 @@ MilionAudioProcessorEditor::MilionAudioProcessorEditor(MilionAudioProcessor& p)
     : AudioProcessorEditor(&p),
       processor(p),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
-      {
+    {
     m_frequencyKnob.setSliderStyle(Slider::Rotary);
     m_frequencyKnob.setRange(100, 10000, 1);
     m_frequencyKnob.setSkewFactor(0.5);

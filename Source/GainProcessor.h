@@ -1,13 +1,13 @@
-#ifndef MILION_MILIONIMPULSEGENERATOR_H_
-#define MILION_MILIONIMPULSEGENERATOR_H_
+#ifndef MILION_MILIONGAINPROCESSOR_H_
+#define MILION_MILIONGAINPROCESSOR_H_
 
+#include <cmath>
 #include "../JuceLibraryCode/JuceHeader.h"
 
-
-class ImpulseGenerator : public AudioProcessor {
+class GainProcessor : public AudioProcessor {
  public:
-    ImpulseGenerator();
-    ~ImpulseGenerator();
+    GainProcessor();
+    ~GainProcessor();
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
@@ -28,11 +28,10 @@ class ImpulseGenerator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setFrequency(int frequency);
+    void setGain(double gain);
 
  private:
-    int m_frequency;
-    uint64_t m_currentTick;
+    double m_gain;
 };
 
-#endif  // MILION_MILIONIMPULSEGENERATOR_H_
+#endif  // MILION_MILIONGAINPROCESSOR_H

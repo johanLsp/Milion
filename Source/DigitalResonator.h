@@ -10,7 +10,7 @@
 
 class DigitalResonator : public AudioProcessor {
  public:
-    explicit DigitalResonator();
+    DigitalResonator();
     ~DigitalResonator();
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -36,8 +36,6 @@ class DigitalResonator : public AudioProcessor {
     void setCenterFrequency(double frequency);
     void setBandwidth(double bandwidth);
 
-    void processBlock(AudioSampleBuffer& buffer);
-
  private:
     double m_centerFrequency;
     double m_bandwidth;
@@ -48,4 +46,4 @@ class DigitalResonator : public AudioProcessor {
     double m_y, m_yy;
 };
 
-#endif  // MILION_MILIONDIGITALRESONATOR_H_
+#endif  // MILION_MILIONDIGITALRESONATOR_H

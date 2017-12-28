@@ -3,11 +3,13 @@
 
 #include "ImpulseGenerator.h"
 #include "DigitalResonator.h"
+#include "GainProcessor.h"
 #include "../JuceLibraryCode/JuceHeader.h"
 
 class VoicingSource : public AudioProcessor {
  public:
     VoicingSource();
+    ~VoicingSource();
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     const String getName() const override;
@@ -30,17 +32,14 @@ class VoicingSource : public AudioProcessor {
     void setFrequency(int frequency);
 
  private:
-    ImpulseGenerator* m_pImpulseGenerator;
-    DigitalResonator* m_pRGP;
-    DigitalResonator* m_pRGZ;
-    DigitalResonator* m_pRGS;
+    AudioProcessorGraph m_graph;
 
-    AudioSampleBuffer m_RGZBuffer;
-
-    double m_AV;
-    double m_AVS;
-
-    int m_sampleRate;
+    ImpulseGenerator m_impulseGenerator;
+    DigitalResonator m_RGP;
+    DigitalResonator m_RGZ;
+    DigitalResonator m_RGS;
+    GainProcessor m_AV;
+    GainProcessor m_AVS;
 };
 
 #endif  // MILION_MILIONVOICINGSOURCE_H_

@@ -31,6 +31,9 @@
       <FILE id="RVO1xE" name="VoicingSource.cpp" compile="1" resource="0"
             file="Source/VoicingSource.cpp"/>
       <FILE id="RVO1xF" name="VoicingSource.h" compile="0" resource="0" file="Source/VoicingSource.h"/>
+      <FILE id="RVO1xG" name="GainProcessor.cpp" compile="1" resource="0"
+            file="Source/GainProcessor.cpp"/>
+      <FILE id="RVO1xH" name="GainProcessor.h" compile="0" resource="0" file="Source/GainProcessor.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

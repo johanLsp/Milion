@@ -7,6 +7,9 @@ DigitalResonator::DigitalResonator() {
     m_yy = 0;
 }
 
+DigitalResonator::~DigitalResonator() {
+}
+
 const String DigitalResonator::getName() const {
     return "Digital Resonator Processor";
 }
@@ -58,8 +61,10 @@ void DigitalResonator::getStateInformation(MemoryBlock& destData) {
 void DigitalResonator::setStateInformation(const void* data, int sizeInBytes) {
 }
 
+void DigitalResonator::prepareToPlay(double sampleRate, int samplesPerBlock) {
+}
+
 void DigitalResonator::setCenterFrequency(double frequency) {
-    
     m_centerFrequency = frequency;
     m_C = -exp(-2.0 * M_PI * m_bandwidth / getSampleRate());
     m_B = 2 * exp(-1.0 * M_PI * m_bandwidth / getSampleRate())
@@ -85,7 +90,7 @@ double DigitalResonator::tick(double input) {
 }
 
 
-void DigitalResonator::processBlock(AudioSampleBuffer& buffer) {
+void DigitalResonator::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMessages) {
     float* channelData = buffer.getWritePointer(0);
     for (int i = 0; i < buffer.getNumSamples(); i++) {
         channelData[i] = m_A * channelData[i]
