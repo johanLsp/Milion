@@ -34,6 +34,25 @@
       <FILE id="RVO1xG" name="GainProcessor.cpp" compile="1" resource="0"
             file="Source/GainProcessor.cpp"/>
       <FILE id="RVO1xH" name="GainProcessor.h" compile="0" resource="0" file="Source/GainProcessor.h"/>
+      <FILE id="RVO1xI" name="CascadeVocal.cpp" compile="1" resource="0"
+            file="Source/CascadeVocal.cpp"/>
+      <FILE id="RVO1xJ" name="CascadeVocal.h" compile="0" resource="0" file="Source/CascadeVocal.h"/>
+      <FILE id="RVO1xK" name="ParallelVocal.cpp" compile="1" resource="0"
+            file="Source/ParallelVocal.cpp"/>
+      <FILE id="RVO1xL" name="ParallelVocal.h" compile="0" resource="0" file="Source/ParallelVocal.h"/>
+      <FILE id="RVO1xM" name="DifferenceProcessor.cpp" compile="1" resource="0"
+            file="Source/DifferenceProcessor.cpp"/>
+      <FILE id="RVO1xN" name="DifferenceProcessor.h" compile="0" resource="0"
+            file="Source/DifferenceProcessor.h"/>
+      <FILE id="RVO1xO" name="NoiseSource.cpp" compile="1" resource="0" file="Source/NoiseSource.cpp"/>
+      <FILE id="RVO1xP" name="NoiseSource.h" compile="0" resource="0" file="Source/NoiseSource.h"/>
+      <FILE id="RVO1xQ" name="RandomGenerator.cpp" compile="1" resource="0"
+            file="Source/RandomGenerator.cpp"/>
+      <FILE id="RVO1xR" name="RandomGenerator.h" compile="0" resource="0"
+            file="Source/RandomGenerator.h"/>
+      <FILE id="RVO1xQ" name="AntiResonator.cpp" compile="1" resource="0"
+            file="Source/AntiResonator.cpp"/>
+      <FILE id="RVO1xR" name="AntiResonator.h" compile="0" resource="0" file="Source/AntiResonator.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

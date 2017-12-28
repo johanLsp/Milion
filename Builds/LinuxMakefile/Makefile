@@ -98,6 +98,12 @@ OBJECTS_SHARED_CODE := \
   $(JUCE_OBJDIR)/ImpulseGenerator_908f20e7.o \
   $(JUCE_OBJDIR)/VoicingSource_c7bed8cb.o \
   $(JUCE_OBJDIR)/GainProcessor_dbb8ddb4.o \
+  $(JUCE_OBJDIR)/CascadeVocal_f8f01c2a.o \
+  $(JUCE_OBJDIR)/ParallelVocal_59d2b10f.o \
+  $(JUCE_OBJDIR)/DifferenceProcessor_859b87b6.o \
+  $(JUCE_OBJDIR)/NoiseSource_e41de7b6.o \
+  $(JUCE_OBJDIR)/RandomGenerator_24ee3db1.o \
+  $(JUCE_OBJDIR)/AntiResonator_3cbc48f4.o \
   $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o \
   $(JUCE_OBJDIR)/include_juce_audio_devices_63111d02.o \
   $(JUCE_OBJDIR)/include_juce_audio_formats_15f82001.o \
@@ -181,6 +187,36 @@ $(JUCE_OBJDIR)/VoicingSource_c7bed8cb.o: ../../Source/VoicingSource.cpp
 $(JUCE_OBJDIR)/GainProcessor_dbb8ddb4.o: ../../Source/GainProcessor.cpp
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
 	@echo "Compiling GainProcessor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/CascadeVocal_f8f01c2a.o: ../../Source/CascadeVocal.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling CascadeVocal.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/ParallelVocal_59d2b10f.o: ../../Source/ParallelVocal.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling ParallelVocal.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/DifferenceProcessor_859b87b6.o: ../../Source/DifferenceProcessor.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling DifferenceProcessor.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/NoiseSource_e41de7b6.o: ../../Source/NoiseSource.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling NoiseSource.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/RandomGenerator_24ee3db1.o: ../../Source/RandomGenerator.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling RandomGenerator.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/AntiResonator_3cbc48f4.o: ../../Source/AntiResonator.cpp
+	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
+	@echo "Compiling AntiResonator.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_SHARED_CODE) $(JUCE_CFLAGS_SHARED_CODE) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o: ../../JuceLibraryCode/include_juce_audio_basics.cpp
