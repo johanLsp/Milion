@@ -3,6 +3,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "VoicingSource.h"
+#include "NoiseSource.h"
+#include "CascadeVocal.h"
+#include "ParallelVocal.h"
+#include "GainProcessor.h"
+#include "DifferenceProcessor.h"
 #include <fstream>
 
 class MilionAudioProcessor  : public AudioProcessor, 
@@ -52,6 +57,13 @@ class MilionAudioProcessor  : public AudioProcessor,
 
     AudioProcessorGraph m_graph;
     VoicingSource m_voicingSource;
+    NoiseSource m_noiseSource;
+    CascadeVocal m_cascadeVocal;
+    ParallelVocal m_parallelVocal;
+    GainProcessor m_AH;
+    GainProcessor m_AF;
+    DifferenceProcessor m_DIFF;
+
     std::ofstream file;
 };
 
