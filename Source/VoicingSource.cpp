@@ -11,8 +11,8 @@ VoicingSource::VoicingSource() {
     m_RGZ.setBandwidth(6000);
 
     //  20dB
-    m_AV.setGain(20);
-    m_AVS.setGain(20);
+    m_AV.setGain(1);
+    m_AVS.setGain(1);
 }
 
 VoicingSource::~VoicingSource() {
