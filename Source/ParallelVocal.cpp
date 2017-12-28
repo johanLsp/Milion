@@ -84,8 +84,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R1.setCenterFrequency(0);
-    m_R1.setBandwidth(100);
+    m_R1.setCenterFrequency(450);
+    m_R1.setBandwidth(50);
 
     m_AN.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -98,7 +98,7 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_RNP.setCenterFrequency(0);
+    m_RNP.setCenterFrequency(250);
     m_RNP.setBandwidth(100);
 
     m_A2.setPlayConfigDetails(
@@ -112,8 +112,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R2.setCenterFrequency(0);
-    m_R2.setBandwidth(100);
+    m_R2.setCenterFrequency(1450);
+    m_R2.setBandwidth(70);
 
     m_A3.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -126,8 +126,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R3.setCenterFrequency(0);
-    m_R3.setBandwidth(100);
+    m_R3.setCenterFrequency(2450);
+    m_R3.setBandwidth(110);
 
     m_A4.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -140,8 +140,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R4.setCenterFrequency(0);
-    m_R4.setBandwidth(100);
+    m_R4.setCenterFrequency(3300);
+    m_R4.setBandwidth(250);
 
     m_A5.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -154,8 +154,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R5.setCenterFrequency(0);
-    m_R5.setBandwidth(100);
+    m_R5.setCenterFrequency(3750);
+    m_R5.setBandwidth(200);
 
     m_A6.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -168,8 +168,8 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_R6.setCenterFrequency(0);
-    m_R6.setBandwidth(100);
+    m_R6.setCenterFrequency(4900);
+    m_R6.setBandwidth(1000);
 
     m_AB.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -183,6 +183,7 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
+    m_DIFF.setType(DifferenceProcessor::Type::HIGHPASS);
 
     m_graph.addNode(input, 1);
     m_graph.addNode(output, 2);
