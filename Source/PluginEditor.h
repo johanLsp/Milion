@@ -3,6 +3,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "Utils/TriggeredScope.h"
 
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
@@ -13,13 +14,17 @@ class MilionAudioProcessorEditor  : public AudioProcessorEditor,
     void paint(Graphics&) override;
     void resized() override;
 
+    void pushBuffer(const float* data, int numSamples);
+
+
  private:
     void sliderValueChanged(Slider* slider) override;
 
 
  private:
     MilionAudioProcessor& processor;
-    Slider m_frequencyKnob;
+    TriggeredScope m_oscilloscope;
+    
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 

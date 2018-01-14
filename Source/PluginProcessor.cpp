@@ -95,43 +95,12 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
         new AudioProcessorGraph::AudioGraphIOProcessor(
             AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
 
-    m_voicingSource.setPlayConfigDetails(
+    m_FMOP1.setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-
-    m_noiseSource.setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_cascadeVocal.setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_parallelVocal.setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_AH.setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_AF.setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_DIFF.setPlayConfigDetails(
+    m_FMOP2.setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
@@ -139,53 +108,20 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     m_graph.addNode(input, 1);
     m_graph.addNode(output, 2);
-    m_graph.addNode(&m_voicingSource, 3);
-    m_graph.addNode(&m_noiseSource, 4);
-    m_graph.addNode(&m_cascadeVocal, 5);
-    m_graph.addNode(&m_parallelVocal, 6);
-    m_graph.addNode(&m_AH, 7);
-    m_graph.addNode(&m_AF, 8);
-    m_graph.addNode(&m_DIFF, 9);
+    m_graph.addNode(&m_FMOP1, 3);
+    m_graph.addNode(&m_FMOP2, 4);
 
-    // Input -> VoicingSource
+    m_FMOP1.setFrequencyMultiplier(2);
+    m_FMOP2.setFrequencyMultiplier(3);
+
     m_graph.addConnection(1, 0, 3, 0);
     m_graph.addConnection(1, 1, 3, 1);
-    // Input -> NoiseSource
-    m_graph.addConnection(1, 0, 4, 0);
-    m_graph.addConnection(1, 1, 4, 1);
 
-    // NoiseSource -> AH
-    m_graph.addConnection(4, 0, 7, 0);
-    m_graph.addConnection(4, 1, 7, 1);
-    // NoiseSource -> AF
-    m_graph.addConnection(4, 0, 8, 0);
-    m_graph.addConnection(4, 1, 8, 1);
+    m_graph.addConnection(3, 0, 4, 0);
+    m_graph.addConnection(3, 1, 4, 1);
 
-    // AH -> CascadeVocal
-    //m_graph.addConnection(7, 0, 5, 0);
-    //m_graph.addConnection(7, 1, 5, 1);
-    // AF -> ParallelVocal 2-3
-    m_graph.addConnection(8, 0, 6, 2);
-    m_graph.addConnection(8, 1, 6, 3);
-
-    // CascadeVocal -> Output
-    //m_graph.addConnection(5, 0, 2, 0);
-    //m_graph.addConnection(5, 1, 2, 1);
-
-    // ParallelVocal -> Output
-    //m_graph.addConnection(6, 0, 2, 0);
-    //m_graph.addConnection(6, 1, 2, 1);
-
-    // VoicingSource -> CascadeVocal
-    //m_graph.addConnection(3, 0, 5, 0);
-    //m_graph.addConnection(3, 1, 5, 1);
-    // VoicingSource -> ParallelVocal 0-1
-    //m_graph.addConnection(3, 0, 6, 0);
-    //m_graph.addConnection(3, 1, 6, 1);
-
-    // VoicingSource -> Output
-    m_graph.addConnection(3, 0, 2, 0);
-    m_graph.addConnection(3, 1, 2, 1);
+    m_graph.addConnection(4, 0, 2, 0);
+    m_graph.addConnection(4, 1, 2, 1);
 }
 
 void MilionAudioProcessor::releaseResources() {
@@ -231,9 +167,11 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
     m_graph.processBlock(buffer, midiMessages);
     const float* channelData = buffer.getReadPointer(0);
 
-    //for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
-    //    file << channelData[sample] << std::endl;
-    //}
+
+    MilionAudioProcessorEditor* editor = 
+        reinterpret_cast<MilionAudioProcessorEditor*>(getActiveEditor());
+        editor->pushBuffer(channelData, buffer.getNumSamples());
+
 }
 
 //==============================================================================
@@ -266,7 +204,14 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
 
 
 void MilionAudioProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
-    m_voicingSource.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    m_FMOP1.handleNoteOn(midiChannel, midiNoteNumber, velocity);
+    m_FMOP2.handleNoteOn(midiChannel, midiNoteNumber, velocity);
+
+    //m_voicingSource.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    //m_impulseGenerator.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    //m_randomGenerator.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+    //m_R1.setCenterFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
+
     //processor->noteOn(midiChannel, midiNoteNumber, velocity);
     //MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
     //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);

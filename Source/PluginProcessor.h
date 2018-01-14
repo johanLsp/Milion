@@ -9,6 +9,7 @@
 #include "GainProcessor.h"
 #include "DifferenceProcessor.h"
 #include <fstream>
+#include "Operator/FMOperator.h"
 
 class MilionAudioProcessor  : public AudioProcessor, 
                               public MidiKeyboardStateListener {
@@ -63,6 +64,22 @@ class MilionAudioProcessor  : public AudioProcessor,
     GainProcessor m_AH;
     GainProcessor m_AF;
     DifferenceProcessor m_DIFF;
+
+
+
+    ImpulseGenerator m_impulseGenerator;
+    RandomGenerator m_randomGenerator;
+    DigitalResonator m_R1;
+    GainProcessor m_A1;
+    DigitalResonator m_R2;
+    GainProcessor m_A2;
+    DigitalResonator m_R3;
+    GainProcessor m_A3;
+    DigitalResonator m_R4;
+    GainProcessor m_A4;
+
+    FMOperator m_FMOP1;
+    FMOperator m_FMOP2;
 
     std::ofstream file;
 };

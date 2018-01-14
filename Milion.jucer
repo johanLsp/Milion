@@ -53,6 +53,15 @@
       <FILE id="RVO1xQ" name="AntiResonator.cpp" compile="1" resource="0"
             file="Source/AntiResonator.cpp"/>
       <FILE id="RVO1xR" name="AntiResonator.h" compile="0" resource="0" file="Source/AntiResonator.h"/>
+      <FILE id="RVO1xS" name="BaseOperator.cpp" compile="1" resource="0"
+            file="Source/Operator/BaseOperator.cpp"/>
+      <FILE id="RVO1xT" name="BaseOperator.h" compile="0" resource="0" file="Source/Operator/BaseOperator.h"/>
+      <FILE id="RVO1xU" name="FMOperator.cpp" compile="1" resource="0" file="Source/Operator/FMOperator.cpp"/>
+      <FILE id="RVO1xV" name="FMOperator.h" compile="0" resource="0" file="Source/Operator/FMOperator.h"/>
+      <FILE id="RVO1xW" name="TriggeredScope.cpp" compile="1" resource="0"
+            file="Source/Utils/TriggeredScope.cpp"/>
+      <FILE id="RVO1xX" name="TriggeredScope.h" compile="0" resource="0"
+            file="Source/Utils/TriggeredScope.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
