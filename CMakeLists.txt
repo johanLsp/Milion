@@ -79,9 +79,11 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Operator/BaseOperator.h"
   x         .         .         "src/Operator/FMOperator.cpp"
   .         .         .         "src/Operator/FMOperator.h"
-  x         .         .         "src/Utils/TriggeredScope.cpp"
-  .         .         .         "src/Utils/TriggeredScope.h"
-  .         .         .         "src/Utils/FifoBuffer.h"
+)
+
+jucer_project_module(
+  dRowAudio
+  PATH "modules"
 )
 
 jucer_project_module(

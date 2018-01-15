@@ -3,7 +3,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
-#include "Utils/TriggeredScope.h"
 
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
@@ -23,7 +22,7 @@ class MilionAudioProcessorEditor  : public AudioProcessorEditor,
 
  private:
     MilionAudioProcessor& processor;
-    TriggeredScope m_oscilloscope;
+    drow::TriggeredScope m_oscilloscope;
     
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
