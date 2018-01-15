@@ -57,6 +57,7 @@ class MilionAudioProcessor  : public AudioProcessor,
     float m_phaseIncrement;
 
     AudioProcessorGraph m_graph;
+/*
     VoicingSource m_voicingSource;
     NoiseSource m_noiseSource;
     CascadeVocal m_cascadeVocal;
@@ -77,7 +78,7 @@ class MilionAudioProcessor  : public AudioProcessor,
     GainProcessor m_A3;
     DigitalResonator m_R4;
     GainProcessor m_A4;
-
+*/
     FMOperator m_FMOP1;
     FMOperator m_FMOP2;
 

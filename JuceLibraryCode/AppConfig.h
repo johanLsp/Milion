@@ -48,6 +48,7 @@
 #define JUCE_USE_DARK_SPLASH_SCREEN 1
 
 //==============================================================================
+#define JUCE_MODULE_AVAILABLE_dRowAudio                     1
 #define JUCE_MODULE_AVAILABLE_juce_audio_basics             1
 #define JUCE_MODULE_AVAILABLE_juce_audio_devices            1
 #define JUCE_MODULE_AVAILABLE_juce_audio_formats            1
@@ -65,6 +66,21 @@
 #define JUCE_MODULE_AVAILABLE_juce_video                    1
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
+
+//==============================================================================
+// dRowAudio flags:
+
+#ifndef    DROWAUDIO_USE_FFTREAL
+ //#define DROWAUDIO_USE_FFTREAL 1
+#endif
+
+#ifndef    DROWAUDIO_USE_SOUNDTOUCH
+ //#define DROWAUDIO_USE_SOUNDTOUCH 1
+#endif
+
+#ifndef    DROWAUDIO_USE_CURL
+ //#define DROWAUDIO_USE_CURL 1
+#endif
 
 //==============================================================================
 // juce_audio_devices flags:
@@ -267,13 +283,13 @@
 // Audio plugin settings..
 
 #ifndef  JucePlugin_Build_VST
- #define JucePlugin_Build_VST              1
+ #define JucePlugin_Build_VST              0
 #endif
 #ifndef  JucePlugin_Build_VST3
  #define JucePlugin_Build_VST3             0
 #endif
 #ifndef  JucePlugin_Build_AU
- #define JucePlugin_Build_AU               1
+ #define JucePlugin_Build_AU               0
 #endif
 #ifndef  JucePlugin_Build_AUv3
  #define JucePlugin_Build_AUv3             0
