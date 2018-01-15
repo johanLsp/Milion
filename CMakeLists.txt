@@ -71,17 +71,17 @@ jucer_audio_plugin_settings(
 jucer_project_files("JuceDemoPlugin"
 # Compile   Xcode     Binary
 #           Resource  Resource
-  x         .         .         "Source/PluginEditor.cpp"
-  .         .         .         "Source/PluginEditor.h"
-  x         .         .         "Source/PluginProcessor.cpp"
-  .         .         .         "Source/PluginProcessor.h"
-  x         .         .         "Source/Operator/BaseOperator.cpp"
-  .         .         .         "Source/Operator/BaseOperator.h"
-  x         .         .         "Source/Operator/FMOperator.cpp"
-  .         .         .         "Source/Operator/FMOperator.h"
-  x         .         .         "Source/Utils/TriggeredScope.cpp"
-  .         .         .         "Source/Utils/TriggeredScope.h"
-  .         .         .         "Source/Utils/FifoBuffer.h"
+  x         .         .         "src/PluginEditor.cpp"
+  .         .         .         "src/PluginEditor.h"
+  x         .         .         "src/PluginProcessor.cpp"
+  .         .         .         "src/PluginProcessor.h"
+  x         .         .         "src/Operator/BaseOperator.cpp"
+  .         .         .         "src/Operator/BaseOperator.h"
+  x         .         .         "src/Operator/FMOperator.cpp"
+  .         .         .         "src/Operator/FMOperator.h"
+  x         .         .         "src/Utils/TriggeredScope.cpp"
+  .         .         .         "src/Utils/TriggeredScope.h"
+  .         .         .         "src/Utils/FifoBuffer.h"
 )
 
 jucer_project_module(
@@ -175,12 +175,6 @@ jucer_project_module(
   # JUCE_USE_XCURSOR
 )
 
-#jucer_project_module(
-#  juce_gui_extra
-#  PATH "modules"
-  # JUCE_WEB_BROWSER
-  # JUCE_ENABLE_LIVE_CONSTANT_EDITOR
-#)
 
 jucer_export_target(
   "Xcode (MacOSX)"
