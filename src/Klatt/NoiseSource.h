@@ -1,20 +1,13 @@
-#ifndef MILION_MILIONDIFFERENCEPROCESSOR_H_
-#define MILION_MILIONDIFFERENCEPROCESSOR_H_
+#ifndef MILION_MILIONNOISESOURCE_H_
+#define MILION_MILIONNOISESOURCE_H_
 
-#include <cmath>
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "RandomGenerator.h"
+#include "DifferenceProcessor.h"
 
-/* Digital filter - output is given by :
- * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
- */
-
-class DifferenceProcessor : public AudioProcessor {
+class NoiseSource : public AudioProcessor {
  public:
-    enum class Type {LOWPASS, HIGHPASS};
- public:
-    DifferenceProcessor();
-    ~DifferenceProcessor();
-
+    NoiseSource();
+    ~NoiseSource();
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     const String getName() const override;
@@ -34,11 +27,13 @@ class DifferenceProcessor : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setType(Type type);
+    void setFrequency(int frequency);
 
  private:
-    double m_xx[2];
-    int m_sign;
+    AudioProcessorGraph m_graph;
+
+    RandomGenerator m_randomGenerator;
+    DifferenceProcessor m_LPF;
 };
 
-#endif  // MILION_MILIONDIFFERENCEPROCESSOR_H
+#endif  // MILION_MILIONNOISESOURCE_H_

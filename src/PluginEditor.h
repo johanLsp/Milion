@@ -1,7 +1,6 @@
 #ifndef MILION_MILIONPLUGINEDITOR_H_
 #define MILION_MILIONPLUGINEDITOR_H_
 
-#include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,

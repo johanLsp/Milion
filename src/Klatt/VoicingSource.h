@@ -1,18 +1,15 @@
-#ifndef MILION_MILIONDIGITALRESONATOR_H_
-#define MILION_MILIONDIGITALRESONATOR_H_
+#ifndef MILION_MILIONVOICINGSOURCE_H_
+#define MILION_MILIONVOICINGSOURCE_H_
 
-#include <cmath>
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "ImpulseGenerator.h"
+#include "DigitalResonator.h"
+#include "AntiResonator.h"
+#include "GainProcessor.h"
 
-/* Digital filter - output is given by :
- * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
- */
-
-class DigitalResonator : public AudioProcessor {
+class VoicingSource : public AudioProcessor {
  public:
-    DigitalResonator();
-    ~DigitalResonator();
-
+    VoicingSource();
+    ~VoicingSource();
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     const String getName() const override;
@@ -32,18 +29,17 @@ class DigitalResonator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setCenterFrequency(double frequency);
-    void setBandwidth(double bandwidth);
+    void setFrequency(int frequency);
 
  private:
-    double m_centerFrequency;
-    double m_bandwidth;
+    AudioProcessorGraph m_graph;
 
-    double m_A;
-    double m_B;
-    double m_C;
-    double m_y[2];
-    double m_yy[2];
+    ImpulseGenerator m_impulseGenerator;
+    DigitalResonator m_RGP;
+    AntiResonator m_RGZ;
+    DigitalResonator m_RGS;
+    GainProcessor m_AV;
+    GainProcessor m_AVS;
 };
 
-#endif  // MILION_MILIONDIGITALRESONATOR_H
+#endif  // MILION_MILIONVOICINGSOURCE_H_

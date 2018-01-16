@@ -1,17 +1,11 @@
-#ifndef MILION_MILIONANTIRESONATOR_H_
-#define MILION_MILIONANTIRESONATOR_H_
+#ifndef MILION_MILIONRANDOMGENERATOR_H_
+#define MILION_MILIONRANDOMGENERATOR_H_
 
-#include <cmath>
-#include "../JuceLibraryCode/JuceHeader.h"
 
-/* Anti filter - output is given by :
- * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
- */
-
-class AntiResonator : public AudioProcessor {
+class RandomGenerator : public AudioProcessor {
  public:
-    AntiResonator();
-    ~AntiResonator();
+    RandomGenerator();
+    ~RandomGenerator();
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
@@ -32,17 +26,12 @@ class AntiResonator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setCenterFrequency(double frequency);
-    void setBandwidth(double bandwidth);
+    void setFrequency(int frequency);
 
  private:
-    double m_centerFrequency;
-    double m_bandwidth;
-
-    double m_A;
-    double m_B;
-    double m_C;
-    double m_x[2];
-    double m_xx[2];
+    int m_frequency;
+    uint64_t m_currentTick;
+    Random m_random;
 };
-#endif  // MILION_MILIONANTIRESONATOR_H
+
+#endif  // MILION_MILIONRANDOMGENERATOR_H_

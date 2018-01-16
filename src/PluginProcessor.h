@@ -1,15 +1,17 @@
 #ifndef MILION_MILIONAUDIOPROCESSOR_H_
 #define MILION_MILIONAUDIOPROCESSOR_H_
 
-#include "../JuceLibraryCode/JuceHeader.h"
-#include "VoicingSource.h"
-#include "NoiseSource.h"
-#include "CascadeVocal.h"
-#include "ParallelVocal.h"
-#include "GainProcessor.h"
-#include "DifferenceProcessor.h"
-#include <fstream>
+// This should be included at least once somewhere in the project
+#include "JuceHeader.h"
+#include "Klatt/VoicingSource.h"
+#include "Klatt/NoiseSource.h"
+#include "Klatt/CascadeVocal.h"
+#include "Klatt/ParallelVocal.h"
+#include "Klatt/GainProcessor.h"
+#include "Klatt/DifferenceProcessor.h"
 #include "Operator/FMOperator.h"
+#include <fstream>
+
 
 class MilionAudioProcessor  : public AudioProcessor, 
                               public MidiKeyboardStateListener {

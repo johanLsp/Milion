@@ -1,14 +1,17 @@
-#ifndef MILION_MILIONCASCADEVOCAL_H_
-#define MILION_MILIONCASCADEVOCAL_H_
+#ifndef MILION_MILIONDIGITALRESONATOR_H_
+#define MILION_MILIONDIGITALRESONATOR_H_
 
-#include "DigitalResonator.h"
-#include "AntiResonator.h"
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <cmath>
 
-class CascadeVocal : public AudioProcessor {
+/* Digital filter - output is given by :
+ * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
+ */
+
+class DigitalResonator : public AudioProcessor {
  public:
-    CascadeVocal();
-    ~CascadeVocal();
+    DigitalResonator();
+    ~DigitalResonator();
+
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     const String getName() const override;
@@ -28,16 +31,18 @@ class CascadeVocal : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
- private:
-    AudioProcessorGraph m_graph;
+    void setCenterFrequency(double frequency);
+    void setBandwidth(double bandwidth);
 
-    DigitalResonator m_RNP;
-    AntiResonator m_RNZ;
-    DigitalResonator m_R1;
-    DigitalResonator m_R2;
-    DigitalResonator m_R3;
-    DigitalResonator m_R4;
-    DigitalResonator m_R5;
+ private:
+    double m_centerFrequency;
+    double m_bandwidth;
+
+    double m_A;
+    double m_B;
+    double m_C;
+    double m_y[2];
+    double m_yy[2];
 };
 
-#endif  // MILION_MILIONCASCADEVOCAL_H_
+#endif  // MILION_MILIONDIGITALRESONATOR_H

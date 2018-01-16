@@ -1,13 +1,12 @@
-#ifndef MILION_MILIONRANDOMGENERATOR_H_
-#define MILION_MILIONRANDOMGENERATOR_H_
+#ifndef MILION_MILIONGAINPROCESSOR_H_
+#define MILION_MILIONGAINPROCESSOR_H_
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <cmath>
 
-
-class RandomGenerator : public AudioProcessor {
+class GainProcessor : public AudioProcessor {
  public:
-    RandomGenerator();
-    ~RandomGenerator();
+    GainProcessor();
+    ~GainProcessor();
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
@@ -28,12 +27,10 @@ class RandomGenerator : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setFrequency(int frequency);
+    void setGain(double gain);
 
  private:
-    int m_frequency;
-    uint64_t m_currentTick;
-    Random m_random;
+    double m_gain;
 };
 
-#endif  // MILION_MILIONRANDOMGENERATOR_H_
+#endif  // MILION_MILIONGAINPROCESSOR_H

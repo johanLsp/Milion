@@ -1,16 +1,19 @@
-#ifndef MILION_MILIONVOICINGSOURCE_H_
-#define MILION_MILIONVOICINGSOURCE_H_
+#ifndef MILION_MILIONDIFFERENCEPROCESSOR_H_
+#define MILION_MILIONDIFFERENCEPROCESSOR_H_
 
-#include "ImpulseGenerator.h"
-#include "DigitalResonator.h"
-#include "AntiResonator.h"
-#include "GainProcessor.h"
-#include "../JuceLibraryCode/JuceHeader.h"
+#include <cmath>
 
-class VoicingSource : public AudioProcessor {
+/* Digital filter - output is given by :
+ * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
+ */
+
+class DifferenceProcessor : public AudioProcessor {
  public:
-    VoicingSource();
-    ~VoicingSource();
+    enum class Type {LOWPASS, HIGHPASS};
+ public:
+    DifferenceProcessor();
+    ~DifferenceProcessor();
+
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     const String getName() const override;
@@ -30,17 +33,11 @@ class VoicingSource : public AudioProcessor {
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void setFrequency(int frequency);
+    void setType(Type type);
 
  private:
-    AudioProcessorGraph m_graph;
-
-    ImpulseGenerator m_impulseGenerator;
-    DigitalResonator m_RGP;
-    AntiResonator m_RGZ;
-    DigitalResonator m_RGS;
-    GainProcessor m_AV;
-    GainProcessor m_AVS;
+    double m_xx[2];
+    int m_sign;
 };
 
-#endif  // MILION_MILIONVOICINGSOURCE_H_
+#endif  // MILION_MILIONDIFFERENCEPROCESSOR_H

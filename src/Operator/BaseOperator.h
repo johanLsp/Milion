@@ -2,8 +2,6 @@
 #define MILION_MILIONBASEOPERATOR_H_
 
 #include <cmath>
-#include "../JuceLibraryCode/JuceHeader.h"
-
 
 class BaseOperator : public AudioProcessor {
  public:
