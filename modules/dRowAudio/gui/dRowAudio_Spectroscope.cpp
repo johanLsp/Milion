@@ -40,6 +40,12 @@ Spectroscope::Spectroscope (int fftSizeLog2)
 {
 	setOpaque (true);
 
+	OptionalScopedPointer<TimeSliceThread> newThread (new TimeSliceThread ("Spectroscope Rendering Thread"), true);
+	backgroundThreadToUse = newThread;
+	backgroundThreadToUse->startThread (1);
+        
+    backgroundThreadToUse->addTimeSliceClient (this);
+
 	fftEngine.setWindowType (Window::Hann);
 	numBins = fftEngine.getFFTProperties().fftSizeHalved;
     
@@ -53,6 +59,10 @@ Spectroscope::Spectroscope (int fftSizeLog2)
 
 Spectroscope::~Spectroscope()
 {
+	backgroundThreadToUse->removeTimeSliceClient (this);
+
+    if (backgroundThreadToUse.willDeleteObject())
+        backgroundThreadToUse->stopThread (500);
 }
 
 void Spectroscope::resized()

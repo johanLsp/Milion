@@ -5,13 +5,16 @@
 MilionAudioProcessorEditor::MilionAudioProcessorEditor(MilionAudioProcessor& p)
     : AudioProcessorEditor(&p),
       processor(p),
+      m_spectroscope(12),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
     {
     m_keyboardState.addListener(&processor);
 
+    m_spectroscope.setLogFrequencyDisplay(true);
     addAndMakeVisible(&m_oscilloscope);
+    addAndMakeVisible(&m_spectroscope);
     addAndMakeVisible(&m_midiKeyboard);
-    setSize(400, 300);
+    setSize(800, 400);
 }
 
 MilionAudioProcessorEditor::~MilionAudioProcessorEditor() {
@@ -30,12 +33,14 @@ void MilionAudioProcessorEditor::paint(Graphics& g) {
 
 void MilionAudioProcessorEditor::resized() {
     Rectangle<int> area = getLocalBounds();
-    m_midiKeyboard.setBounds(area.removeFromBottom(50));
-    m_oscilloscope.setBounds(area);
+    m_midiKeyboard.setBounds(area.removeFromBottom(100));
+    m_oscilloscope.setBounds(area.removeFromRight(400));
+    m_spectroscope.setBounds(area);
 }
 
 
 void MilionAudioProcessorEditor::pushBuffer(const float* data, int numSamples) {
     m_oscilloscope.addSamples(data, numSamples);
+    m_spectroscope.copySamples(data, numSamples);
 }
 

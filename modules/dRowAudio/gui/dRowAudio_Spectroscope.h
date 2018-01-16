@@ -97,6 +97,9 @@ private:
 	
 	bool logFrequency;
     Image scopeImage;
+
+    OptionalScopedPointer<TimeSliceThread> backgroundThreadToUse;
+
     
     void renderScopeImage();
     

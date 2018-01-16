@@ -170,8 +170,8 @@ void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& m
 
     MilionAudioProcessorEditor* editor = 
         reinterpret_cast<MilionAudioProcessorEditor*>(getActiveEditor());
-        editor->pushBuffer(channelData, buffer.getNumSamples());
 
+        if (editor) editor->pushBuffer(channelData, buffer.getNumSamples());
 }
 
 //==============================================================================
