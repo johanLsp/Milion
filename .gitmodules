@@ -1,6 +1,0 @@
-[submodule "modules/JUCE"]
-	path = modules/JUCE
-	url = https://github.com/WeAreROLI/JUCE.git
-[submodule "modules/dRowAudio"]
-	path = modules/dRowAudio
-	url = https://github.com/drowaudio/drowaudio.git
