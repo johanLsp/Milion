@@ -1,6 +1,7 @@
 #include "BaseOperator.h"
 
-BaseOperator::BaseOperator() {
+BaseOperator::BaseOperator(AudioProcessorValueTreeState& vst)
+    : m_parameters(vst) {
 }
 
 BaseOperator::~BaseOperator() {

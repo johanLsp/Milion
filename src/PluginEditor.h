@@ -3,10 +3,12 @@
 
 #include "PluginProcessor.h"
 
+typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
  public:
-    explicit MilionAudioProcessorEditor(MilionAudioProcessor&);
+    explicit MilionAudioProcessorEditor(MilionAudioProcessor&, AudioProcessorValueTreeState& vst);
     ~MilionAudioProcessorEditor();
 
     void paint(Graphics&) override;
@@ -25,6 +27,11 @@ class MilionAudioProcessorEditor  : public AudioProcessorEditor,
     drow::Spectroscope m_spectroscope;
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
+
+    AudioProcessorValueTreeState& m_valueTreeState;
+    Label m_freqMultiplierLabel;
+    Slider m_freqMultiplierSlider;
+    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionAudioProcessorEditor)
 };

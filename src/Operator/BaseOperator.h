@@ -6,7 +6,7 @@
 
 class BaseOperator : public AudioProcessor {
  public:
-    BaseOperator();
+    BaseOperator(AudioProcessorValueTreeState& vst);
     ~BaseOperator();
 
     const String getName() const override;
@@ -25,5 +25,8 @@ class BaseOperator : public AudioProcessor {
 
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
+
+ protected:
+    AudioProcessorValueTreeState& m_parameters;
 };
 #endif  // MILION_MILIONBASEOPERATOR_H_

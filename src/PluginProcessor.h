@@ -83,7 +83,7 @@ class MilionAudioProcessor  : public AudioProcessor,
 */
     FMOperator* m_pFMOP1;
     FMOperator* m_pFMOP2;
-
+    AudioProcessorValueTreeState m_parameters;
     std::ofstream file;
 };
 

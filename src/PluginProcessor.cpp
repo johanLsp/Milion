@@ -2,8 +2,9 @@
 #include "PluginEditor.h"
 
 MilionAudioProcessor::MilionAudioProcessor()
+: m_parameters(*this, nullptr)
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor(BusesProperties()
+    ,  AudioProcessor(BusesProperties()
 #if !JucePlugin_IsMidiEffect
 #if !JucePlugin_IsSynth
                        .withInput("Input",  AudioChannelSet::stereo(), true)
@@ -14,6 +15,8 @@ MilionAudioProcessor::MilionAudioProcessor()
 #endif
 {
     m_currentPhase = 0;
+    m_parameters.state = ValueTree(Identifier("Milion"));
+
     file.open("test.dat");
 }
 
@@ -96,13 +99,13 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
         new AudioProcessorGraph::AudioGraphIOProcessor(
             AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
 
-    m_pFMOP1 = new FMOperator();
+    m_pFMOP1 = new FMOperator(m_parameters);
     m_pFMOP1->setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_pFMOP2 = new FMOperator();
+    m_pFMOP2 = new FMOperator(m_parameters);
     m_pFMOP2->setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
@@ -185,7 +188,7 @@ bool MilionAudioProcessor::hasEditor() const {
 }
 
 AudioProcessorEditor* MilionAudioProcessor::createEditor() {
-    return new MilionAudioProcessorEditor (*this);
+    return new MilionAudioProcessorEditor (*this, m_parameters);
 }
 
 //==============================================================================

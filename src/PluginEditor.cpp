@@ -2,9 +2,11 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-MilionAudioProcessorEditor::MilionAudioProcessorEditor(MilionAudioProcessor& p)
-    : AudioProcessorEditor(&p),
-      processor(p),
+MilionAudioProcessorEditor::MilionAudioProcessorEditor(
+    MilionAudioProcessor& parent, AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor(&parent),
+      m_valueTreeState(vts),
+      processor(parent),
       m_spectroscope(12),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
     {
@@ -15,6 +17,13 @@ MilionAudioProcessorEditor::MilionAudioProcessorEditor(MilionAudioProcessor& p)
     addAndMakeVisible(&m_spectroscope);
     addAndMakeVisible(&m_midiKeyboard);
     setSize(800, 400);
+
+
+
+    m_freqMultiplierLabel.setText ("Frequency Multiplier", dontSendNotification);
+    addAndMakeVisible (m_freqMultiplierLabel);
+    addAndMakeVisible (m_freqMultiplierSlider);
+    m_freqMultiplierAttachment = new SliderAttachment (m_valueTreeState, "freq_multiplier", m_freqMultiplierSlider);
 }
 
 MilionAudioProcessorEditor::~MilionAudioProcessorEditor() {
@@ -34,6 +43,7 @@ void MilionAudioProcessorEditor::paint(Graphics& g) {
 void MilionAudioProcessorEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
+    m_freqMultiplierSlider.setBounds(area.removeFromBottom(50));
     m_oscilloscope.setBounds(area.removeFromRight(400));
     m_spectroscope.setBounds(area);
 }

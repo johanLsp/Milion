@@ -11,6 +11,7 @@
 class FMOperator : public BaseOperator {
 
  public:
+    FMOperator(AudioProcessorValueTreeState& vst);
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
