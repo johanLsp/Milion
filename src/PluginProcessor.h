@@ -81,8 +81,8 @@ class MilionAudioProcessor  : public AudioProcessor,
     DigitalResonator m_R4;
     GainProcessor m_A4;
 */
-    FMOperator m_FMOP1;
-    FMOperator m_FMOP2;
+    FMOperator* m_pFMOP1;
+    FMOperator* m_pFMOP2;
 
     std::ofstream file;
 };

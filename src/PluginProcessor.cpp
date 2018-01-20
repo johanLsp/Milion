@@ -18,6 +18,7 @@ MilionAudioProcessor::MilionAudioProcessor()
 }
 
 MilionAudioProcessor::~MilionAudioProcessor() {
+    m_graph.clear();
 }
 
 void MilionAudioProcessor::setFrequency(float frequency) {
@@ -95,12 +96,14 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
         new AudioProcessorGraph::AudioGraphIOProcessor(
             AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
 
-    m_FMOP1.setPlayConfigDetails(
+    m_pFMOP1 = new FMOperator();
+    m_pFMOP1->setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_FMOP2.setPlayConfigDetails(
+    m_pFMOP2 = new FMOperator();
+    m_pFMOP2->setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
@@ -108,11 +111,12 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     m_graph.addNode(input, 1);
     m_graph.addNode(output, 2);
-    m_graph.addNode(&m_FMOP1, 3);
-    m_graph.addNode(&m_FMOP2, 4);
+    m_graph.addNode(m_pFMOP1, 3);
 
-    m_FMOP1.setFrequencyMultiplier(2);
-    m_FMOP2.setFrequencyMultiplier(3);
+    m_graph.addNode(m_pFMOP2, 4);
+
+    m_pFMOP1->setFrequencyMultiplier(2);
+    m_pFMOP2->setFrequencyMultiplier(3);
 
     m_graph.addConnection(1, 0, 3, 0);
     m_graph.addConnection(1, 1, 3, 1);
@@ -122,6 +126,7 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
     m_graph.addConnection(4, 0, 2, 0);
     m_graph.addConnection(4, 1, 2, 1);
+
 }
 
 void MilionAudioProcessor::releaseResources() {
@@ -204,8 +209,8 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
 
 
 void MilionAudioProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
-    m_FMOP1.handleNoteOn(midiChannel, midiNoteNumber, velocity);
-    m_FMOP2.handleNoteOn(midiChannel, midiNoteNumber, velocity);
+    m_pFMOP1->handleNoteOn(midiChannel, midiNoteNumber, velocity);
+    m_pFMOP2->handleNoteOn(midiChannel, midiNoteNumber, velocity);
 
     //m_voicingSource.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
     //m_impulseGenerator.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
