@@ -3,9 +3,9 @@
 
 //==============================================================================
 MilionAudioProcessorEditor::MilionAudioProcessorEditor(
-    MilionAudioProcessor& parent, AudioProcessorValueTreeState& vts)
+    MilionAudioProcessor& parent, ValueTreeStates& vts)
     : AudioProcessorEditor(&parent),
-      m_valueTreeState(vts),
+      m_valueTreeStates(vts),
       processor(parent),
       m_spectroscope(12),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
@@ -18,12 +18,19 @@ MilionAudioProcessorEditor::MilionAudioProcessorEditor(
     addAndMakeVisible(&m_midiKeyboard);
     setSize(800, 400);
 
+    m_freqMultiplierLabel1.setText("Frequency Multiplier", dontSendNotification);
+    addAndMakeVisible(m_freqMultiplierLabel1);
+    addAndMakeVisible(m_freqMultiplierSlider1);
+    m_freqMultiplierAttachment1 = new SliderAttachment(*(m_valueTreeStates[0]),
+                                                        "freq_multiplier",
+                                                        m_freqMultiplierSlider1);
 
-
-    m_freqMultiplierLabel.setText ("Frequency Multiplier", dontSendNotification);
-    addAndMakeVisible (m_freqMultiplierLabel);
-    addAndMakeVisible (m_freqMultiplierSlider);
-    m_freqMultiplierAttachment = new SliderAttachment (m_valueTreeState, "freq_multiplier", m_freqMultiplierSlider);
+    m_freqMultiplierLabel2.setText("Frequency Multiplier", dontSendNotification);
+    addAndMakeVisible (m_freqMultiplierLabel2);
+    addAndMakeVisible (m_freqMultiplierSlider2);
+    m_freqMultiplierAttachment2 = new SliderAttachment(*(m_valueTreeStates[1]),
+                                                        "freq_multiplier",
+                                                        m_freqMultiplierSlider2);
 }
 
 MilionAudioProcessorEditor::~MilionAudioProcessorEditor() {
@@ -35,7 +42,6 @@ void MilionAudioProcessorEditor::sliderValueChanged(Slider* slider) {
 //==============================================================================
 void MilionAudioProcessorEditor::paint(Graphics& g) {
     g.fillAll(getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
-
     g.setColour(Colours::white);
     g.setFont(15.0f);
 }
@@ -43,14 +49,13 @@ void MilionAudioProcessorEditor::paint(Graphics& g) {
 void MilionAudioProcessorEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
-    m_freqMultiplierSlider.setBounds(area.removeFromBottom(50));
+    m_freqMultiplierSlider2.setBounds(area.removeFromBottom(50));
+    m_freqMultiplierSlider1.setBounds(area.removeFromBottom(50));
     m_oscilloscope.setBounds(area.removeFromRight(400));
     m_spectroscope.setBounds(area);
 }
-
 
 void MilionAudioProcessorEditor::pushBuffer(const float* data, int numSamples) {
     m_oscilloscope.addSamples(data, numSamples);
     m_spectroscope.copySamples(data, numSamples);
 }
-

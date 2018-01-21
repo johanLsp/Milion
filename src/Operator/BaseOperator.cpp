@@ -1,14 +1,13 @@
 #include "BaseOperator.h"
 
-BaseOperator::BaseOperator(AudioProcessorValueTreeState& vst)
-    : m_parameters(vst) {
+BaseOperator::BaseOperator() {
 }
 
 BaseOperator::~BaseOperator() {
 }
 
 const String BaseOperator::getName() const {
-    return "Anti Resonator Processor";
+    return "";
 }
 
 void BaseOperator::releaseResources() {
@@ -27,7 +26,6 @@ bool BaseOperator::producesMidi() const {
 }
 
 AudioProcessorEditor* BaseOperator::createEditor() {
-
 }
 
 bool BaseOperator::hasEditor() const {
@@ -56,4 +54,7 @@ void BaseOperator::getStateInformation(MemoryBlock& destData) {
 }
 
 void BaseOperator::setStateInformation(const void* data, int sizeInBytes) {
+}
+
+void BaseOperator::handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {
 }

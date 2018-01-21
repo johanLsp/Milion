@@ -2,9 +2,8 @@
 #include "PluginEditor.h"
 
 MilionAudioProcessor::MilionAudioProcessor()
-: m_parameters(*this, nullptr)
 #ifndef JucePlugin_PreferredChannelConfigurations
-    ,  AudioProcessor(BusesProperties()
+    : AudioProcessor(BusesProperties()
 #if !JucePlugin_IsMidiEffect
 #if !JucePlugin_IsSynth
                        .withInput("Input",  AudioChannelSet::stereo(), true)
@@ -14,19 +13,31 @@ MilionAudioProcessor::MilionAudioProcessor()
                        )
 #endif
 {
-    m_currentPhase = 0;
-    m_parameters.state = ValueTree(Identifier("Milion"));
+    AudioProcessorGraph::AudioGraphIOProcessor* input =
 
-    file.open("test.dat");
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
+
+    AudioProcessorGraph::AudioGraphIOProcessor* output =
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
+    m_graph.addNode(input, 1);
+    m_graph.addNode(output, 2);
+
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_operators[i] = new OperatorContainer();
+        AudioProcessorValueTreeState* vst = new AudioProcessorValueTreeState(*m_operators[i], nullptr);
+        m_valueTreeStates.add(vst);
+        m_operators[i]->setValueTreeState(vst);
+        m_graph.addNode(m_operators[i], i+3);
+    }
 }
 
 MilionAudioProcessor::~MilionAudioProcessor() {
     m_graph.clear();
-}
-
-void MilionAudioProcessor::setFrequency(float frequency) {
-    m_frequency = frequency;
-    m_phaseIncrement = 2 * M_PI * frequency / getSampleRate();
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        delete m_valueTreeStates[i];
+    }
 }
 
 const String MilionAudioProcessor::getName() const {
@@ -62,8 +73,7 @@ double MilionAudioProcessor::getTailLengthSeconds() const {
 }
 
 int MilionAudioProcessor::getNumPrograms() {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1;
 }
 
 int MilionAudioProcessor::getCurrentProgram() {
@@ -88,38 +98,21 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
         sampleRate,
         samplesPerBlock);
     m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
+
+
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_operators[i]->setOperator(Operator::FM);
+        m_operators[i]->setPlayConfigDetails(
+            getTotalNumInputChannels(),
+            getTotalNumOutputChannels(),
+            sampleRate,
+            samplesPerBlock);
+    }
+
+    for (int i = m_graph.getNumConnections() - 1; i >= 0; i--)
+        m_graph.removeConnection(i);
+
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
-
-    AudioProcessorGraph::AudioGraphIOProcessor* input =
-
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
-
-    AudioProcessorGraph::AudioGraphIOProcessor* output =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-
-    m_pFMOP1 = new FMOperator(m_parameters);
-    m_pFMOP1->setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-    m_pFMOP2 = new FMOperator(m_parameters);
-    m_pFMOP2->setPlayConfigDetails(
-        getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-
-    m_graph.addNode(input, 1);
-    m_graph.addNode(output, 2);
-    m_graph.addNode(m_pFMOP1, 3);
-
-    m_graph.addNode(m_pFMOP2, 4);
-
-    m_pFMOP1->setFrequencyMultiplier(2);
-    m_pFMOP2->setFrequencyMultiplier(3);
 
     m_graph.addConnection(1, 0, 3, 0);
     m_graph.addConnection(1, 1, 3, 1);
@@ -130,11 +123,10 @@ void MilionAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     m_graph.addConnection(4, 0, 2, 0);
     m_graph.addConnection(4, 1, 2, 1);
 
+
 }
 
 void MilionAudioProcessor::releaseResources() {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -162,75 +154,42 @@ bool MilionAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) co
 
 void MilionAudioProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages) {
     ScopedNoDenormals noDenormals;
-    const int totalNumInputChannels  = getTotalNumInputChannels();
-    const int totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
-
     m_graph.processBlock(buffer, midiMessages);
-    const float* channelData = buffer.getReadPointer(0);
-
 
     MilionAudioProcessorEditor* editor = 
         reinterpret_cast<MilionAudioProcessorEditor*>(getActiveEditor());
 
-        if (editor) editor->pushBuffer(channelData, buffer.getNumSamples());
+    const float* channelData = buffer.getReadPointer(0);
+    if (editor) editor->pushBuffer(channelData, buffer.getNumSamples());
 }
 
 //==============================================================================
 bool MilionAudioProcessor::hasEditor() const {
-    return true; // (change this to false if you choose to not supply an editor)
+    return true;
 }
 
 AudioProcessorEditor* MilionAudioProcessor::createEditor() {
-    return new MilionAudioProcessorEditor (*this, m_parameters);
+    return new MilionAudioProcessorEditor (*this, m_valueTreeStates);
 }
 
 //==============================================================================
 void MilionAudioProcessor::getStateInformation(MemoryBlock& destData) {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
 }
 
 void MilionAudioProcessor::setStateInformation(const void* data, int sizeInBytes) {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
     return new MilionAudioProcessor();
 }
 
-
-
 void MilionAudioProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
-    m_pFMOP1->handleNoteOn(midiChannel, midiNoteNumber, velocity);
-    m_pFMOP2->handleNoteOn(midiChannel, midiNoteNumber, velocity);
-
-    //m_voicingSource.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    //m_impulseGenerator.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    //m_randomGenerator.setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-    //m_R1.setCenterFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
-
-    //processor->noteOn(midiChannel, midiNoteNumber, velocity);
-    //MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
-    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
-    //sendToOutputs (m);
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_operators[i]->handleNoteOn(midiChannel, midiNoteNumber, velocity);
+    }
 }
 
 //==============================================================================
-void MilionAudioProcessor::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
-{
-    //MidiMessage m (MidiMessage::noteOff (midiChannel, midiNoteNumber, velocity));
-    //m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
-    //sendToOutputs (m);
+void MilionAudioProcessor::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
 }
 

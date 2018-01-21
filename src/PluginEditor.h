@@ -8,7 +8,7 @@ typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 class MilionAudioProcessorEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
  public:
-    explicit MilionAudioProcessorEditor(MilionAudioProcessor&, AudioProcessorValueTreeState& vst);
+    explicit MilionAudioProcessorEditor(MilionAudioProcessor&, ValueTreeStates& vst);
     ~MilionAudioProcessorEditor();
 
     void paint(Graphics&) override;
@@ -28,10 +28,13 @@ class MilionAudioProcessorEditor  : public AudioProcessorEditor,
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 
-    AudioProcessorValueTreeState& m_valueTreeState;
-    Label m_freqMultiplierLabel;
-    Slider m_freqMultiplierSlider;
-    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment;
+    ValueTreeStates& m_valueTreeStates;
+    Label m_freqMultiplierLabel1;
+    Slider m_freqMultiplierSlider1;
+    Label m_freqMultiplierLabel2;
+    Slider m_freqMultiplierSlider2;
+    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment1;
+    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment2;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionAudioProcessorEditor)
 };

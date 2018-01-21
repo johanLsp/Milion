@@ -3,15 +3,13 @@
 
 // This should be included at least once somewhere in the project
 #include "JuceHeader.h"
-#include "Klatt/VoicingSource.h"
-#include "Klatt/NoiseSource.h"
-#include "Klatt/CascadeVocal.h"
-#include "Klatt/ParallelVocal.h"
-#include "Klatt/GainProcessor.h"
-#include "Klatt/DifferenceProcessor.h"
 #include "Operator/FMOperator.h"
+#include "Operator/OperatorContainer.h"
 #include <fstream>
+#include <sstream>
 
+#define NUM_OPERATOR 8
+typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;
 
 class MilionAudioProcessor  : public AudioProcessor, 
                               public MidiKeyboardStateListener {
@@ -59,31 +57,9 @@ class MilionAudioProcessor  : public AudioProcessor,
     float m_phaseIncrement;
 
     AudioProcessorGraph m_graph;
-/*
-    VoicingSource m_voicingSource;
-    NoiseSource m_noiseSource;
-    CascadeVocal m_cascadeVocal;
-    ParallelVocal m_parallelVocal;
-    GainProcessor m_AH;
-    GainProcessor m_AF;
-    DifferenceProcessor m_DIFF;
 
-
-
-    ImpulseGenerator m_impulseGenerator;
-    RandomGenerator m_randomGenerator;
-    DigitalResonator m_R1;
-    GainProcessor m_A1;
-    DigitalResonator m_R2;
-    GainProcessor m_A2;
-    DigitalResonator m_R3;
-    GainProcessor m_A3;
-    DigitalResonator m_R4;
-    GainProcessor m_A4;
-*/
-    FMOperator* m_pFMOP1;
-    FMOperator* m_pFMOP2;
-    AudioProcessorValueTreeState m_parameters;
+    OperatorContainer* m_operators[8];
+    ValueTreeStates m_valueTreeStates;
     std::ofstream file;
 };
 

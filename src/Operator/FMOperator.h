@@ -11,19 +11,18 @@
 class FMOperator : public BaseOperator {
 
  public:
-    FMOperator(AudioProcessorValueTreeState& vst);
+    FMOperator(AudioProcessorValueTreeState* vst);
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
+    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) override;
 
-    void setFrequencyMultiplier(double multiplier);
 
  private:
+    AudioProcessorValueTreeState* m_valueTreeState;
     double m_basePhase;
     double m_modulatedPhase;
 
     double m_frequency;
-    double m_frequencyMultiplier;
     double m_feedbackGain;
 
 };

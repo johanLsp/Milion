@@ -79,6 +79,8 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Operator/BaseOperator.h"
   x         .         .         "src/Operator/FMOperator.cpp"
   .         .         .         "src/Operator/FMOperator.h"
+  x         .         .         "src/Operator/OperatorContainer.cpp"
+  .         .         .         "src/Operator/OperatorContainer.h"
 )
 
 jucer_project_module(

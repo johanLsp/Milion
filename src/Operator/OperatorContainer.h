@@ -1,13 +1,15 @@
-#ifndef MILION_MILIONBASEOPERATOR_H_
-#define MILION_MILIONBASEOPERATOR_H_
+#ifndef MILION_MILIONOPERATORCONTAINER_H_
+#define MILION_MILIONOPERATORCONTAINER_H_
 
-#include <cmath>
 #include "JuceHeader.h"
+#include "FMOperator.h"
 
-class BaseOperator : public AudioProcessor {
+enum class Operator {FM};
+
+class OperatorContainer : public AudioProcessor {
  public:
-    BaseOperator();
-    ~BaseOperator();
+    OperatorContainer();
+    ~OperatorContainer();
 
     const String getName() const override;
     void releaseResources() override;
@@ -25,7 +27,15 @@ class BaseOperator : public AudioProcessor {
 
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
-    virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
 
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+    void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
+    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
+
+    void setValueTreeState(AudioProcessorValueTreeState* vst);
+    void setOperator(Operator op);
+ private:
+    AudioProcessorValueTreeState* m_valueTreeState;
+    BaseOperator* m_pOperator;
 };
-#endif  // MILION_MILIONBASEOPERATOR_H_
+#endif  // MILION_MILIONOPERATORCONTAINER_H_
