@@ -3,7 +3,6 @@
 
 MilionProcessor::MilionProcessor()
     : AudioProcessor(BusesProperties()
-                       .withInput("Input",  AudioChannelSet::stereo(), true)
                        .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
     AudioProcessorGraph::AudioGraphIOProcessor* input =
@@ -54,33 +53,27 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
         m_graph.removeConnection(i);
 
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
-
     m_graph.addConnection(1, 0, 3, 0);
-    m_graph.addConnection(1, 1, 3, 1);
-
     m_graph.addConnection(3, 0, 4, 0);
-    m_graph.addConnection(3, 1, 4, 1);
-
     m_graph.addConnection(4, 0, 2, 0);
-    m_graph.addConnection(4, 1, 2, 1);
 }
 
 void MilionProcessor::releaseResources() {
 }
 
 bool MilionProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
-    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
-        return false;
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+    if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono() &&
+        layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
         return false;
     return true;
 }
 
 void MilionProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages) {
     ScopedNoDenormals noDenormals;
+    buffer.clear();
     m_graph.processBlock(buffer, midiMessages);
 
+    buffer.copyFrom(1, 0, buffer, 0, 0, buffer.getNumSamples());
     MilionEditor* editor = 
         reinterpret_cast<MilionEditor*>(getActiveEditor());
 
@@ -109,4 +102,7 @@ void MilionProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midi
 }
 
 void MilionProcessor::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_operators[i]->handleNoteOff(midiChannel, midiNoteNumber, velocity);
+    }
 }

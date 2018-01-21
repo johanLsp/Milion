@@ -44,7 +44,7 @@ class MilionProcessor  : public AudioProcessor,
  private:
     AudioProcessorGraph m_graph;
     OperatorContainer* m_operators[8];
-    ValueTreeStates m_valueTreeStates;    
+    ValueTreeStates m_valueTreeStates;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionProcessor)
 };
