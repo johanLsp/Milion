@@ -1,16 +1,16 @@
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
+#include "MilionProcessor.h"
+#include "MilionEditor.h"
 
 //==============================================================================
-MilionAudioProcessorEditor::MilionAudioProcessorEditor(
-    MilionAudioProcessor& parent, ValueTreeStates& vts)
+MilionEditor::MilionEditor(
+    MilionProcessor& parent, ValueTreeStates& vts)
     : AudioProcessorEditor(&parent),
       m_valueTreeStates(vts),
-      processor(parent),
+      m_processor(parent),
       m_spectroscope(12),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
     {
-    m_keyboardState.addListener(&processor);
+    m_keyboardState.addListener(&m_processor);
 
     m_spectroscope.setLogFrequencyDisplay(true);
     addAndMakeVisible(&m_oscilloscope);
@@ -33,20 +33,19 @@ MilionAudioProcessorEditor::MilionAudioProcessorEditor(
                                                         m_freqMultiplierSlider2);
 }
 
-MilionAudioProcessorEditor::~MilionAudioProcessorEditor() {
+MilionEditor::~MilionEditor() {
 }
 
-void MilionAudioProcessorEditor::sliderValueChanged(Slider* slider) {
+void MilionEditor::sliderValueChanged(Slider* slider) {
 }
 
-//==============================================================================
-void MilionAudioProcessorEditor::paint(Graphics& g) {
+void MilionEditor::paint(Graphics& g) {
     g.fillAll(getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
     g.setColour(Colours::white);
     g.setFont(15.0f);
 }
 
-void MilionAudioProcessorEditor::resized() {
+void MilionEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
     m_freqMultiplierSlider2.setBounds(area.removeFromBottom(50));
@@ -55,7 +54,7 @@ void MilionAudioProcessorEditor::resized() {
     m_spectroscope.setBounds(area);
 }
 
-void MilionAudioProcessorEditor::pushBuffer(const float* data, int numSamples) {
+void MilionEditor::pushBuffer(const float* data, int numSamples) {
     m_oscilloscope.addSamples(data, numSamples);
     m_spectroscope.copySamples(data, numSamples);
 }

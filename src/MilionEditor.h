@@ -1,28 +1,25 @@
-#ifndef MILION_MILIONPLUGINEDITOR_H_
-#define MILION_MILIONPLUGINEDITOR_H_
+#ifndef MILION_MILIONEDITOR_H_
+#define MILION_MILIONEDITOR_H_
 
-#include "PluginProcessor.h"
+#include "MilionProcessor.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
-class MilionAudioProcessorEditor  : public AudioProcessorEditor,
+class MilionEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
  public:
-    explicit MilionAudioProcessorEditor(MilionAudioProcessor&, ValueTreeStates& vst);
-    ~MilionAudioProcessorEditor();
+    explicit MilionEditor(MilionProcessor&, ValueTreeStates& vst);
+    ~MilionEditor();
 
     void paint(Graphics&) override;
     void resized() override;
-
     void pushBuffer(const float* data, int numSamples);
-
 
  private:
     void sliderValueChanged(Slider* slider) override;
 
-
  private:
-    MilionAudioProcessor& processor;
+    MilionProcessor& m_processor;
     drow::TriggeredScope m_oscilloscope;
     drow::Spectroscope m_spectroscope;
     MidiKeyboardState m_keyboardState;
@@ -36,7 +33,7 @@ class MilionAudioProcessorEditor  : public AudioProcessorEditor,
     ScopedPointer<SliderAttachment> m_freqMultiplierAttachment1;
     ScopedPointer<SliderAttachment> m_freqMultiplierAttachment2;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionEditor)
 };
 
-#endif  // MILION_MILIONPLUGINEDITOR_H_
+#endif  // MILION_MILIONEDITOR_H_

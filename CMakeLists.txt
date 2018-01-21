@@ -57,7 +57,7 @@ jucer_audio_plugin_settings(
   # PLUGIN_CHANNEL_CONFIGURATIONS
   PLUGIN_IS_A_SYNTH OFF
   PLUGIN_MIDI_INPUT ON
-  PLUGIN_MIDI_OUTPUT ON
+  PLUGIN_MIDI_OUTPUT OFF
   MIDI_EFFECT_PLUGIN OFF
   KEY_FOCUS ON
   PLUGIN_AU_EXPORT_PREFIX "MilionAU"
@@ -71,10 +71,10 @@ jucer_audio_plugin_settings(
 jucer_project_files("JuceDemoPlugin"
 # Compile   Xcode     Binary
 #           Resource  Resource
-  x         .         .         "src/PluginEditor.cpp"
-  .         .         .         "src/PluginEditor.h"
-  x         .         .         "src/PluginProcessor.cpp"
-  .         .         .         "src/PluginProcessor.h"
+  x         .         .         "src/MilionEditor.cpp"
+  .         .         .         "src/MilionEditor.h"
+  x         .         .         "src/MilionProcessor.cpp"
+  .         .         .         "src/MilionProcessor.h"
   x         .         .         "src/Operator/BaseOperator.cpp"
   .         .         .         "src/Operator/BaseOperator.h"
   x         .         .         "src/Operator/FMOperator.cpp"

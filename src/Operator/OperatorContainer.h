@@ -11,29 +11,31 @@ class OperatorContainer : public AudioProcessor {
     OperatorContainer();
     ~OperatorContainer();
 
-    const String getName() const override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+    void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
+    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
+    
+    void setValueTreeState(AudioProcessorValueTreeState* vst);
+    void setOperator(Operator op);
     void releaseResources() override;
-    double getTailLengthSeconds() const override;
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
     AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
 
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram(int index) override;
-    const String getProgramName(int index) override;
-    void changeProgramName(int index, const String& newName) override;
+    // Configuration
+    bool hasEditor() const override {return false;}
+    const String getName() const override {return "FM Operator";}
+    double getTailLengthSeconds() const override {return 0.0;}
+    bool acceptsMidi() const override {return true;}
+    bool producesMidi() const override {return false;}
+    // Presets
+    int getNumPrograms() override {return 1;}
+    int getCurrentProgram() override {return 0;}
+    void setCurrentProgram(int index) override {}
+    const String getProgramName(int index) override {return {};}
+    void changeProgramName(int index, const String& newName) override {}
 
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
-    void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
-
-    void setValueTreeState(AudioProcessorValueTreeState* vst);
-    void setOperator(Operator op);
  private:
     AudioProcessorValueTreeState* m_valueTreeState;
     BaseOperator* m_pOperator;

@@ -7,48 +7,10 @@ OperatorContainer::~OperatorContainer() {
     if (m_pOperator) delete m_pOperator;
 }
 
-const String OperatorContainer::getName() const {
-    return "";
-}
-
 void OperatorContainer::releaseResources() {
 }
 
-double OperatorContainer::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool OperatorContainer::acceptsMidi() const {
-    return false;
-}
-
-bool OperatorContainer::producesMidi() const {
-    return false;
-}
-
 AudioProcessorEditor* OperatorContainer::createEditor() {
-}
-
-bool OperatorContainer::hasEditor() const {
-    return false;
-}
-
-int OperatorContainer::getNumPrograms() {
-    return 1;
-}
-
-int OperatorContainer::getCurrentProgram() {
-    return 0;
-}
-
-void OperatorContainer::setCurrentProgram(int index) {
-}
-
-const String OperatorContainer::getProgramName(int index) {
-    return {};
-}
-
-void OperatorContainer::changeProgramName(int index, const String& newName) {
 }
 
 void OperatorContainer::getStateInformation(MemoryBlock& destData) {
@@ -69,7 +31,6 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
                                 nullptr);
     m_valueTreeState->state = ValueTree(Identifier("Milion"));
 }
-
 
 void OperatorContainer::setOperator(Operator op) {
     if (m_pOperator) delete m_pOperator;
