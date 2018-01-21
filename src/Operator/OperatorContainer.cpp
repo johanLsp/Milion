@@ -1,6 +1,7 @@
 #include "OperatorContainer.h"
 
-OperatorContainer::OperatorContainer() {
+OperatorContainer::OperatorContainer()
+    : m_pOperator(nullptr) {
 }
 
 OperatorContainer::~OperatorContainer() {
@@ -55,4 +56,8 @@ void OperatorContainer::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
 
 void OperatorContainer::handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {
     m_pOperator->handleNoteOn(midiChannel, midiNoteNumber, velocity);
+}
+
+void OperatorContainer::handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {
+    m_pOperator->handleNoteOff(midiChannel, midiNoteNumber, velocity);
 }

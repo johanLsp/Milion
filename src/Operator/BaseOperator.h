@@ -9,9 +9,11 @@ class BaseOperator : public AudioProcessor {
     BaseOperator();
     ~BaseOperator();
 
-    void releaseResources() override;
+    void releaseResources() override {};
     AudioProcessorEditor* createEditor() override {}
     virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
+    virtual void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) = 0;
+    virtual void prepareToPlay(double sampleRate, int samplesPerBlock) = 0;
 
     // Configuration
     bool hasEditor() const override {return false;}
@@ -26,7 +28,7 @@ class BaseOperator : public AudioProcessor {
     const String getProgramName(int index) override {return {};}
     void changeProgramName(int index, const String& newName) override {}
 
-    void getStateInformation(MemoryBlock& destData) override;
-    void setStateInformation(const void* data, int sizeInBytes) override;
+    void getStateInformation(MemoryBlock& destData) override {};
+    void setStateInformation(const void* data, int sizeInBytes) override {};
 };
 #endif  // MILION_MILIONBASEOPERATOR_H_

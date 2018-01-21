@@ -14,6 +14,7 @@ class OperatorContainer : public AudioProcessor {
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity);
+    void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity);
     
     void setValueTreeState(AudioProcessorValueTreeState* vst);
     void setOperator(Operator op);

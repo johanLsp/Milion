@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.4)
 add_definitions("-fPIC")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+#list(APPEND CMAKE_EXE_LINKER_FLAGS "-pg")
 message(${CMAKE_MODULE_PATH})
 include(Juce)
 
@@ -55,7 +56,7 @@ jucer_audio_plugin_settings(
   PLUGIN_MANUFACTURER_CODE "johanLsp"
   PLUGIN_CODE "Milion"
   # PLUGIN_CHANNEL_CONFIGURATIONS
-  PLUGIN_IS_A_SYNTH OFF
+  PLUGIN_IS_A_SYNTH ON
   PLUGIN_MIDI_INPUT ON
   PLUGIN_MIDI_OUTPUT OFF
   MIDI_EFFECT_PLUGIN OFF
@@ -81,6 +82,8 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Operator/FMOperator.h"
   x         .         .         "src/Operator/OperatorContainer.cpp"
   .         .         .         "src/Operator/OperatorContainer.h"
+  x         .         .         "src/Operator/EnveloppeGenerator.cpp"
+  .         .         .         "src/Operator/EnveloppeGenerator.h"
 )
 
 jucer_project_module(
