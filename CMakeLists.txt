@@ -365,7 +365,7 @@ jucer_export_target(
   # EXTRA_PREPROCESSOR_DEFINITIONS
   # EXTRA_COMPILER_FLAGS
   # EXTRA_LINKER_FLAGS
-  # EXTERNAL_LIBRARIES_TO_LINK
+  EXTERNAL_LIBRARIES_TO_LINK -lasound
   ICON_SMALL "<None>"
   ICON_LARGE "<None>"
   # CXX_STANDARD_TO_USE
@@ -376,7 +376,7 @@ jucer_export_target_configuration(
   "Linux Makefile"
   NAME "Debug"
   DEBUG_MODE ON
-  BINARY_NAME "Milion"
+  BINARY_NAME "Milion_dbg"
   # BINARY_LOCATION
   # HEADER_SEARCH_PATHS
   EXTRA_LIBRARY_SEARCH_PATHS "/usr/X11R6/lib/"
