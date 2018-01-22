@@ -3,16 +3,12 @@
 
 MilionProcessor::MilionProcessor()
     : AudioProcessor(BusesProperties()
-                       .withOutput("Output", AudioChannelSet::stereo(), true)
+                        .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
-    AudioProcessorGraph::AudioGraphIOProcessor* input =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
 
     AudioProcessorGraph::AudioGraphIOProcessor* output =
         new AudioProcessorGraph::AudioGraphIOProcessor(
             AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-    m_graph.addNode(input, 1);
     m_graph.addNode(output, 2);
 
     for (int i = 0; i < NUM_OPERATOR; i++) {
@@ -53,7 +49,7 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
         m_graph.removeConnection(i);
 
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
-    m_graph.addConnection(1, 0, 3, 0);
+    //m_graph.addConnection(1, 0, 3, 0);
     m_graph.addConnection(3, 0, 4, 0);
     m_graph.addConnection(4, 0, 2, 0);
 }
@@ -70,15 +66,13 @@ bool MilionProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
 
 void MilionProcessor::processBlock(AudioSampleBuffer& buffer, MidiBuffer& midiMessages) {
     ScopedNoDenormals noDenormals;
-    buffer.clear();
     m_graph.processBlock(buffer, midiMessages);
 
     buffer.copyFrom(1, 0, buffer, 0, 0, buffer.getNumSamples());
     MilionEditor* editor = 
         reinterpret_cast<MilionEditor*>(getActiveEditor());
 
-    const float* channelData = buffer.getReadPointer(0);
-    if (editor) editor->pushBuffer(channelData, buffer.getNumSamples());
+    const float* channelData = buffer.getReadPointer(1);
 }
 
 AudioProcessorEditor* MilionProcessor::createEditor() {
