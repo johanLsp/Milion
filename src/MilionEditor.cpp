@@ -20,10 +20,14 @@ MilionEditor::MilionEditor(
 
     m_freqMultiplierLabel1.setText("Frequency Multiplier", dontSendNotification);
     addAndMakeVisible(m_freqMultiplierLabel1);
+    m_freqMultiplierSlider1.setSliderStyle(Slider::Rotary);
+    m_freqMultiplierSlider1.setTextBoxStyle(Slider::TextBoxBelow, true, 40, 20);
     addAndMakeVisible(m_freqMultiplierSlider1);
     m_freqMultiplierAttachment1 = new SliderAttachment(*(m_valueTreeStates[0]),
                                                         "freq_multiplier",
                                                         m_freqMultiplierSlider1);
+    m_freqMultiplierSlider2.setSliderStyle(Slider::Rotary);
+    m_freqMultiplierSlider2.setTextBoxStyle(Slider::TextBoxBelow, true, 40, 20);
 
     m_freqMultiplierLabel2.setText("Frequency Multiplier", dontSendNotification);
     addAndMakeVisible (m_freqMultiplierLabel2);
@@ -48,8 +52,9 @@ void MilionEditor::paint(Graphics& g) {
 void MilionEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
-    m_freqMultiplierSlider2.setBounds(area.removeFromBottom(50));
-    m_freqMultiplierSlider1.setBounds(area.removeFromBottom(50));
+    Rectangle<int> knobs = area.removeFromBottom(100);
+    m_freqMultiplierSlider1.setBounds(knobs.removeFromLeft(100));
+    m_freqMultiplierSlider2.setBounds(knobs.removeFromLeft(100));
     m_oscilloscope.setBounds(area.removeFromRight(400));
     m_spectroscope.setBounds(area);
 }

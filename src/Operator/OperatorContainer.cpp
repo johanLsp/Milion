@@ -30,7 +30,6 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
                                 1.0f,         // default value
                                 nullptr,
                                 nullptr);
-    m_valueTreeState->state = ValueTree(Identifier("Milion"));
 }
 
 void OperatorContainer::setOperator(Operator op) {
