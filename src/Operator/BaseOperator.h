@@ -14,6 +14,7 @@ class BaseOperator : public AudioProcessor {
     virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void prepareToPlay(double sampleRate, int samplesPerBlock) = 0;
+    virtual void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) = 0;
 
     // Configuration
     bool hasEditor() const override {return false;}

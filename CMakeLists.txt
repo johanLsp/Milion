@@ -84,8 +84,10 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Operator/FMOperator.h"
   x         .         .         "src/Operator/OperatorContainer.cpp"
   .         .         .         "src/Operator/OperatorContainer.h"
-  x         .         .         "src/Operator/EnveloppeGenerator.cpp"
-  .         .         .         "src/Operator/EnveloppeGenerator.h"
+  x         .         .         "src/Operator/EnvelopeGenerator.cpp"
+  .         .         .         "src/Operator/EnvelopeGenerator.h"
+  x         .         .         "src/Component/EnvelopeComponent.cpp"
+  .         .         .         "src/Component/EnvelopeComponent.h"
 )
 
 jucer_project_module(

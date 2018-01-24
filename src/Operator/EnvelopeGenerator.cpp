@@ -1,6 +1,6 @@
-#include "EnveloppeGenerator.h"
+#include "EnvelopeGenerator.h"
 
-EnveloppeGenerator::EnveloppeGenerator()
+EnvelopeGenerator::EnvelopeGenerator()
     : m_state(State::IDLE),
       m_attack(1.0),
       m_attackLevel(1.0),
@@ -11,10 +11,10 @@ EnveloppeGenerator::EnveloppeGenerator()
       m_currentLevel(0.0) {
 }
 
-EnveloppeGenerator::~EnveloppeGenerator() {
+EnvelopeGenerator::~EnvelopeGenerator() {
 }
 
-void EnveloppeGenerator::setParameters(double attack,
+void EnvelopeGenerator::setParameters(double attack,
                          double attackLevel,
                          double decay,
                          double sustainLevel,
@@ -27,10 +27,10 @@ void EnveloppeGenerator::setParameters(double attack,
     m_release = release * sampleRate;
 }
 
-void EnveloppeGenerator::prepareToPlay(double sampleRate, int samplesPerBlock) {
+void EnvelopeGenerator::prepareToPlay(double sampleRate, int samplesPerBlock) {
 }
 
-void EnveloppeGenerator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
+void EnvelopeGenerator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
     float* channelData = buffer.getWritePointer(0);
     for (int i = 0; i < buffer.getNumSamples(); i++) {
         switch (m_state) {
@@ -59,11 +59,11 @@ void EnveloppeGenerator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &mid
     }
 }
 
-void EnveloppeGenerator::handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {
+void EnvelopeGenerator::handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {
     m_state = State::ATTACK;
 }
 
-void EnveloppeGenerator::handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {
+void EnvelopeGenerator::handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {
     m_state = State::RELEASE;
 }
 

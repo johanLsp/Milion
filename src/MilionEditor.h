@@ -2,6 +2,7 @@
 #define MILION_MILIONEDITOR_H_
 
 #include "MilionProcessor.h"
+#include "Component/EnvelopeComponent.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
@@ -26,6 +27,8 @@ class MilionEditor  : public AudioProcessorEditor,
     MidiKeyboardComponent m_midiKeyboard;
 
     ValueTreeStates& m_valueTreeStates;
+    EnvelopeComponent m_envelope;
+
     Label m_freqMultiplierLabel1;
     Slider m_freqMultiplierSlider1;
     Label m_freqMultiplierLabel2;

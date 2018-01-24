@@ -1,12 +1,12 @@
-#ifndef INCLUDE_MILIONENVELOPPEGENERATOR_H_
-#define INCLUDE_MILIONENVELOPPEGENERATOR_H_
+#ifndef INCLUDE_MILIONENVELOPEGENERATOR_H_
+#define INCLUDE_MILIONENVELOPEGENERATOR_H_
 
 #include "JuceHeader.h"
 
-class EnveloppeGenerator : public AudioProcessor {
+class EnvelopeGenerator : public AudioProcessor {
  public:
-    EnveloppeGenerator();
-    ~EnveloppeGenerator();
+    EnvelopeGenerator();
+    ~EnvelopeGenerator();
 
     void setParameters(double attack, 
                          double attackLevel,
@@ -24,7 +24,7 @@ class EnveloppeGenerator : public AudioProcessor {
 
     // Configuration
     bool hasEditor() const override {return false;}
-    const String getName() const override {return "Enveloppe Generator";}
+    const String getName() const override {return "Envelope Generator";}
     double getTailLengthSeconds() const override {return 0.0;}
     bool acceptsMidi() const override {return true;}
     bool producesMidi() const override {return false;}
@@ -50,4 +50,4 @@ class EnveloppeGenerator : public AudioProcessor {
     double m_currentLevel;
 };
 
-#endif  // INCLUDE_MILIONENVELOPPEGENERATOR_H_
+#endif  // INCLUDE_MILIONENVELOPEGENERATOR_H_
