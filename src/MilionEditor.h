@@ -27,7 +27,7 @@ class MilionEditor  : public AudioProcessorEditor,
     MidiKeyboardComponent m_midiKeyboard;
 
     ValueTreeStates& m_valueTreeStates;
-    EnvelopeComponent m_envelope;
+    EnvelopeComponent m_envelopes[NUM_OPERATOR];
 
     Label m_freqMultiplierLabel1;
     Slider m_freqMultiplierSlider1;

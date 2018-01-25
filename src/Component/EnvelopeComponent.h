@@ -23,6 +23,7 @@ SOFTWARE.
 
 #include "JuceHeader.h"
 
+typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
 class EnvelopeComponent : public Component {
  public:
@@ -30,6 +31,8 @@ class EnvelopeComponent : public Component {
     ~EnvelopeComponent() {}
     
     void update();
+    void setValueTreeState(AudioProcessorValueTreeState* vst);
+
     
     struct EnvelopeData {
      public:
@@ -132,6 +135,23 @@ private:
         kRelease
     };
     OwnedArray<Segment> segments;
+
+    AudioProcessorValueTreeState* m_valueTreeState;
+    Slider m_attackSlider;
+    ScopedPointer<SliderAttachment> m_attackAttachment;
+
+    Slider m_attackLevelSlider;
+    ScopedPointer<SliderAttachment> m_attackLevelAttachment;
+
+    Slider m_decaySlider;
+    ScopedPointer<SliderAttachment> m_decayAttachment; 
+
+    Slider m_sustainSlider;
+    ScopedPointer<SliderAttachment> m_sustainAttachment;
+
+    Slider m_releaseSlider;
+    ScopedPointer<SliderAttachment> m_releaseAttachment;
+
 };
 
 #endif  // MILION_ENVELOPECOMPONENT_H_

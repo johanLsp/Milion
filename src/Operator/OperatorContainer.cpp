@@ -30,6 +30,46 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
                                 1.0f,         // default value
                                 nullptr,
                                 nullptr);
+
+    m_valueTreeState->createAndAddParameter("env_attack",       // parameter ID
+                                "Envelope attack time",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.01f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
+
+    m_valueTreeState->createAndAddParameter("env_attackLevel",       // parameter ID
+                                "Envelope attackLevel time",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.01f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
+
+    m_valueTreeState->createAndAddParameter("env_decay",       // parameter ID
+                                "Envelope decay time",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.01f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
+
+    m_valueTreeState->createAndAddParameter("env_sustain",       // parameter ID
+                                "Envelope sustain time",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.01f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
+
+    m_valueTreeState->createAndAddParameter("env_release",       // parameter ID
+                                "Envelope release time",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.01f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
 }
 
 void OperatorContainer::setOperator(Operator op) {

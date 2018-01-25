@@ -1,7 +1,4 @@
-
-
 #include "EnvelopeComponent.h"
-
 
 void EnvelopeComponent::EnvelopeData::drawDebugInformation(Graphics & g,
                                                     Rectangle<float> area) const
@@ -22,15 +19,15 @@ void  EnvelopeComponent::EnvelopeData::show(Graphics & g,
                                      Rectangle<float> & area) const
 {
     float halfWidth = area.getWidth() / 2.0f + 5.0f;
-    
+
     g.drawText(title,
                area.withTrimmedRight(halfWidth),
                Justification::right, false);
-    
+
     g.drawText(String(value),
                area.withTrimmedLeft(halfWidth),
                Justification::left, false);
-    
+
     area.translate(0.0f, area.getHeight());
 }
 
@@ -66,6 +63,32 @@ EnvelopeComponent::EnvelopeComponent()
     update();
 }
 
+
+void EnvelopeComponent::setValueTreeState(AudioProcessorValueTreeState* vst) {
+    m_valueTreeState = vst;
+
+    if(m_attackAttachment) delete m_attackAttachment;
+    m_attackAttachment = new SliderAttachment(*(m_valueTreeState),
+                        "env_attack",
+                        m_attackSlider);
+    if(m_attackLevelAttachment) delete m_attackLevelAttachment;
+    m_attackLevelAttachment = new SliderAttachment(*(m_valueTreeState),
+                        "env_attackLevel",
+                        m_attackLevelSlider);
+    if(m_decayAttachment) delete m_decayAttachment;
+    m_decayAttachment = new SliderAttachment(*(m_valueTreeState),
+                        "env_decay",
+                        m_decaySlider);
+    if(m_sustainAttachment) delete m_sustainAttachment;
+    m_sustainAttachment = new SliderAttachment(*(m_valueTreeState),
+                        "env_sustain",
+                        m_sustainSlider);
+    if(m_releaseAttachment) delete m_releaseAttachment;
+    m_releaseAttachment = new SliderAttachment(*(m_valueTreeState),
+                        "env_release",
+                        m_releaseSlider);
+}
+
 void EnvelopeComponent::resized()
 {
     updateSegmentPositions();
@@ -80,12 +103,17 @@ void EnvelopeComponent::updateFromSegments()
     data.decay          = segments[kDecay]->getDuration();
     data.sustain        = segments[kSustain]->getLeftLevel();
     data.release        = segments[kRelease]->getDuration();
+    m_attackSlider.setValue(data.attackTime);
+    m_attackLevelSlider.setValue(data.attackLevel);
+    m_decaySlider.setValue(data.decay);
+    m_sustainSlider.setValue(data.sustain);
+    m_releaseSlider.setValue(data.release);
 }
 
 void EnvelopeComponent::updateSegmentPositions()
 {
     float totalDuration = 0.0f;
-    const float minDuration = 0.1f;
+    const float minDuration = 0.01f;
     
     for (auto s: segments)
         totalDuration += (s->getDuration() + minDuration);
@@ -108,11 +136,14 @@ void EnvelopeComponent::updateSegmentPositions()
 
 void EnvelopeComponent::update()
 {
+    segments[kAttack]->setLeftLevel(0.0);
     segments[kAttack]->setRightLevel(data.attackLevel);
     segments[kAttack]->setDuration(data.attackTime);
     segments[kDecay]->setDuration(data.decay);
     segments[kSustain]->setLeftLevel(data.sustain);
+    segments[kSustain]->setRightLevel(data.sustain);
     segments[kRelease]->setDuration(data.release);
+    segments[kRelease]->setRightLevel(0.0);
     
     updateSegmentPositions();
 }

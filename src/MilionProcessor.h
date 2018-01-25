@@ -6,7 +6,7 @@
 #include "Operator/FMOperator.h"
 #include "Operator/OperatorContainer.h"
 
-#define NUM_OPERATOR 2
+#define NUM_OPERATOR 8
 typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;
 
 class MilionProcessor  : public AudioProcessor, 

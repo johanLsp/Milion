@@ -18,7 +18,14 @@ void FMOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
 void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
     const float freqMultiplier = *m_valueTreeState->getRawParameterValue("freq_multiplier");
-    m_envelope.setParameters(0.1, 1.0, 0.1, 0.5, 0.2);
+    const float envAttack = *m_valueTreeState->getRawParameterValue("env_attack");
+    const float envAttackLevel = *m_valueTreeState->getRawParameterValue("env_attackLevel");
+    const float envDecay = *m_valueTreeState->getRawParameterValue("env_decay");
+    const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
+    const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
+
+
+    m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);
     double output = 0;
     double increment = m_frequency * freqMultiplier / getSampleRate();
     float* channelData = buffer.getWritePointer(0);
