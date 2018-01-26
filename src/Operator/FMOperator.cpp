@@ -23,11 +23,14 @@ void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessage
     const float envDecay = *m_valueTreeState->getRawParameterValue("env_decay");
     const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
     const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
+    const int waveformIndex = *m_valueTreeState->getRawParameterValue("waveform");
 
-
+    m_wavetable.setWavetable(waveformIndex);
     m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);
     double output = 0;
-    double increment = m_frequency * freqMultiplier * m_wavetable.getLength() / getSampleRate();
+    double increment = m_frequency * freqMultiplier/ getSampleRate();
+    //double increment = m_frequency * freqMultiplier / getSampleRate();
+
     float* channelData = buffer.getWritePointer(0);
 
     for (int i = 0; i < buffer.getNumSamples(); i++) {
@@ -35,7 +38,8 @@ void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessage
         m_modulatedPhase = m_basePhase
                         + channelData[i]
                         + m_feedbackGain * output;
-        output = m_wavetable(m_modulatedPhase);
+        output = m_wavetable(m_modulatedPhase/(2*M_PI));
+        //output = sin(m_modulatedPhase);
         channelData[i] = output;
     }
     m_envelope.processBlock(buffer, midiMessages);

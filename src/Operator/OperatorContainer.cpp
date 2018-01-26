@@ -70,6 +70,13 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
                                 0.2f,         // default value
                                 nullptr,
                                 nullptr);
+    m_valueTreeState->createAndAddParameter("waveform",       // parameter ID
+                                "Waveform selection",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (1, 7),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
 }
 
 void OperatorContainer::setOperator(Operator op) {

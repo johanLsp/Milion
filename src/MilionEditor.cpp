@@ -18,9 +18,24 @@ MilionEditor::MilionEditor(
     addAndMakeVisible(&m_midiKeyboard);
     setSize(800, 600);
 
+
+    StringArray waveformList;
+    waveformList.add("Sine");
+    waveformList.add("1");
+    waveformList.add("2");
+    waveformList.add("3");
+    waveformList.add("4");
+    waveformList.add("5");
+    waveformList.add("6");
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_envelopes[i].setValueTreeState(vts[i]);
         addAndMakeVisible(&m_envelopes[i]);
+        m_waveforms[i].addItemList(waveformList, 1);
+        addAndMakeVisible(&m_waveforms[i]);
+        m_comboboxAttachment[i] = new ComboBoxAttachment(*(m_valueTreeStates[i]),
+                                                        "waveform",
+                                                        m_waveforms[i]);
+        
     }
 
     m_freqMultiplierLabel1.setText("Frequency Multiplier", dontSendNotification);
@@ -57,12 +72,15 @@ void MilionEditor::paint(Graphics& g) {
 void MilionEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
-
     Rectangle<int> operators = area.removeFromBottom(200);
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_envelopes[i].setBounds(operators.removeFromLeft(area.getWidth()/NUM_OPERATOR));
     }
 
+    Rectangle<int> waveforms = area.removeFromBottom(50);
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_waveforms[i].setBounds(waveforms.removeFromLeft(area.getWidth()/NUM_OPERATOR));
+    }
     Rectangle<int> knobs = area.removeFromBottom(100);
     m_freqMultiplierSlider1.setBounds(knobs.removeFromLeft(100));
     m_freqMultiplierSlider2.setBounds(knobs.removeFromLeft(100));

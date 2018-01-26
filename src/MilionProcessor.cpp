@@ -51,7 +51,7 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     for (int i = m_graph.getNumConnections() - 1; i >= 0; i--)
         m_graph.removeConnection(i);
 
-    for (int i = 0; i < NUM_OPERATOR; i++)
+    for (int i = 0; i < NUM_OPERATOR-1; i++)
         m_graph.addConnection(2+i, 0, 3+i, 0);
     m_graph.addConnection(NUM_OPERATOR+1, 0, 1, 0);
 }

@@ -5,6 +5,7 @@
 #include "Component/EnvelopeComponent.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
+typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
 
 class MilionEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
@@ -28,6 +29,8 @@ class MilionEditor  : public AudioProcessorEditor,
 
     ValueTreeStates& m_valueTreeStates;
     EnvelopeComponent m_envelopes[NUM_OPERATOR];
+    ComboBox m_waveforms[NUM_OPERATOR];
+    ScopedPointer<ComboBoxAttachment> m_comboboxAttachment[NUM_OPERATOR];
 
     Label m_freqMultiplierLabel1;
     Slider m_freqMultiplierSlider1;
