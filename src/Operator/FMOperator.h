@@ -3,6 +3,7 @@
 
 #include "BaseOperator.h"
 #include "EnvelopeGenerator.h"
+#include "../Utils/Wavetable.h"
 /*
     Implements a Frequency Modulation operator
     This is actually done using phase modulation
@@ -21,6 +22,7 @@ class FMOperator : public BaseOperator {
  private:
     AudioProcessorValueTreeState* m_valueTreeState;
     EnvelopeGenerator m_envelope;
+    Wavetable m_wavetable;
     double m_basePhase;
     double m_modulatedPhase;
     double m_frequency;
