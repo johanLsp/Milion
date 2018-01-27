@@ -1,3 +1,7 @@
+#ifndef MILION_MILIONWAVETABKE_H_
+#define MILION_MILIONWAVETABKE_H_
+
+
 #include <cmath>
 
 class Wavetable {
@@ -15,3 +19,5 @@ class Wavetable {
     int m_waveformIndex;
     double* m_wavetable[8];
 };
+
+#endif  // MILION_MILIONWAVETABKE_H_

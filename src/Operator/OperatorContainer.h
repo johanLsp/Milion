@@ -3,8 +3,9 @@
 
 #include "JuceHeader.h"
 #include "FMOperator.h"
+#include "FormantOperator.h"
 
-enum class Operator {FM};
+enum class Operator {FM, Formant};
 
 class OperatorContainer : public AudioProcessor {
  public:
@@ -23,7 +24,7 @@ class OperatorContainer : public AudioProcessor {
 
     // Configuration
     bool hasEditor() const override {return false;}
-    const String getName() const override {return "FM Operator";}
+    const String getName() const override {return "Operator Container";}
     double getTailLengthSeconds() const override {return 0.0;}
     bool acceptsMidi() const override {return true;}
     bool producesMidi() const override {return false;}

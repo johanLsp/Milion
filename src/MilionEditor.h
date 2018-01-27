@@ -32,12 +32,15 @@ class MilionEditor  : public AudioProcessorEditor,
     ComboBox m_waveforms[NUM_OPERATOR];
     ScopedPointer<ComboBoxAttachment> m_comboboxAttachment[NUM_OPERATOR];
 
-    Label m_freqMultiplierLabel1;
-    Slider m_freqMultiplierSlider1;
-    Label m_freqMultiplierLabel2;
-    Slider m_freqMultiplierSlider2;
-    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment1;
-    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment2;
+    
+    Slider m_bandwidth[NUM_OPERATOR];
+    ScopedPointer<SliderAttachment> m_bandwidthAttachment[NUM_OPERATOR];
+    Slider m_skirt[NUM_OPERATOR];
+    ScopedPointer<SliderAttachment> m_skirtAttachment[NUM_OPERATOR];
+
+    Label m_freqMultiplierLabel[NUM_OPERATOR];
+    Slider m_freqMultiplierSlider[NUM_OPERATOR];
+    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment[NUM_OPERATOR];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionEditor)
 };

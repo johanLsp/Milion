@@ -51,8 +51,10 @@ void EnvelopeGenerator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
                 break;
             case State::RELEASE:
                 m_currentLevel -= m_sustainLevel / m_release;
-                if (m_currentLevel <= 0)
+                if (m_currentLevel <= 0) {
+                    m_currentLevel = 0;
                     m_state = State::IDLE;
+                }
                 break;
         }
         channelData[i] *= m_currentLevel;

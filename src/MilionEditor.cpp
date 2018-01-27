@@ -11,12 +11,12 @@ MilionEditor::MilionEditor(
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
     {
     m_keyboardState.addListener(&m_processor);
-
+    m_oscilloscope.setNumSamplesPerPixel(2);
     m_spectroscope.setLogFrequencyDisplay(true);
     addAndMakeVisible(&m_oscilloscope);
     addAndMakeVisible(&m_spectroscope);
     addAndMakeVisible(&m_midiKeyboard);
-    setSize(800, 600);
+    setSize(800, 800);
 
 
     StringArray waveformList;
@@ -35,26 +35,30 @@ MilionEditor::MilionEditor(
         m_comboboxAttachment[i] = new ComboBoxAttachment(*(m_valueTreeStates[i]),
                                                         "waveform",
                                                         m_waveforms[i]);
-        
+
+        addAndMakeVisible(m_bandwidth[i]);
+        m_bandwidthAttachment[i] = new SliderAttachment(*(m_valueTreeStates[i]),
+                                                        "bandwidth",
+                                                        m_bandwidth[i]);
+
+        addAndMakeVisible(m_skirt[i]);
+        m_skirtAttachment[i] = new SliderAttachment(*(m_valueTreeStates[i]),
+                                                        "skirt",
+                                                        m_skirt[i]);
+
+        m_freqMultiplierLabel[i].setText("Frequency Multiplier", dontSendNotification);
+        addAndMakeVisible(m_freqMultiplierLabel[i]);
+        m_freqMultiplierSlider[i].setSliderStyle(Slider::Rotary);
+        m_freqMultiplierSlider[i].setSkewFactor(0.1);
+
+        m_freqMultiplierSlider[i].setTextBoxStyle(Slider::TextBoxBelow, true, 40, 20);
+        addAndMakeVisible(m_freqMultiplierSlider[i]);
+        m_freqMultiplierAttachment[i] = new SliderAttachment(*(m_valueTreeStates[i]),
+                                                        "freq_multiplier",
+                                                        m_freqMultiplierSlider[i]);
     }
 
-    m_freqMultiplierLabel1.setText("Frequency Multiplier", dontSendNotification);
-    addAndMakeVisible(m_freqMultiplierLabel1);
-    m_freqMultiplierSlider1.setSliderStyle(Slider::Rotary);
-    m_freqMultiplierSlider1.setTextBoxStyle(Slider::TextBoxBelow, true, 40, 20);
-    addAndMakeVisible(m_freqMultiplierSlider1);
-    m_freqMultiplierAttachment1 = new SliderAttachment(*(m_valueTreeStates[0]),
-                                                        "freq_multiplier",
-                                                        m_freqMultiplierSlider1);
-    m_freqMultiplierSlider2.setSliderStyle(Slider::Rotary);
-    m_freqMultiplierSlider2.setTextBoxStyle(Slider::TextBoxBelow, true, 40, 20);
 
-    m_freqMultiplierLabel2.setText("Frequency Multiplier", dontSendNotification);
-    addAndMakeVisible (m_freqMultiplierLabel2);
-    addAndMakeVisible (m_freqMultiplierSlider2);
-    m_freqMultiplierAttachment2 = new SliderAttachment(*(m_valueTreeStates[1]),
-                                                        "freq_multiplier",
-                                                        m_freqMultiplierSlider2);
 }
 
 MilionEditor::~MilionEditor() {
@@ -81,9 +85,17 @@ void MilionEditor::resized() {
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_waveforms[i].setBounds(waveforms.removeFromLeft(area.getWidth()/NUM_OPERATOR));
     }
+
+    Rectangle<int> formant = area.removeFromBottom(50);
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_bandwidth[i].setBounds(formant.removeFromLeft(area.getWidth()/NUM_OPERATOR/2));
+        m_skirt[i].setBounds(formant.removeFromLeft(area.getWidth()/NUM_OPERATOR/2));
+    }
+
     Rectangle<int> knobs = area.removeFromBottom(100);
-    m_freqMultiplierSlider1.setBounds(knobs.removeFromLeft(100));
-    m_freqMultiplierSlider2.setBounds(knobs.removeFromLeft(100));
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_freqMultiplierSlider[i].setBounds(knobs.removeFromLeft(area.getWidth()/NUM_OPERATOR));
+    }
     m_oscilloscope.setBounds(area.removeFromRight(400));
     m_spectroscope.setBounds(area);
 }

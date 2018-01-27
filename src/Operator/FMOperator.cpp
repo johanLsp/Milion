@@ -28,7 +28,7 @@ void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessage
     m_wavetable.setWavetable(waveformIndex);
     m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);
     double output = 0;
-    double increment = m_frequency * freqMultiplier/ getSampleRate();
+    double increment = m_frequency * freqMultiplier / getSampleRate();
     //double increment = m_frequency * freqMultiplier / getSampleRate();
 
     float* channelData = buffer.getWritePointer(0);
@@ -38,7 +38,7 @@ void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessage
         m_modulatedPhase = m_basePhase
                         + channelData[i]
                         + m_feedbackGain * output;
-        output = m_wavetable(m_modulatedPhase/(2*M_PI));
+        output = m_wavetable(m_modulatedPhase);
         //output = sin(m_modulatedPhase);
         channelData[i] = output;
     }

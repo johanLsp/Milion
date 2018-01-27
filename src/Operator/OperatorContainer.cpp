@@ -26,7 +26,7 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState->createAndAddParameter("freq_multiplier",       // parameter ID
                                 "Frequency Multiplier",       // parameter name
                                 String(),     // parameter label (suffix)
-                                NormalisableRange<float> (1.0f, 10.0f),    // range
+                                NormalisableRange<float> (1.0f, 10.0f, 0.01, 0.5),    // range
                                 1.0f,         // default value
                                 nullptr,
                                 nullptr);
@@ -77,6 +77,21 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
                                 0.2f,         // default value
                                 nullptr,
                                 nullptr);
+
+    m_valueTreeState->createAndAddParameter("bandwidth",       // parameter ID
+                                "Bandwidth",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (0.1f, 1.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
+                                    m_valueTreeState->createAndAddParameter("skirt",       // parameter ID
+                                "Skirt",       // parameter name
+                                String(),     // parameter label (suffix)
+                                NormalisableRange<float> (1.0f, 10.0f),    // range
+                                0.2f,         // default value
+                                nullptr,
+                                nullptr);
 }
 
 void OperatorContainer::setOperator(Operator op) {
@@ -84,7 +99,9 @@ void OperatorContainer::setOperator(Operator op) {
 
     switch (op) {
         case Operator::FM:
-        m_pOperator = new FMOperator(m_valueTreeState);
+            m_pOperator = new FMOperator(m_valueTreeState);
+        case Operator::Formant:
+            m_pOperator = new FormantOperator(m_valueTreeState);
     }
 }
 
