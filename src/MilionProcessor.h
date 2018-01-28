@@ -5,6 +5,7 @@
 #include "JuceHeader.h"
 #include "Operator/FMOperator.h"
 #include "Operator/OperatorContainer.h"
+#include "Utils/SysexParser.h"
 
 #define NUM_OPERATOR 2
 typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;

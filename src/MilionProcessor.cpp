@@ -5,6 +5,9 @@ MilionProcessor::MilionProcessor()
     : AudioProcessor(BusesProperties()
                         .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
+    
+    SysexParser parser;
+    parser.parse("1_0.syx");
 
     AudioProcessorGraph::AudioGraphIOProcessor* output =
         new AudioProcessorGraph::AudioGraphIOProcessor(

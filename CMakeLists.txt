@@ -90,6 +90,8 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Operator/EnvelopeGenerator.h"
   x         .         .         "src/Component/EnvelopeComponent.cpp"
   .         .         .         "src/Component/EnvelopeComponent.h"
+  x         .         .         "src/Utils/SysexParser.cpp"
+  .         .         .         "src/Utils/SysexParser.h"
   x         .         .         "src/Utils/Wavetable.cpp"
   .         .         .         "src/Utils/Wavetable.h"
 )
