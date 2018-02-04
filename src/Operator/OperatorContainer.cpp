@@ -100,8 +100,10 @@ void OperatorContainer::setOperator(Operator op) {
     switch (op) {
         case Operator::FM:
             m_pOperator = new FMOperator(m_valueTreeState);
+            break;
         case Operator::Formant:
             m_pOperator = new FormantOperator(m_valueTreeState);
+            break;
     }
 }
 

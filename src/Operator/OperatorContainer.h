@@ -5,10 +5,11 @@
 #include "FMOperator.h"
 #include "FormantOperator.h"
 
-enum class Operator {FM, Formant};
 
 class OperatorContainer : public AudioProcessor {
  public:
+    enum class Operator {FM, Formant};
+
     OperatorContainer();
     ~OperatorContainer();
 

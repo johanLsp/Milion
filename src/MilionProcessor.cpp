@@ -6,8 +6,8 @@ MilionProcessor::MilionProcessor()
                         .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
     
-    SysexParser parser;
-    parser.parse("1_0.syx");
+    //SysexParser parser;
+    //parser.parse("1_0.syx");
 
     AudioProcessorGraph::AudioGraphIOProcessor* output =
         new AudioProcessorGraph::AudioGraphIOProcessor(
@@ -42,7 +42,7 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
 
     for (int i = 0; i < NUM_OPERATOR; i++) {
-        m_operators[i]->setOperator(Operator::Formant);
+        m_operators[i]->setOperator(OperatorContainer::Operator::Formant);
         m_operators[i]->setPlayConfigDetails(
             getTotalNumOutputChannels(),
             getTotalNumOutputChannels(),
