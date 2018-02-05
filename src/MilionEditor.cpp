@@ -8,7 +8,8 @@ MilionEditor::MilionEditor(
       m_valueTreeStates(vts),
       m_processor(parent),
       m_spectroscope(12),
-      m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard)
+      m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard),
+      m_tabLayout(TabbedButtonBar::TabsAtTop)
     {
     m_keyboardState.addListener(&m_processor);
     m_oscilloscope.setNumSamplesPerPixel(2);
@@ -19,14 +20,15 @@ MilionEditor::MilionEditor(
     setSize(800, 800);
 
 
-    StringArray waveformList;
-    waveformList.add("Sine");
-    waveformList.add("1");
-    waveformList.add("2");
-    waveformList.add("3");
-    waveformList.add("4");
-    waveformList.add("5");
-    waveformList.add("6");
+    for (int i = 0; i < NUM_OPERATOR; i++) {
+        m_containers[i] = new ComponentContainer(vts[i]);
+        m_tabLayout.addTab("Operator " + i, Colour(), m_containers[i], false);
+        m_tabLayout.setTabBackgroundColour (i, getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+    }
+
+    addAndMakeVisible(&m_tabLayout);
+/*
+
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_envelopes[i].setValueTreeState(vts[i]);
         addAndMakeVisible(&m_envelopes[i]);
@@ -57,8 +59,7 @@ MilionEditor::MilionEditor(
                                                         "freq_multiplier",
                                                         m_freqMultiplierSlider[i]);
     }
-
-
+*/
 }
 
 MilionEditor::~MilionEditor() {
@@ -76,6 +77,10 @@ void MilionEditor::paint(Graphics& g) {
 void MilionEditor::resized() {
     Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
+    
+    m_tabLayout.setBounds(area.removeFromBottom(400));
+    
+    /*
     Rectangle<int> operators = area.removeFromBottom(200);
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_envelopes[i].setBounds(operators.removeFromLeft(area.getWidth()/NUM_OPERATOR));
@@ -96,6 +101,7 @@ void MilionEditor::resized() {
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_freqMultiplierSlider[i].setBounds(knobs.removeFromLeft(area.getWidth()/NUM_OPERATOR));
     }
+    */
     m_oscilloscope.setBounds(area.removeFromRight(400));
     m_spectroscope.setBounds(area);
 }

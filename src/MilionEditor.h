@@ -3,6 +3,7 @@
 
 #include "MilionProcessor.h"
 #include "Component/EnvelopeComponent.h"
+#include "Component/ComponentContainer.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
@@ -27,20 +28,10 @@ class MilionEditor  : public AudioProcessorEditor,
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 
-    ValueTreeStates& m_valueTreeStates;
-    EnvelopeComponent m_envelopes[NUM_OPERATOR];
-    ComboBox m_waveforms[NUM_OPERATOR];
-    ScopedPointer<ComboBoxAttachment> m_comboboxAttachment[NUM_OPERATOR];
-
+    TabbedComponent m_tabLayout;
+    ScopedPointer<ComponentContainer> m_containers[NUM_OPERATOR];
     
-    Slider m_bandwidth[NUM_OPERATOR];
-    ScopedPointer<SliderAttachment> m_bandwidthAttachment[NUM_OPERATOR];
-    Slider m_skirt[NUM_OPERATOR];
-    ScopedPointer<SliderAttachment> m_skirtAttachment[NUM_OPERATOR];
-
-    Label m_freqMultiplierLabel[NUM_OPERATOR];
-    Slider m_freqMultiplierSlider[NUM_OPERATOR];
-    ScopedPointer<SliderAttachment> m_freqMultiplierAttachment[NUM_OPERATOR];
+    ValueTreeStates& m_valueTreeStates;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionEditor)
 };
