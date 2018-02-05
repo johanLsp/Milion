@@ -5,9 +5,6 @@
 #include "Component/EnvelopeComponent.h"
 #include "Component/ComponentContainer.h"
 
-typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
-typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
-
 class MilionEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
  public:

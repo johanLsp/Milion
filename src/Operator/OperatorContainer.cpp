@@ -24,7 +24,7 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState = vst;
 
     m_valueTreeState->createAndAddParameter("freq_multiplier",       // parameter ID
-                                "Frequency Multiplier",       // parameter name
+                                "Frequency",       // parameter name
                                 String(),     // parameter label (suffix)
                                 NormalisableRange<float> (1.0f, 10.0f, 0.01, 0.5),    // range
                                 1.0f,         // default value
@@ -105,6 +105,7 @@ void OperatorContainer::setOperator(Operator op) {
             m_pOperator = new FormantOperator(m_valueTreeState);
             break;
     }
+    prepareToPlay(getSampleRate(), getBlockSize());
 }
 
 void OperatorContainer::prepareToPlay(double sampleRate, int samplesPerBlock) {

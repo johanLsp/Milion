@@ -21,23 +21,31 @@ ComponentContainer::ComponentContainer(AudioProcessorValueTreeState* vst)
     m_FormantButton->addListener(this);
     addAndMakeVisible(m_FormantButton);
 
+    m_envelope.setValueTreeState(m_valueTreeState);
     addAndMakeVisible(m_envelope);
     m_pOperator = new FMComponent(m_valueTreeState);
     addAndMakeVisible(m_pOperator);
+
+
+
 }
 
 
 void ComponentContainer::buttonClicked(Button* button) {
     if (button == m_FMButton && m_pOperator->getType() != OperatorComponent::Operator::FM) {
         setOperator(OperatorComponent::Operator::FM);
+        Value type = m_valueTreeState->getParameterAsValue("operator_type");
+        type = 0;
     } else if (button == m_FormantButton && m_pOperator->getType() != OperatorComponent::Operator::Formant) {
         setOperator(OperatorComponent::Operator::Formant);
+        Value type = m_valueTreeState->getParameterAsValue("operator_type");
+        type = 1;
     }
 }
 
 void ComponentContainer::resized() {
     Rectangle<int> area = getLocalBounds();
-    Rectangle<int> knobs = area.removeFromTop(50);
+    Rectangle<int> knobs = area.removeFromTop(100);
     knobs.removeFromLeft(150);
     m_pOperator->setBounds(knobs);
     m_envelope.setBounds(area);

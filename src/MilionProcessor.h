@@ -11,7 +11,8 @@
 typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;
 
 class MilionProcessor  : public AudioProcessor, 
-                              public MidiKeyboardStateListener {
+                              public MidiKeyboardStateListener,
+                              public AudioProcessorValueTreeState::Listener {
  public:
     MilionProcessor();
     ~MilionProcessor();
@@ -25,7 +26,8 @@ class MilionProcessor  : public AudioProcessor,
     void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
     void getStateInformation(MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
- 
+    void parameterChanged (const String& parameterID, float newValue) override;
+
     AudioProcessorEditor* createEditor() override;
 
     // Plugin configuration
