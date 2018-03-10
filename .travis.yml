@@ -1,0 +1,47 @@
+language: cpp
+compiler: gcc
+
+matrix:
+  include:
+    - os: linux
+      sudo: false
+      dist: trusty
+      compiler: gcc
+      env: BUILD_TYPE="Debug"
+
+    - os: linux
+      sudo: false
+      dist: trusty
+      compiler: gcc
+      env: BUILD_TYPE="Release"
+
+    - os: osx
+      compiler: xcode6.4
+      env: BUILD_TYPE="Release"
+
+    - os: osx
+      compiler: xcode8
+      env: BUILD_TYPE="Release"
+
+addons:
+  apt:
+    packages:
+      - cmake
+      - libfreetype6-dev
+      - libxinerama-dev
+      - libxrandr-dev
+      - libxcursor-dev
+      - mesa-common-dev
+      - libasound2-dev
+      - freeglut3-dev
+      - libxcomposite-dev
+
+script:
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  - cmake --build .
+
+# Disable notifications
+notifications:
+  email: false
