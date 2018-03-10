@@ -123,14 +123,47 @@ void SysexParser::parse(std::string filename) {
         uint8_t eg_bias;
     };
 
+    struct unvoice_data {
+        uint8_t formant_pitch_transpose;
+        uint8_t formant_pitch_coarse;
+        uint8_t formant_pitch_fine;
+        uint8_t formant_pitch_scaling;
+        uint8_t formant_shape_bw;
+        uint8_t formant_shape_bw_bias;
+        uint8_t formant_resonance;
+        uint8_t freq_eg_init_val;
+        uint8_t freq_eg_attack_val;
+        uint8_t freq_eg_attack_time;
+        uint8_t freq_eg_decay_time;
+        uint8_t level;
+        uint8_t level_scaling;
+        uint8_t eg_level1;
+        uint8_t eg_level2;
+        uint8_t eg_level3;
+        uint8_t eg_level4;
+        uint8_t eg_time1;
+        uint8_t eg_time2;
+        uint8_t eg_time3;
+        uint8_t eg_time4;
+        uint8_t eg_hold_time;
+        uint8_t eg_time_scaling;
+        uint8_t freq_bias;
+        uint8_t freq_mod;
+        uint8_t amp_mod_vel;
+        uint8_t eg_bias;
+    };
+
     struct data {
         common_data common;
         voice_data voice[8];
+        unvoice_data unvoice[8];
     } d;
 
     file.read((char*)(&d.common), sizeof(common_data));
 
     for (int i = 0; i < 8; i++) {
         file.read((char*)(&d.voice[i]), sizeof(voice_data));
+        file.read((char*)(&d.unvoice[i]), sizeof(unvoice_data));
+        std::cout << (int)d.voice[i].level_breakpoint << std::endl;
     }
 }
