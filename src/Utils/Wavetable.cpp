@@ -55,6 +55,25 @@ double Wavetable::operator()(double position) {
     return m_wavetable[m_waveformIndex][static_cast<int>(position*m_length)%m_length];
 }
 
+std::string Wavetable::getName(int index) {
+    switch (index) {
+        case 0:
+            return "Sine";
+        case 1:
+            return "Even 1";
+        case 2:
+            return "Odd 1";
+        case 3:
+            return "Res 2";
+        case 4:
+            return "Even 2";
+        case 5:
+            return "Odd 2";
+        case 6:
+            return "Square";
+    }
+}
+
 Wavetable::~Wavetable() {
     for (int i = 0; i < 8; i++) {
         delete[] m_wavetable[i];

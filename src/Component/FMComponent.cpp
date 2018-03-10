@@ -4,13 +4,9 @@
 FMComponent::FMComponent(AudioProcessorValueTreeState* vts)
 : m_valueTreeState(vts) {
     StringArray waveformList;
-    waveformList.add("Sine");
-    waveformList.add("1");
-    waveformList.add("2");
-    waveformList.add("3");
-    waveformList.add("4");
-    waveformList.add("5");
-    waveformList.add("6");
+    for (int i = 0; i < Wavetable::getNumWavetable(); i++) {
+        waveformList.add(Wavetable::getName(i));
+    }
     m_waveform.addItemList(waveformList, 1);
     addAndMakeVisible(&m_waveform);
     m_waveformAttachment = new ComboBoxAttachment(*(m_valueTreeState),

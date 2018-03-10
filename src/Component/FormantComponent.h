@@ -3,6 +3,7 @@
 
 #include "JuceHeader.h"
 #include "OperatorComponent.h"
+#include "../Utils/Wavetable.h"
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
