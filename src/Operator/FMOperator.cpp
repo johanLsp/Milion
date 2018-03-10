@@ -7,6 +7,10 @@ FMOperator::FMOperator(AudioProcessorValueTreeState* vst)
     m_frequency(0) {
 }
 
+FMOperator::~FMOperator() {
+
+}
+
 void FMOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_envelope.setPlayConfigDetails(
         getTotalNumInputChannels(),

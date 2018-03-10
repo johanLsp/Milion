@@ -15,6 +15,9 @@ FormantOperator::FormantOperator(AudioProcessorValueTreeState* vst)
     m_bandwidthPhasor[1] = 0.5;
 }
 
+FormantOperator::~FormantOperator() {
+}
+
 void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_envelope.setPlayConfigDetails(
         getTotalNumInputChannels(),

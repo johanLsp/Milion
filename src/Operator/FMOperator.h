@@ -13,11 +13,14 @@ class FMOperator : public BaseOperator {
 
  public:
     FMOperator(AudioProcessorValueTreeState* vst);
+    ~FMOperator();
+
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) override;
 
+    const String getName() const override {return "FM Operator";}
 
  private:
     AudioProcessorValueTreeState* m_valueTreeState;

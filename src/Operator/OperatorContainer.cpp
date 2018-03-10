@@ -5,7 +5,6 @@ OperatorContainer::OperatorContainer()
 }
 
 OperatorContainer::~OperatorContainer() {
-    if (m_pOperator) delete m_pOperator;
 }
 
 void OperatorContainer::releaseResources() {
@@ -95,8 +94,6 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
 }
 
 void OperatorContainer::setOperator(Operator op) {
-    if (m_pOperator) delete m_pOperator;
-
     switch (op) {
         case Operator::FM:
             m_pOperator = new FMOperator(m_valueTreeState);

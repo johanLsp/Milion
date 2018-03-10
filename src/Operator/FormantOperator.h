@@ -13,11 +13,14 @@ class FormantOperator : public BaseOperator {
 
  public:
     FormantOperator(AudioProcessorValueTreeState* vst);
+    ~FormantOperator();
+    
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) override;
 
+    const String getName() const override {return "Formant Operator";}
 
  private:
     AudioProcessorValueTreeState* m_valueTreeState;

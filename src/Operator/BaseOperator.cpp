@@ -2,6 +2,3 @@
 
 BaseOperator::BaseOperator() {
 }
-
-BaseOperator::~BaseOperator() {
-}
