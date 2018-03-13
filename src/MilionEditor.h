@@ -1,9 +1,11 @@
 #ifndef MILION_MILIONEDITOR_H_
 #define MILION_MILIONEDITOR_H_
 
+#include "JuceHeader.h"
 #include "MilionProcessor.h"
 #include "Component/EnvelopeComponent.h"
 #include "Component/ComponentContainer.h"
+
 
 class MilionEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
@@ -20,8 +22,8 @@ class MilionEditor  : public AudioProcessorEditor,
 
  private:
     MilionProcessor& m_processor;
-    drow::TriggeredScope m_oscilloscope;
-    drow::Spectroscope m_spectroscope;
+    //drow::TriggeredScope m_oscilloscope;
+    //drow::Spectroscope m_spectroscope;
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 

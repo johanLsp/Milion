@@ -1,6 +1,10 @@
 #ifndef MILION_MILIONFORMANTOPERATOR_H_
 #define MILION_MILIONFORMANTOPERATOR_H_
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
+#include "JuceHeader.h"
 #include "BaseOperator.h"
 #include "EnvelopeGenerator.h"
 #include "../Utils/Wavetable.h"

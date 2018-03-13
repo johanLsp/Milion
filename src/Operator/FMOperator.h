@@ -1,6 +1,7 @@
 #ifndef MILION_MILIONFMOPERATOR_H_
 #define MILION_MILIONFMOPERATOR_H_
 
+#include "JuceHeader.h"
 #include "BaseOperator.h"
 #include "EnvelopeGenerator.h"
 #include "../Utils/Wavetable.h"

@@ -7,15 +7,15 @@ MilionEditor::MilionEditor(
     : AudioProcessorEditor(&parent),
       m_valueTreeStates(vts),
       m_processor(parent),
-      m_spectroscope(12),
+      //m_spectroscope(12),
       m_midiKeyboard(m_keyboardState, MidiKeyboardComponent::horizontalKeyboard),
       m_tabLayout(TabbedButtonBar::TabsAtTop)
     {
     m_keyboardState.addListener(&m_processor);
-    m_oscilloscope.setNumSamplesPerPixel(2);
-    m_spectroscope.setLogFrequencyDisplay(true);
-    addAndMakeVisible(&m_oscilloscope);
-    addAndMakeVisible(&m_spectroscope);
+    //m_oscilloscope.setNumSamplesPerPixel(2);
+    //m_spectroscope.setLogFrequencyDisplay(true);
+    //addAndMakeVisible(&m_oscilloscope);
+    //addAndMakeVisible(&m_spectroscope);
     addAndMakeVisible(&m_midiKeyboard);
     setSize(800, 800);
 
@@ -75,7 +75,7 @@ void MilionEditor::paint(Graphics& g) {
 }
 
 void MilionEditor::resized() {
-    Rectangle<int> area = getLocalBounds();
+    juce::Rectangle<int> area = getLocalBounds();
     m_midiKeyboard.setBounds(area.removeFromBottom(100));
     
     m_tabLayout.setBounds(area.removeFromBottom(400));
@@ -102,11 +102,11 @@ void MilionEditor::resized() {
         m_freqMultiplierSlider[i].setBounds(knobs.removeFromLeft(area.getWidth()/NUM_OPERATOR));
     }
     */
-    m_oscilloscope.setBounds(area.removeFromRight(400));
-    m_spectroscope.setBounds(area);
+   // m_oscilloscope.setBounds(area.removeFromRight(400));
+   // m_spectroscope.setBounds(area);
 }
 
 void MilionEditor::pushBuffer(const float* data, int numSamples) {
-    m_oscilloscope.addSamples(data, numSamples);
-    m_spectroscope.copySamples(data, numSamples);
+   // m_oscilloscope.addSamples(data, numSamples);
+   // m_spectroscope.copySamples(data, numSamples);
 }

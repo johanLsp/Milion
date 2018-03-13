@@ -31,7 +31,7 @@ FormantComponent::FormantComponent(AudioProcessorValueTreeState* vts)
 }
 
 void FormantComponent::resized() {
-    Rectangle<int> area = getLocalBounds();
+    juce::Rectangle<int> area = getLocalBounds();
     m_waveform.setBounds(area.removeFromLeft(100).reduced(0, 25));
     area.removeFromLeft(50);
     m_bandwidthLabel.setBounds(area.removeFromLeft(100));

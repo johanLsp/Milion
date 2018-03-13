@@ -1,7 +1,7 @@
 #include "EnvelopeComponent.h"
 
 void EnvelopeComponent::EnvelopeData::drawDebugInformation(Graphics & g,
-                                                    Rectangle<float> area) const
+                                                    juce::Rectangle<float> area) const
 {
     g.setColour(Colours::grey.withAlpha(0.5f));
     area.setHeight(area.getHeight() / 5.0f);
@@ -16,7 +16,7 @@ void EnvelopeComponent::EnvelopeData::drawDebugInformation(Graphics & g,
 void  EnvelopeComponent::EnvelopeData::show(Graphics & g,
                                      const String & title,
                                      float value,
-                                     Rectangle<float> & area) const
+                                     juce::Rectangle<float> & area) const
 {
     float halfWidth = area.getWidth() / 2.0f + 5.0f;
 

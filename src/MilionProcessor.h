@@ -2,10 +2,10 @@
 #define MILION_MILIONPROCESSOR_H_
 
 // This should be included at least once somewhere in the project
+#include "JuceHeader.h"
 #include "Operator/FMOperator.h"
 #include "Operator/OperatorContainer.h"
 #include "Utils/SysexParser.h"
-#include "JuceHeader.h"
 
 #define NUM_OPERATOR 2
 typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;
