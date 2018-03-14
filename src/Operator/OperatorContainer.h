@@ -21,7 +21,7 @@ class OperatorContainer : public AudioProcessor {
     void setValueTreeState(AudioProcessorValueTreeState* vst);
     void setOperator(Operator op);
     void releaseResources() override;
-    AudioProcessorEditor* createEditor() override;
+    AudioProcessorEditor* createEditor() override {return nullptr;}
 
     // Configuration
     bool hasEditor() const override {return false;}

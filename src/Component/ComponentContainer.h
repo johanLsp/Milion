@@ -7,7 +7,7 @@
 #include "FormantComponent.h"
 
 
-class ComponentContainer  : public Component,
+class ComponentContainer  : public juce::Component,
                             public Button::Listener {
  public:
     ComponentContainer(AudioProcessorValueTreeState* vts);

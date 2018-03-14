@@ -44,8 +44,8 @@ void ComponentContainer::buttonClicked(Button* button) {
 }
 
 void ComponentContainer::resized() {
-    Rectangle<int> area = getLocalBounds();
-    Rectangle<int> knobs = area.removeFromTop(100);
+    juce::Rectangle<int> area = getLocalBounds();
+    juce::Rectangle<int> knobs = area.removeFromTop(100);
     knobs.removeFromLeft(150);
     m_pOperator->setBounds(knobs);
     m_envelope.setBounds(area);

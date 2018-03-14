@@ -11,9 +11,6 @@ OperatorContainer::~OperatorContainer() {
 void OperatorContainer::releaseResources() {
 }
 
-AudioProcessorEditor* OperatorContainer::createEditor() {
-}
-
 void OperatorContainer::getStateInformation(MemoryBlock& destData) {
 }
 

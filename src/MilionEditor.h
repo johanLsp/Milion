@@ -20,8 +20,6 @@ class MilionEditor  : public AudioProcessorEditor,
 
  private:
     MilionProcessor& m_processor;
-    drow::TriggeredScope m_oscilloscope;
-    drow::Spectroscope m_spectroscope;
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 

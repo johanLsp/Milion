@@ -46,7 +46,12 @@
 #endif
 
 #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
-#define JUCE_CORE_INCLUDE_NATIVE_HEADERS 1
-#define NOGDI
+
+#if JucePlugin_Build_VST3 && (_WIN32 || _WIN64)
+ #define JUCE_VST3_CAN_REPLACE_VST2 0
+#endif
+
+//#define JUCE_CORE_INCLUDE_NATIVE_HEADERS 1
+//#define NOGDI
 
 @config_flags_defines@@audio_plugin_settings_defines@
