@@ -28,7 +28,7 @@ MilionProcessor::MilionProcessor()
                                 nullptr);
         vst->addParameterListener("operator_type", this);
         
-        vst->state = ValueTree(Identifier("Milion" + i));
+        vst->state = ValueTree(Identifier("Milion" + std::to_string(i)));
         m_valueTreeStates.add(vst);
         m_graph.addNode(m_operators[i], i+2);
     }

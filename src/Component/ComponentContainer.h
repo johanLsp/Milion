@@ -13,7 +13,7 @@ class ComponentContainer  : public juce::Component,
     ComponentContainer(AudioProcessorValueTreeState* vts);
     ~ComponentContainer();
  private:
-    void resized();
+    void resized() override;
     void setOperator(OperatorComponent::Operator op);
     void buttonClicked(Button* button) override;
 

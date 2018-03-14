@@ -14,12 +14,10 @@ class BaseOperator : public AudioProcessor {
     AudioProcessorEditor* createEditor() override {return nullptr;}
     virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) = 0;
-    virtual void prepareToPlay(double sampleRate, int samplesPerBlock) = 0;
-    virtual void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) = 0;
 
     // Configuration
     bool hasEditor() const override {return false;}
-    const String getName() const override {return "FM Operator";}
+    const String getName() const override {return "Base Operator";}
     double getTailLengthSeconds() const override {return 0.0;}
     bool acceptsMidi() const override {return true;}
     bool producesMidi() const override {return false;}

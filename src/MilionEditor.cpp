@@ -17,7 +17,7 @@ MilionEditor::MilionEditor(
 
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_containers[i] = new ComponentContainer(vts[i]);
-        m_tabLayout.addTab("Operator " + i, Colour(), m_containers[i], false);
+        m_tabLayout.addTab("Operator " + std::to_string(i), Colour(), m_containers[i], false);
         m_tabLayout.setTabBackgroundColour (i, getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     }
 
