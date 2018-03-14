@@ -7,8 +7,8 @@
 
 class BaseOperator : public AudioProcessor {
  public:
-    BaseOperator();
-    ~BaseOperator();
+    BaseOperator() {}
+    ~BaseOperator() {}
 
     void releaseResources() override {};
     AudioProcessorEditor* createEditor() override {return nullptr;}
