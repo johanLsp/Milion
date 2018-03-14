@@ -23,7 +23,7 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState->createAndAddParameter("freq_multiplier",       // parameter ID
                                 "Frequency",       // parameter name
                                 String(),     // parameter label (suffix)
-                                NormalisableRange<float> (1.0f, 10.0f, 0.01, 0.5),    // range
+                                NormalisableRange<float> (1.0f, 10.0f, 0.01f, 0.5f),    // range
                                 1.0f,         // default value
                                 nullptr,
                                 nullptr);

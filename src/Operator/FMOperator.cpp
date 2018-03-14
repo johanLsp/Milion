@@ -23,7 +23,7 @@ void FMOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessage
     const float envDecay = *m_valueTreeState->getRawParameterValue("env_decay");
     const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
     const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
-    const int waveformIndex = *m_valueTreeState->getRawParameterValue("waveform");
+    const int waveformIndex = static_cast<int>(*m_valueTreeState->getRawParameterValue("waveform"));
 
     m_wavetable.setWavetable(waveformIndex);
     m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);

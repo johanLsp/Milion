@@ -118,8 +118,8 @@ void EnvelopeComponent::updateSegmentPositions()
     for (auto s: segments)
         totalDuration += (s->getDuration() + minDuration);
     
-    float width = getWidth();
-    float height = getHeight();
+    int width = getWidth();
+    int height = getHeight();
     
     float xpos = 0.0f;
     

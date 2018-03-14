@@ -36,7 +36,7 @@ void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
     const float envDecay = *m_valueTreeState->getRawParameterValue("env_decay");
     const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
     const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
-    const int waveformIndex = *m_valueTreeState->getRawParameterValue("waveform");
+    const int waveformIndex = static_cast<int>(*m_valueTreeState->getRawParameterValue("waveform"));
     const float bandwidth = *m_valueTreeState->getRawParameterValue("bandwidth");
     const float skirt = *m_valueTreeState->getRawParameterValue("skirt");
 
