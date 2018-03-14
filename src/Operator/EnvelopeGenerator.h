@@ -20,7 +20,7 @@ class EnvelopeGenerator : public AudioProcessor {
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
 
     void releaseResources() override {};
-    AudioProcessorEditor* createEditor() override {}
+    AudioProcessorEditor* createEditor() override {return nullptr;}
 
     // Configuration
     bool hasEditor() const override {return false;}

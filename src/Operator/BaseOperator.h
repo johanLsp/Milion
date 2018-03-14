@@ -1,6 +1,7 @@
 #ifndef MILION_MILIONBASEOPERATOR_H_
 #define MILION_MILIONBASEOPERATOR_H_
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "JuceHeader.h"
 
@@ -10,7 +11,7 @@ class BaseOperator : public AudioProcessor {
     ~BaseOperator();
 
     void releaseResources() override {};
-    AudioProcessorEditor* createEditor() override {}
+    AudioProcessorEditor* createEditor() override {return nullptr;}
     virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void prepareToPlay(double sampleRate, int samplesPerBlock) = 0;

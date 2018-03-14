@@ -2478,7 +2478,7 @@ function(__set_common_target_properties target)
 
       foreach(path ${JUCER_EXTRA_LIBRARY_SEARCH_PATHS_${config}})
         target_link_libraries(${target} PRIVATE $<$<CONFIG:${config}>:-LIBPATH:${path}>)
-      endforeach()
+      endforeach()      
 
       if(DEFINED JUCER_INCREMENTAL_LINKING_${config})
         if(JUCER_INCREMENTAL_LINKING_${config})

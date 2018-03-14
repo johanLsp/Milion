@@ -25,7 +25,7 @@ SOFTWARE.
 
 typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 
-class EnvelopeComponent : public Component {
+class EnvelopeComponent : public juce::Component {
  public:
     EnvelopeComponent();
     ~EnvelopeComponent() {}
@@ -42,10 +42,10 @@ class EnvelopeComponent : public Component {
         float sustain; /** < 0.0 to 1.0. */
         float release;
         
-        void drawDebugInformation(Graphics & g, Rectangle<float> area) const;
+        void drawDebugInformation(Graphics & g, juce::Rectangle<float> area) const;
      private:
         void show(Graphics & g, const String & title, float value,
-                  Rectangle<float> & area) const;
+                  juce::Rectangle<float> & area) const;
     };
 
     
