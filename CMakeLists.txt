@@ -9,12 +9,14 @@ include(Juce)
 set(JUCE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/modules/JUCE5/modules")
 set(VST3_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/modules/vst3sdk")
 
+# Declare project
 jucer_project_begin(
   JUCER_VERSION "5.2.0"
   PROJECT_FILE "${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt"
   PROJECT_ID "0nRd9LLGO"
 )
 
+# Identification of the audio plugin
 jucer_project_settings(
   PROJECT_NAME "Milion"
   PROJECT_VERSION "1.0.0"
@@ -32,6 +34,7 @@ jucer_project_settings(
   # PREPROCESSOR_DEFINITIONS
 )
 
+# Plugin base configuration
 jucer_audio_plugin_settings(
   BUILD_VST ON
   BUILD_VST3 ON
@@ -45,7 +48,6 @@ jucer_audio_plugin_settings(
   PLUGIN_MANUFACTURER "Johan Lasperas"
   PLUGIN_MANUFACTURER_CODE "johanLsp"
   PLUGIN_CODE "Milion"
-  # PLUGIN_CHANNEL_CONFIGURATIONS
   PLUGIN_IS_A_SYNTH ON
   PLUGIN_MIDI_INPUT ON
   PLUGIN_MIDI_OUTPUT OFF
@@ -53,13 +55,13 @@ jucer_audio_plugin_settings(
   KEY_FOCUS ON
   PLUGIN_AU_EXPORT_PREFIX "MilionAU"
   PLUGIN_CHANNEL_CONFIGURATIONS "{0, 1}"
-
   # PLUGIN_AU_MAIN_TYPE
   # VST_CATEGORY
   # PLUGIN_RTAS_CATEGORY
   PLUGIN_AAX_CATEGORY "AAX_ePlugInCategory_Dynamics"
   PLUGIN_AAX_IDENTIFIER "johan.lasperas@gmail.com"
 )
+
 
 jucer_project_files("JuceDemoPlugin"
 # Compile   Xcode     Binary
@@ -93,6 +95,8 @@ jucer_project_files("JuceDemoPlugin"
   x         .         .         "src/Utils/Wavetable.cpp"
   .         .         .         "src/Utils/Wavetable.h"
 )
+
+# Include JUCE modules
 
 jucer_project_module(
   juce_audio_basics
@@ -185,7 +189,9 @@ jucer_project_module(
   # JUCE_USE_XCURSOR
 )
 
+# Declare targets
 
+# OSX
 jucer_export_target(
   "Xcode (MacOSX)"
   VST3_SDK_FOLDER ${VST3_MODULE_PATH}
@@ -250,6 +256,8 @@ jucer_export_target_configuration(
   # STRIP_LOCAL_SYMBOLS
 )
 
+
+# Visual Studion 2017
 jucer_export_target(
   "Visual Studio 2017"
   VST3_SDK_FOLDER ${VST3_MODULE_PATH}
@@ -308,6 +316,8 @@ jucer_export_target_configuration(
   # RELAX_IEEE_COMPLIANCE
 )
 
+
+# Visual Studio 2015
 jucer_export_target(
   "Visual Studio 2015"
   VST3_SDK_FOLDER ${VST3_MODULE_PATH}
@@ -366,6 +376,8 @@ jucer_export_target_configuration(
   # RELAX_IEEE_COMPLIANCE
 )
 
+
+# Linux
 jucer_export_target(
   "Linux Makefile"
   # EXTRA_PREPROCESSOR_DEFINITIONS
