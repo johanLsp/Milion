@@ -8,7 +8,8 @@ EnvelopeGenerator::EnvelopeGenerator()
       m_sustain(0.5),
       m_sustainLevel(1.0),
       m_release(1.0),
-      m_currentLevel(0.0) {
+      m_currentLevel(0.0),
+      m_targetLevel(0.0) {
 }
 
 EnvelopeGenerator::~EnvelopeGenerator() {
@@ -37,26 +38,35 @@ void EnvelopeGenerator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midi
             case State::IDLE:
                 break;
             case State::ATTACK:
-                m_currentLevel += m_attackLevel / m_attack;
-                if (m_currentLevel >= m_attackLevel)
+                m_targetLevel += m_attackLevel / m_attack;
+                if (m_targetLevel >= m_attackLevel)
                     m_state = State::DECAY;
                 break;
             case State::DECAY:
-                m_currentLevel -= (m_attackLevel - m_sustainLevel) / m_decay;
-                if (m_currentLevel <= m_sustainLevel)
+                m_targetLevel -= (m_attackLevel - m_sustainLevel) / m_decay;
+                if (m_targetLevel <= m_sustainLevel)
                     m_state = State::SUSTAIN;
                 break;
             case State::SUSTAIN:
-                m_currentLevel = m_sustainLevel;
+                m_targetLevel = m_sustainLevel;
                 break;
             case State::RELEASE:
-                m_currentLevel -= m_sustainLevel / m_release;
-                if (m_currentLevel <= 0) {
-                    m_currentLevel = 0;
+                m_targetLevel -= m_sustainLevel / m_release;
+                if (m_targetLevel <= 0) {
+                    m_targetLevel = 0;
                     m_state = State::IDLE;
                 }
                 break;
         }
+
+        if (m_currentLevel - m_targetLevel > 0.01) {
+            m_currentLevel -= 0.01;
+        } else if (m_currentLevel - m_targetLevel < -0.01) {
+            m_currentLevel += 0.01;
+        } else {
+            m_currentLevel = m_targetLevel;
+        }
+
         channelData[i] *= m_currentLevel;
     }
 }
@@ -67,5 +77,8 @@ void EnvelopeGenerator::handleNoteOn(int midiChannel, int midiNoteNumber, float 
 
 void EnvelopeGenerator::handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {
     m_state = State::RELEASE;
+    if (m_targetLevel > m_sustainLevel) {
+        m_targetLevel = m_sustainLevel;
+    }
 }
 

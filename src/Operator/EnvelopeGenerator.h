@@ -48,6 +48,7 @@ class EnvelopeGenerator : public AudioProcessor {
     double m_sustainLevel;
     double m_release;
     double m_currentLevel;
+    double m_targetLevel;
 };
 
 #endif  // INCLUDE_MILIONENVELOPEGENERATOR_H_
