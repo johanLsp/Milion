@@ -1,8 +1,7 @@
 #include "FMOperator.h"
 
-FMOperator::FMOperator(AudioProcessorValueTreeState* vst)
-    : m_valueTreeState(vst),
-    m_basePhase(0),
+FMOperator::FMOperator()
+    : m_basePhase(0),
     m_feedbackGain(0),
     m_frequency(0) {
 }

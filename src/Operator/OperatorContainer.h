@@ -8,7 +8,7 @@
 
 class OperatorContainer : public AudioProcessor {
  public:
-    enum class Operator {FM, Formant};
+    enum Operator {FM = 0, Formant};
 
     OperatorContainer();
     ~OperatorContainer();
@@ -41,6 +41,7 @@ class OperatorContainer : public AudioProcessor {
 
  private:
     AudioProcessorValueTreeState* m_valueTreeState;
-    BaseOperator* m_pOperator;
+    BaseOperator* m_operators[2];
+    BaseOperator* m_pCurrentOperator;
 };
 #endif  // MILION_MILIONOPERATORCONTAINER_H_

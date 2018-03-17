@@ -1,8 +1,7 @@
 #include "FormantOperator.h"
 
-FormantOperator::FormantOperator(AudioProcessorValueTreeState* vst)
-    : m_valueTreeState(vst),
-    m_frequency(440),
+FormantOperator::FormantOperator()
+    : m_frequency(440),
     m_mainPhasor {0,0},
     m_secondaryPhasor {0,0},
     m_bandwidthPhasor {0,0} {

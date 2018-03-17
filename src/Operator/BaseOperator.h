@@ -14,6 +14,7 @@ class BaseOperator : public AudioProcessor {
     AudioProcessorEditor* createEditor() override {return nullptr;}
     virtual void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) = 0;
     virtual void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) = 0;
+    void setValueTreeState(AudioProcessorValueTreeState* vst) {m_valueTreeState = vst;}
 
     // Configuration
     bool hasEditor() const override {return false;}
@@ -30,5 +31,8 @@ class BaseOperator : public AudioProcessor {
 
     void getStateInformation(MemoryBlock& destData) override {};
     void setStateInformation(const void* data, int sizeInBytes) override {};
+
+ protected:
+     AudioProcessorValueTreeState* m_valueTreeState;
 };
 #endif  // MILION_MILIONBASEOPERATOR_H_

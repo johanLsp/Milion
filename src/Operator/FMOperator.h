@@ -12,7 +12,7 @@
 class FMOperator : public BaseOperator {
 
  public:
-    FMOperator(AudioProcessorValueTreeState* vst);
+    FMOperator();
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
     void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) override;
@@ -20,7 +20,6 @@ class FMOperator : public BaseOperator {
 
 
  private:
-    AudioProcessorValueTreeState* m_valueTreeState;
     EnvelopeGenerator m_envelope;
     Wavetable m_wavetable;
     double m_basePhase;

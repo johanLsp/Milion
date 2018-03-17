@@ -1,11 +1,13 @@
 #include "OperatorContainer.h"
 
-OperatorContainer::OperatorContainer()
-    : m_pOperator(nullptr) {
+OperatorContainer::OperatorContainer() {
+    m_operators[0] = new FMOperator();
+    m_operators[1] = new FormantOperator();
 }
 
 OperatorContainer::~OperatorContainer() {
-    if (m_pOperator) delete m_pOperator;
+    delete m_operators[0];
+    delete m_operators[1];
 }
 
 void OperatorContainer::releaseResources() {
@@ -19,6 +21,8 @@ void OperatorContainer::setStateInformation(const void* data, int sizeInBytes) {
 
 void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState = vst;
+    m_operators[0]->setValueTreeState(vst);
+    m_operators[1]->setValueTreeState(vst);
 
     m_valueTreeState->createAndAddParameter("freq_multiplier",       // parameter ID
                                 "Frequency",       // parameter name
@@ -92,35 +96,26 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
 }
 
 void OperatorContainer::setOperator(Operator op) {
-    if (m_pOperator) delete m_pOperator;
-
-    switch (op) {
-        case Operator::FM:
-            m_pOperator = new FMOperator(m_valueTreeState);
-            break;
-        case Operator::Formant:
-            m_pOperator = new FormantOperator(m_valueTreeState);
-            break;
-    }
+    m_pCurrentOperator = m_operators[op];
     prepareToPlay(getSampleRate(), getBlockSize());
 }
 
 void OperatorContainer::prepareToPlay(double sampleRate, int samplesPerBlock) {
-    m_pOperator->setPlayConfigDetails(
+    m_pCurrentOperator->setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-    m_pOperator->prepareToPlay(sampleRate, samplesPerBlock);
+    m_pCurrentOperator->prepareToPlay(sampleRate, samplesPerBlock);
 }
 void OperatorContainer::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
-    m_pOperator->processBlock(buffer, midiMessages);
+    m_pCurrentOperator->processBlock(buffer, midiMessages);
 }
 
 void OperatorContainer::handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {
-    m_pOperator->handleNoteOn(midiChannel, midiNoteNumber, velocity);
+    m_pCurrentOperator->handleNoteOn(midiChannel, midiNoteNumber, velocity);
 }
 
 void OperatorContainer::handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {
-    m_pOperator->handleNoteOff(midiChannel, midiNoteNumber, velocity);
+    m_pCurrentOperator->handleNoteOff(midiChannel, midiNoteNumber, velocity);
 }
