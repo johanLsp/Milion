@@ -3,7 +3,7 @@
 
 Wavetable::Wavetable(int length)
 :m_length(length) {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 7; i++) {
         m_wavetable[i] = new double[length];
     }
 
@@ -56,7 +56,7 @@ double Wavetable::operator()(double position) {
 }
 
 Wavetable::~Wavetable() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 7; i++) {
         delete[] m_wavetable[i];
     }
 }
