@@ -1,30 +1,69 @@
 #include "FormantOperator.h"
 
 FormantOperator::FormantOperator()
-    : m_frequency(440),
-    m_mainPhasor {0,0},
-    m_secondaryPhasor {0,0},
-    m_bandwidthPhasor {0,0} {
-    
-    m_mainPhasor[0] = 0;
-    m_mainPhasor[1] = 0.5;
-    m_secondaryPhasor[0] = 0;
-    m_secondaryPhasor[1] = 0.5;
-    m_bandwidthPhasor[0] = 0;
-    m_bandwidthPhasor[1] = 0.5;
+ : currentX(0), currentY(0),
+    m_basePhase(0),
+    m_frequency(0) {
+    m_Xwave.setWavetable(6);
+    m_Ywave.setWavetable(6);
 }
 
 void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    if(m_pBuffer) delete m_pBuffer;
+
+    m_pBuffer = new AudioSampleBuffer(5, samplesPerBlock);
+
+    m_graph.setPlayConfigDetails(
+        5 * getTotalNumInputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+    m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
+
+    m_graph.clear();
+
+    AudioProcessorGraph::AudioGraphIOProcessor* input =
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
+
+    AudioProcessorGraph::AudioGraphIOProcessor* output =
+        new AudioProcessorGraph::AudioGraphIOProcessor(
+            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
+
+    m_graph.addNode(input, 1);
+    m_graph.addNode(output, 2);
+
+
+    for (int i = 0; i < 4; i++) {
+        m_filters[i] = new ResonantFilter();
+        m_graph.addNode(m_filters[i], i+3);
+    }
+
+    for (int i = m_graph.getNumNodes() - 1; i >= 0; i--)
+        m_graph.disconnectNode(i);
+
+    for (int i = 0; i < 4; i++) {
+        m_filters[i]->setPlayConfigDetails(
+        2 * getTotalNumInputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+        m_graph.addConnection({ {1, 0}, {i+3, 0} });
+        m_graph.addConnection({ {1, i+1}, {i+3, 1} });
+        m_graph.addConnection({ {i+3, 0}, {2, 0} });
+    }
+
+    m_graph.prepareToPlay(sampleRate, samplesPerBlock);
+
+    Xinc =  1.0 / (2 * sampleRate);
+    Yinc = 1.0 / (10 * sampleRate);
+
     m_envelope.setPlayConfigDetails(
         getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-
     m_envelope.prepareToPlay(sampleRate, samplesPerBlock);
-
-    m_window[0].setWavetable(1);
-    m_window[1].setWavetable(1);
 }
 
 void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
@@ -36,43 +75,34 @@ void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
     const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
     const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
     const int waveformIndex = static_cast<int>(*m_valueTreeState->getRawParameterValue("waveform"));
-    const float bandwidth = *m_valueTreeState->getRawParameterValue("bandwidth");
-    const float skirt = *m_valueTreeState->getRawParameterValue("skirt");
 
-    m_wavetable[0].setWavetable(waveformIndex);
-    m_wavetable[1].setWavetable(waveformIndex);
-
+    m_wavetable.setWavetable(waveformIndex);
     m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);
+    double increment = m_frequency * freqMultiplier / getSampleRate();
 
-    double output = 0;
-    double mainInc = m_frequency * freqMultiplier / getSampleRate();
-    double secondaryInc =  m_frequency / getSampleRate() / 2;
-    double bandwidthInc = m_frequency / bandwidth / getSampleRate();
-    double windowPhasor[2];
-    double modulatedPhasor[2];
-    float* channelData = buffer.getWritePointer(0);
-
+    float* inputData = buffer.getWritePointer(0);
+    float* audioData = m_pBuffer->getWritePointer(0);
     for (int i = 0; i < buffer.getNumSamples(); i++) {
-        for (int layer = 0; layer < 2; layer++) {
-            m_mainPhasor[layer] += mainInc;
-            m_secondaryPhasor[layer] += secondaryInc;
-            m_bandwidthPhasor[layer] += bandwidthInc;
-            if (m_bandwidthPhasor[layer] > 1)  m_bandwidthPhasor[layer] = 1;
-            if (m_secondaryPhasor[layer] >= 1) {
-                m_mainPhasor[layer] = 0;
-                m_secondaryPhasor[layer] = 0;
-                m_bandwidthPhasor[layer] = 0;
-            }
-            if (m_secondaryPhasor[layer] >= m_bandwidthPhasor[layer])
-                windowPhasor[layer] = m_secondaryPhasor[layer] + channelData[i];
-            else
-                windowPhasor[layer] = m_bandwidthPhasor[layer] + channelData[i];
+        currentX += Xinc;
+        currentY += Yinc;
+        double x = m_Xwave(currentX);
+        double y = m_Ywave(currentY);
 
-            modulatedPhasor[layer] = m_mainPhasor[layer] + channelData[i];
+        for (int channel = 0; channel < 4; channel++) {
+            float* frequencyData = m_pBuffer->getWritePointer(channel+1);
+            double freq1 = kPhonemeA[channel] + x * (kPhonemeE[channel] - kPhonemeA[channel]);
+            double freq2 = kPhonemeI[channel] + x * (kPhonemeU[channel] - kPhonemeI[channel]);
+            double frequency = freq1 + y * (freq2 - freq1);
+            frequencyData[i] = frequency;
         }
-       channelData[i] = m_wavetable[0](modulatedPhasor[0])*pow(sin(M_PI * windowPhasor[0]) , 2*skirt)
-        + m_wavetable[1](modulatedPhasor[1])*pow(sin(M_PI * windowPhasor[1]) , 2*skirt);
-   }
+
+        m_basePhase += increment;
+        m_modulatedPhase = m_basePhase + inputData[i];
+        audioData[i] = m_wavetable(m_modulatedPhase);
+    }
+
+    m_graph.processBlock(*m_pBuffer, midiMessages);
+    buffer.copyFrom(0, 0, *m_pBuffer, 0, 0, buffer.getNumSamples());
     m_envelope.processBlock(buffer, midiMessages);
 }
 

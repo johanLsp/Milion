@@ -6,6 +6,8 @@ set (CMAKE_CXX_STANDARD 11)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(Juce)
 
+include_directories(src)
+
 set(JUCE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/modules/JUCE5/modules")
 set(VST3_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/modules/vst3sdk")
 
@@ -36,8 +38,8 @@ jucer_project_settings(
 
 # Plugin base configuration
 jucer_audio_plugin_settings(
-  BUILD_VST ON
-  BUILD_VST3 ON
+  BUILD_VST OFF
+  BUILD_VST3 OFF
   BUILD_AUDIOUNIT ON
   BUILD_AUDIOUNIT_V3 OFF
   BUILD_RTAS OFF
@@ -92,6 +94,8 @@ jucer_project_files("JuceDemoPlugin"
   .         .         .         "src/Utils/SysexParser.h"
   x         .         .         "src/Utils/Wavetable.cpp"
   .         .         .         "src/Utils/Wavetable.h"
+  x         .         .         "src/Klatt/ResonantFilter.cpp"
+  .         .         .         "src/Klatt/ResonantFilter.h"
 )
 
 # Include JUCE modules
