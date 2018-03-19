@@ -1,5 +1,4 @@
 #include "ResonantFilter.h"
-#include <sstream>
 
 ResonantFilter::ResonantFilter()
  : coef1(1.0) {
@@ -30,7 +29,7 @@ void ResonantFilter::setBandwidth(double bandwidth) {
 void ResonantFilter::processBlock(AudioSampleBuffer& buffer, MidiBuffer &midiMessages) {
     float* channelData = buffer.getWritePointer(0);
     float* frequencyData = buffer.getWritePointer(1);
-    int sampleRate = getSampleRate();
+    int sampleRate = static_cast<int>(getSampleRate());
 
     coef2 = (coef3 * 4.0) * cos(m_centerFrequency * (2*M_PI/sampleRate))/ (coef3 + 1.0);
        

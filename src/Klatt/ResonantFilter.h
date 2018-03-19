@@ -1,11 +1,10 @@
 #ifndef MILION_MILIONRESONANTFILTER_H_
 #define MILION_MILIONRESONANTFILTER_H_
 
-#include "JuceHeader.h"
-
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+#include "JuceHeader.h"
 class ResonantFilter : public AudioProcessor {
  public:
     ResonantFilter();

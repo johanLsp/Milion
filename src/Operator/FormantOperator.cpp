@@ -42,14 +42,14 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     for (int i = m_graph.getNumNodes() - 1; i >= 0; i--)
         m_graph.disconnectNode(i);
 
-    for (int i = 0; i < 4; i++) {
+    for (unsigned int i = 0; i < 4; i++) {
         m_filters[i]->setPlayConfigDetails(
         2 * getTotalNumInputChannels(),
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
         m_graph.addConnection({ {1, 0}, {i+3, 0} });
-        m_graph.addConnection({ {1, i+1}, {i+3, 1} });
+        m_graph.addConnection({ {1, static_cast<int>(i+1)}, {i+3, 1} });
         m_graph.addConnection({ {i+3, 0}, {2, 0} });
     }
 
