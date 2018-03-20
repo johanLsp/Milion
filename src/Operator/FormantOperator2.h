@@ -2,20 +2,12 @@
 #define MILION_MILIONFORMANTOPERATOR_H_
 
 #include "BaseOperator.h"
-#include "Klatt/ResonantFilter.h"
-#include "Utils/Wavetable.h"
-#include "Operator/EnvelopeGenerator.h"
+#include "EnvelopeGenerator.h"
+#include "../Utils/Wavetable.h"
 /*
     Implements a Frequency Modulation operator
     This is actually done using phase modulation
 */
-
-namespace {
-constexpr double kPhonemeE[4] = {844, 1656, 2437, 3704};
-constexpr double kPhonemeA[4] = {768, 1333, 2522, 3867};
-constexpr double kPhonemeI[4] = {324, 2985, 3329, 3807};
-constexpr double kPhonemeU[4] = {378, 997, 2343, 3357};
-}
 
 class FormantOperator : public BaseOperator {
 
@@ -28,18 +20,13 @@ class FormantOperator : public BaseOperator {
 
 
  private:
-    AudioSampleBuffer* m_pBuffer;
-    AudioProcessorGraph m_graph;
-    Wavetable m_Xwave, m_Ywave;
     EnvelopeGenerator m_envelope;
-    Wavetable m_wavetable;
-    double m_basePhase;
-    double m_modulatedPhase;
+    Wavetable m_wavetable[2];
     double m_frequency;
-
-    double currentX, currentY;
-    double Xinc, Yinc;
-    dsp::IIR::Filter<float> m_filters[4];
+    double m_mainPhasor[2];
+    double m_secondaryPhasor[2];
+    double m_bandwidthPhasor[2];
+    Wavetable m_window[2];
 };
 
 #endif  // MILION_MILIONFORMANTOPERATOR_H_

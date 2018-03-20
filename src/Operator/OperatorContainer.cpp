@@ -82,8 +82,8 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState->createAndAddParameter("bandwidth",       // parameter ID
                                 "Bandwidth",       // parameter name
                                 String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.1f, 1.0f),    // range
-                                0.2f,         // default value
+                                NormalisableRange<float> (0.1f, 50.0f),    // range
+                                1.0f,         // default value
                                 nullptr,
                                 nullptr);
                                     m_valueTreeState->createAndAddParameter("skirt",       // parameter ID

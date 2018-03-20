@@ -39,7 +39,7 @@ class FormantOperator : public BaseOperator {
 
     double currentX, currentY;
     double Xinc, Yinc;
-    dsp::IIR::Filter<float> m_filters[4];
+    ResonantFilter* m_filters[4];
 };
 
 #endif  // MILION_MILIONFORMANTOPERATOR_H_

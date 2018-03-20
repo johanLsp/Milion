@@ -4,8 +4,8 @@ FormantOperator::FormantOperator()
  : currentX(0), currentY(0),
     m_basePhase(0),
     m_frequency(0) {
-    m_Xwave.setWavetable(6);
-    m_Ywave.setWavetable(6);
+    m_Xwave.setWavetable(0);
+    m_Ywave.setWavetable(0);
 }
 
 void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
@@ -13,50 +13,8 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
     m_pBuffer = new AudioSampleBuffer(5, samplesPerBlock);
 
-    m_graph.setPlayConfigDetails(
-        5 * getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-    m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
-
-    m_graph.clear();
-
-    AudioProcessorGraph::AudioGraphIOProcessor* input =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
-
-    AudioProcessorGraph::AudioGraphIOProcessor* output =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-
-    m_graph.addNode(input, 1);
-    m_graph.addNode(output, 2);
-
-
-    for (int i = 0; i < 4; i++) {
-        m_filters[i] = new ResonantFilter();
-        m_graph.addNode(m_filters[i], i+3);
-    }
-
-    for (int i = m_graph.getNumNodes() - 1; i >= 0; i--)
-        m_graph.disconnectNode(i);
-
-    for (unsigned int i = 0; i < 4; i++) {
-        m_filters[i]->setPlayConfigDetails(
-        2 * getTotalNumInputChannels(),
-        getTotalNumOutputChannels(),
-        sampleRate,
-        samplesPerBlock);
-        m_graph.addConnection({ {1, 0}, {i+3, 0} });
-        m_graph.addConnection({ {1, static_cast<int>(i+1)}, {i+3, 1} });
-        m_graph.addConnection({ {i+3, 0}, {2, 0} });
-    }
-
-    m_graph.prepareToPlay(sampleRate, samplesPerBlock);
-
-    Xinc =  1.0 / (2 * sampleRate);
-    Yinc = 1.0 / (10 * sampleRate);
+    Xinc = samplesPerBlock / (2 * sampleRate);
+    Yinc = samplesPerBlock / (10 * sampleRate);
 
     m_envelope.setPlayConfigDetails(
         getTotalNumInputChannels(),
@@ -64,6 +22,8 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
         sampleRate,
         samplesPerBlock);
     m_envelope.prepareToPlay(sampleRate, samplesPerBlock);
+
+
 }
 
 void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
@@ -75,34 +35,41 @@ void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMe
     const float envSustain = *m_valueTreeState->getRawParameterValue("env_sustain");
     const float envRelease = *m_valueTreeState->getRawParameterValue("env_release");
     const int waveformIndex = static_cast<int>(*m_valueTreeState->getRawParameterValue("waveform"));
+    const float bandwidth = *m_valueTreeState->getRawParameterValue("bandwidth");
 
     m_wavetable.setWavetable(waveformIndex);
     m_envelope.setParameters(envAttack, envAttackLevel, envDecay, envSustain, envRelease);
-    double increment = m_frequency * freqMultiplier / getSampleRate();
 
-    float* inputData = buffer.getWritePointer(0);
-    float* audioData = m_pBuffer->getWritePointer(0);
-    for (int i = 0; i < buffer.getNumSamples(); i++) {
+
         currentX += Xinc;
         currentY += Yinc;
-        double x = m_Xwave(currentX);
-        double y = m_Ywave(currentY);
+        double x = 0.5*m_Xwave(currentX) + 0.5;
+        double y = 0.5*m_Ywave(currentY) + 0.5;
 
-        for (int channel = 0; channel < 4; channel++) {
-            float* frequencyData = m_pBuffer->getWritePointer(channel+1);
-            double freq1 = kPhonemeA[channel] + x * (kPhonemeE[channel] - kPhonemeA[channel]);
-            double freq2 = kPhonemeI[channel] + x * (kPhonemeU[channel] - kPhonemeI[channel]);
-            double frequency = freq1 + y * (freq2 - freq1);
-            frequencyData[i] = frequency;
-        }
 
-        m_basePhase += increment;
-        m_modulatedPhase = m_basePhase + inputData[i];
-        audioData[i] = m_wavetable(m_modulatedPhase);
+    for (int i = 0; i < 4; i++) {
+        float freq1 = kPhonemeA[i] + x * (kPhonemeE[i] - kPhonemeA[i]);
+        float freq2 = kPhonemeI[i] + x * (kPhonemeU[i] - kPhonemeI[i]);
+        float frequency = freq1 + y * (freq2 - freq1);
+        m_filters[i] = dsp::IIR::Filter<float>(dsp::IIR::Coefficients<float>::makeBandPass(getSampleRate(), frequency, bandwidth));
+        //m_filters[i].reset();
     }
 
-    m_graph.processBlock(*m_pBuffer, midiMessages);
-    buffer.copyFrom(0, 0, *m_pBuffer, 0, 0, buffer.getNumSamples());
+    for (int i = 0; i < 3; i++) {
+            m_pBuffer->copyFrom(i, 0, buffer, 0, 0, buffer.getNumSamples());
+    }
+
+    dsp::AudioBlock<float> block = dsp::AudioBlock<float>(buffer).getSingleChannelBlock(0);
+    dsp::ProcessContextReplacing<float> context(block);
+    m_filters[0].process(context);
+
+    for(int i = 0; i < 3; i++) {
+        block = dsp::AudioBlock<float>(*m_pBuffer).getSingleChannelBlock(i);
+        dsp::ProcessContextReplacing<float> context(block);
+        m_filters[i].process(context);
+        buffer.addFrom(0, 0, *m_pBuffer, i, 0, buffer.getNumSamples());
+    }
+
     m_envelope.processBlock(buffer, midiMessages);
 }
 
