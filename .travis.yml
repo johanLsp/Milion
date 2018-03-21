@@ -1,5 +1,5 @@
 language: cpp
-compiler: gcc
+compiler: g++
 
 matrix:
   include:
@@ -7,13 +7,13 @@ matrix:
       sudo: false
       dist: trusty
       compiler: gcc
-      env: BUILD_TYPE="Debug"
+      env: BUILD_TYPE="Debug" CXX="g++-5" CC="g++-5"
 
     - os: linux
       sudo: false
       dist: trusty
       compiler: gcc
-      env: BUILD_TYPE="Release"
+      env: BUILD_TYPE="Release" CXX="g++-5" CC="g++-5"
 
     - os: osx
       compiler: xcode6.4
@@ -27,6 +27,7 @@ addons:
   apt:
     packages:
       - cmake
+      - g++-5
       - libfreetype6-dev
       - libxinerama-dev
       - libxrandr-dev
@@ -35,6 +36,8 @@ addons:
       - libasound2-dev
       - freeglut3-dev
       - libxcomposite-dev
+    sources:
+      - ubuntu-toolchain-r-test
 
 script:
   - mkdir build

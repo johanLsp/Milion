@@ -236,7 +236,7 @@ jucer_export_target_configuration(
   OSX_DEPLOYMENT_TARGET "Use Default"
   OSX_ARCHITECTURE "Universal Binary (32/64-bit)"
   # CUSTOM_XCODE_FLAGS
-  CXX_LANGUAGE_STANDARD "Use Default"
+  CXX_LANGUAGE_STANDARD "C++14"
   CXX_LIBRARY "Use Default"
   # CODE_SIGNING_IDENTITY
   # RELAX_IEEE_COMPLIANCE
@@ -260,7 +260,7 @@ jucer_export_target_configuration(
   OSX_DEPLOYMENT_TARGET "Use Default"
   OSX_ARCHITECTURE "Universal Binary (32/64-bit)"
   # CUSTOM_XCODE_FLAGS
-  CXX_LANGUAGE_STANDARD "Use Default"
+  CXX_LANGUAGE_STANDARD "C++14"
   CXX_LIBRARY "Use Default"
   # CODE_SIGNING_IDENTITY
   # RELAX_IEEE_COMPLIANCE
@@ -399,7 +399,6 @@ jucer_export_target(
   ICON_SMALL "<None>"
   ICON_LARGE "<None>"
   CXX_STANDARD_TO_USE C++14
-  # CXX_STANDARD_TO_USE
   # PKGCONFIG_LIBRARIES
 )
 
