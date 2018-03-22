@@ -4,9 +4,11 @@
 #include "BaseOperator.h"
 #include "Klatt/ResonantFilter.h"
 #include "Utils/Wavetable.h"
-
+#include "Operator/EnvelopeGenerator.h"
+#include <fstream>
 /*
-    Implements a Formant operator
+    Implements a Frequency Modulation operator
+    This is actually done using phase modulation
 */
 
 namespace {
@@ -22,15 +24,28 @@ class FormantOperator : public BaseOperator {
     FormantOperator();
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) {};
-    void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) {};
+    void handleNoteOn(int midiChannel, int midiNoteNumber, float velocity) override;
+    void handleNoteOff(int midiChannel, int midiNoteNumber, float velocity) override;
+
 
  private:
+    AudioSampleBuffer* m_pBuffer[3];
     AudioProcessorGraph m_graph;
     Wavetable m_Xwave, m_Ywave;
+    EnvelopeGenerator m_envelope;
+    Wavetable m_wavetable;
+    double m_basePhase;
+    double m_modulatedPhase;
+    double m_frequency;
+
     double currentX, currentY;
     double Xinc, Yinc;
-    ResonantFilter* m_filters[4];
+    dsp::IIR::Filter<float> m_filters[4];
+    dsp::IIR::Filter<float> m_lowPass;
+
+    ResonantFilter m_resonant[4];
+
+    std::ofstream file;
 };
 
 #endif  // MILION_MILIONFORMANTOPERATOR_H_
