@@ -10,7 +10,8 @@ FormantComponent::FormantComponent(AudioProcessorValueTreeState* vts)
     waveformList.add("3");
     waveformList.add("4");
     waveformList.add("5");
-    waveformList.add("6");
+    waveformList.add("Square");
+    waveformList.add("Saw");
     m_waveform.addItemList(waveformList, 1);
     addAndMakeVisible(&m_waveform);
     m_waveformAttachment = new ComboBoxAttachment(*(m_valueTreeState),
@@ -20,17 +21,21 @@ FormantComponent::FormantComponent(AudioProcessorValueTreeState* vts)
     m_bandwidthAttachment = new SliderAttachment(*(m_valueTreeState),
                                                     "bandwidth",
                                                     m_bandwidth);
-    m_bandwidth.setTextBoxStyle(Slider::NoTextBox, true, 50, 20);
+    m_bandwidth.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     m_bandwidth.setSliderStyle(Slider::Rotary);
     m_bandwidthLabel.setText("Bandwidth", dontSendNotification);
+
+    m_bandwidth.setSkewFactor(0.1);
     addAndMakeVisible(m_bandwidthLabel);
     
     addAndMakeVisible(&m_skirt);
     m_skirtAttachment = new SliderAttachment(*(m_valueTreeState),
                                                     "skirt",
                                                     m_skirt);
-    m_skirt.setTextBoxStyle(Slider::NoTextBox, true, 50, 20);
+    m_skirt.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     m_skirt.setSliderStyle(Slider::Rotary);
+    m_skirt.setSkewFactor(0.1);
+
     m_skirtLabel.setText("Skirt", dontSendNotification);
     addAndMakeVisible(m_skirtLabel);
 

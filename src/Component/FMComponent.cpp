@@ -10,7 +10,8 @@ FMComponent::FMComponent(AudioProcessorValueTreeState* vts)
     waveformList.add("3");
     waveformList.add("4");
     waveformList.add("5");
-    waveformList.add("6");
+    waveformList.add("Square");
+    waveformList.add("Saw");
     m_waveform.addItemList(waveformList, 1);
     addAndMakeVisible(&m_waveform);
     m_waveformAttachment = new ComboBoxAttachment(*(m_valueTreeState),

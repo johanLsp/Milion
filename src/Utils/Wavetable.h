@@ -20,7 +20,7 @@ class Wavetable {
  private:
     int m_length;
     int m_waveformIndex;
-    double* m_wavetable[7];
+    double* m_wavetable[8];
 };
 
 #endif  // MILION_MILIONWAVETABKE_H_

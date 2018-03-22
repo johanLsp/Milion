@@ -3,7 +3,7 @@
 
 Wavetable::Wavetable(int length)
 :m_length(length) {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         m_wavetable[i] = new double[length];
     }
 
@@ -15,6 +15,7 @@ Wavetable::Wavetable(int length)
         m_wavetable[4][i] = sin(4*M_PI*i/length);
         m_wavetable[5][i] = sin(4*M_PI*i/length);
         m_wavetable[6][i] = 1;
+        m_wavetable[7][i] = 2.0*i / length - 1;
     }
     for (int i = length/4; i < length/2; i++) {
         m_wavetable[0][i] = sin(2*M_PI*i/length);
@@ -24,6 +25,7 @@ Wavetable::Wavetable(int length)
         m_wavetable[4][i] = sin(4*M_PI*i/length);
         m_wavetable[5][i] = -sin(4*M_PI*i/length);
         m_wavetable[6][i] = 1;
+        m_wavetable[7][i] = 2.0*i / length - 1;
     }
     for (int i = length/2; i < 3*length/4; i++) {
         m_wavetable[0][i] = sin(2*M_PI*i/length);
@@ -33,6 +35,7 @@ Wavetable::Wavetable(int length)
         m_wavetable[4][i] = 0;
         m_wavetable[5][i] = 0;
         m_wavetable[6][i] = -1;
+        m_wavetable[7][i] = 2.0*i / length - 1;
     }
     for (int i = 3*length/4; i < length; i++) {
         m_wavetable[0][i] = sin(2*M_PI*i/length);
@@ -42,9 +45,10 @@ Wavetable::Wavetable(int length)
         m_wavetable[4][i] = 0;
         m_wavetable[5][i] = 0;
         m_wavetable[6][i] = -1;
+        m_wavetable[7][i] = 2.0*i / length - 1;
     }
 
-    m_waveformIndex = 1;
+    m_waveformIndex = 0;
 }
 
 void Wavetable::setWavetable(int index) {
@@ -56,7 +60,7 @@ double Wavetable::operator()(double position) {
 }
 
 Wavetable::~Wavetable() {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         delete[] m_wavetable[i];
     }
 }
