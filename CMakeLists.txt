@@ -199,6 +199,14 @@ jucer_project_module(
   # JUCE_DSP_ENABLE_SNAP_TO_ZERO
 )
 
+jucer_project_module(
+  dRowAudio
+  PATH "${CMAKE_CURRENT_LIST_DIR}/modules"
+  # JUCE_DSP_ENABLE_SNAP_TO_ZERO
+)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/modules/JUCE5)
+add_definitions("-DDROWAUDIO_USE_FFTREAL")
+
 add_definitions("-DJUCE_USE_SIMD=0")
 
 # Declare targets

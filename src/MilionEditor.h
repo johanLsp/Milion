@@ -4,6 +4,7 @@
 #include "MilionProcessor.h"
 #include "Component/EnvelopeComponent.h"
 #include "Component/ComponentContainer.h"
+#include "dRowAudio/dRowAudio.h"
 
 class MilionEditor  : public AudioProcessorEditor,
                                     private Slider::Listener {
@@ -27,6 +28,9 @@ class MilionEditor  : public AudioProcessorEditor,
     ScopedPointer<ComponentContainer> m_containers[NUM_OPERATOR];
     
     ValueTreeStates& m_valueTreeStates;
+
+    drow::Spectroscope m_spectroscope;
+    drow::TriggeredScope m_oscilloscope;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionEditor)
 };
