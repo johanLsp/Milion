@@ -1,9 +1,6 @@
 #include "FormantOperator.h"
 
-FormantOperator::FormantOperator()
- : currentX(0), currentY(0) {
-    m_Xwave.setWavetable(6);
-    m_Ywave.setWavetable(6);
+FormantOperator::FormantOperator() {
 }
 
 void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
@@ -26,7 +23,6 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.addNode(input, 1);
     m_graph.addNode(output, 2);
 
-
     for (int i = 0; i < 4; i++) {
         m_filters[i] = new ResonantFilter();
         m_graph.addNode(m_filters[i], i+3);
@@ -43,16 +39,11 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     }
 
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
-
-    Xinc = samplesPerBlock / (2 * sampleRate);
-    Yinc = samplesPerBlock / (10 * sampleRate);
 }
 
 void FormantOperator::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
-    currentX += Xinc;
-    currentY += Yinc;
-    double x = 0.5*m_Xwave(currentX) + 0.5;
-    double y = 0.5*m_Ywave(currentY) + 0.5;
+    const float x = *m_valueTreeState->getRawParameterValue("bandwidth");
+    const float y = *m_valueTreeState->getRawParameterValue("skirt");
 
     for (int i = 0; i < 4; i++) {
         float freq1 = kPhonemeA[i] + x * (kPhonemeE[i] - kPhonemeA[i]);

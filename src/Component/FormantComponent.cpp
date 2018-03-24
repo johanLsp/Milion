@@ -25,7 +25,6 @@ FormantComponent::FormantComponent(AudioProcessorValueTreeState* vts)
     m_bandwidth.setSliderStyle(Slider::Rotary);
     m_bandwidthLabel.setText("Bandwidth", dontSendNotification);
 
-    m_bandwidth.setSkewFactor(0.1);
     addAndMakeVisible(m_bandwidthLabel);
     
     addAndMakeVisible(&m_skirt);
@@ -34,7 +33,6 @@ FormantComponent::FormantComponent(AudioProcessorValueTreeState* vts)
                                                     m_skirt);
     m_skirt.setTextBoxStyle(Slider::TextBoxBelow, true, 50, 20);
     m_skirt.setSliderStyle(Slider::Rotary);
-    m_skirt.setSkewFactor(0.1);
 
     m_skirtLabel.setText("Skirt", dontSendNotification);
     addAndMakeVisible(m_skirtLabel);
