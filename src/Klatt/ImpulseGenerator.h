@@ -1,6 +1,7 @@
 #ifndef MILION_MILIONIMPULSEGENERATOR_H_
 #define MILION_MILIONIMPULSEGENERATOR_H_
 
+#include "JuceHeader.h"
 
 class ImpulseGenerator : public AudioProcessor {
  public:

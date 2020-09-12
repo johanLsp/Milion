@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "JuceHeader.h"
+
 /* Digital filter - output is given by :
  * y(n) = A*x(n) + B*y(n-1) + C*y(n-2) 
  */

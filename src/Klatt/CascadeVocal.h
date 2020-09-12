@@ -3,6 +3,7 @@
 
 #include "DigitalResonator.h"
 #include "AntiResonator.h"
+#include "JuceHeader.h"
 
 class CascadeVocal : public AudioProcessor {
  public:
@@ -30,13 +31,13 @@ class CascadeVocal : public AudioProcessor {
  private:
     AudioProcessorGraph m_graph;
 
-    DigitalResonator m_RNP;
-    AntiResonator m_RNZ;
-    DigitalResonator m_R1;
-    DigitalResonator m_R2;
-    DigitalResonator m_R3;
-    DigitalResonator m_R4;
-    DigitalResonator m_R5;
+    DigitalResonator* m_RNP;
+    AntiResonator* m_RNZ;
+    DigitalResonator* m_R1;
+    DigitalResonator* m_R2;
+    DigitalResonator* m_R3;
+    DigitalResonator* m_R4;
+    DigitalResonator* m_R5;
 };
 
 #endif  // MILION_MILIONCASCADEVOCAL_H_

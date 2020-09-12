@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "JuceHeader.h"
+
 class GainProcessor : public AudioProcessor {
  public:
     GainProcessor();

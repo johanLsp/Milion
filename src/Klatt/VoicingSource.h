@@ -5,6 +5,7 @@
 #include "DigitalResonator.h"
 #include "AntiResonator.h"
 #include "GainProcessor.h"
+#include "JuceHeader.h"
 
 class VoicingSource : public AudioProcessor {
  public:
@@ -34,12 +35,12 @@ class VoicingSource : public AudioProcessor {
  private:
     AudioProcessorGraph m_graph;
 
-    ImpulseGenerator m_impulseGenerator;
-    DigitalResonator m_RGP;
-    AntiResonator m_RGZ;
-    DigitalResonator m_RGS;
-    GainProcessor m_AV;
-    GainProcessor m_AVS;
+    ImpulseGenerator* m_impulseGenerator;
+    DigitalResonator* m_RGP;
+    AntiResonator* m_RGZ;
+    DigitalResonator* m_RGS;
+    GainProcessor* m_AV;
+    GainProcessor* m_AVS;
 };
 
 #endif  // MILION_MILIONVOICINGSOURCE_H_

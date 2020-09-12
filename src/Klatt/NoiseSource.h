@@ -3,6 +3,7 @@
 
 #include "RandomGenerator.h"
 #include "DifferenceProcessor.h"
+#include "JuceHeader.h"
 
 class NoiseSource : public AudioProcessor {
  public:
@@ -32,8 +33,8 @@ class NoiseSource : public AudioProcessor {
  private:
     AudioProcessorGraph m_graph;
 
-    RandomGenerator m_randomGenerator;
-    DifferenceProcessor m_LPF;
+    RandomGenerator* m_randomGenerator;
+    DifferenceProcessor* m_LPF;
 };
 
 #endif  // MILION_MILIONNOISESOURCE_H_

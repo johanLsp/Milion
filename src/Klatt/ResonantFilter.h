@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "JuceHeader.h"
+
 class ResonantFilter : public AudioProcessor {
  public:
     ResonantFilter();

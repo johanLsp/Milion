@@ -1,6 +1,7 @@
 #ifndef MILION_MILIONRANDOMGENERATOR_H_
 #define MILION_MILIONRANDOMGENERATOR_H_
 
+#include "JuceHeader.h"
 
 class RandomGenerator : public AudioProcessor {
  public:
