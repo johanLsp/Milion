@@ -2,6 +2,8 @@
 
 cmake_minimum_required(VERSION 3.4)
 
+project(Milion)
+
 # Ugly, but can't set c++14 with CMAKE_CXX_STANDARD
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
@@ -131,6 +133,13 @@ jucer_project_module(
 )
 
 jucer_project_module(
+  juce_audio_utils
+  PATH ${JUCE_MODULE_PATH}
+  # JUCE_USE_CDREADER
+  # JUCE_USE_CDBURNER
+)
+
+jucer_project_module(
   juce_audio_plugin_client
   PATH ${JUCE_MODULE_PATH}
   # JUCE_FORCE_USE_LEGACY_PARAM_IDS
@@ -144,13 +153,6 @@ jucer_project_module(
   JUCE_PLUGINHOST_VST OFF
   # JUCE_PLUGINHOST_VST3
   JUCE_PLUGINHOST_AU OFF
-)
-
-jucer_project_module(
-  juce_audio_utils
-  PATH ${JUCE_MODULE_PATH}
-  # JUCE_USE_CDREADER
-  # JUCE_USE_CDBURNER
 )
 
 jucer_project_module(
@@ -208,6 +210,7 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/modules/JUCE5)
 add_definitions("-DDROWAUDIO_USE_FFTREAL")
 
 add_definitions("-DJUCE_USE_SIMD=0")
+add_definitions("-DJUCE_ALLOW_STATIC_NULL_VARIABLES=1")
 
 # Declare targets
 
@@ -403,7 +406,7 @@ jucer_export_target(
   # EXTRA_PREPROCESSOR_DEFINITIONS
    EXTRA_COMPILER_FLAGS "-fPIC"
   # EXTRA_LINKER_FLAGS
-  EXTERNAL_LIBRARIES_TO_LINK -lasound
+  EXTERNAL_LIBRARIES_TO_LINK "-lasound -lcurl"
   ICON_SMALL "<None>"
   ICON_LARGE "<None>"
   CXX_STANDARD_TO_USE C++14

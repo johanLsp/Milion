@@ -14,9 +14,8 @@ FMComponent::FMComponent(AudioProcessorValueTreeState* vts)
     waveformList.add("Saw");
     m_waveform.addItemList(waveformList, 1);
     addAndMakeVisible(&m_waveform);
-    m_waveformAttachment = new ComboBoxAttachment(*(m_valueTreeState),
-                                                        "waveform",
-                                                        m_waveform);
+    m_waveformAttachment.reset(
+        new ComboBoxAttachment(*(m_valueTreeState), "waveform", m_waveform));
 
     m_freqLabel.setText("Frequency", dontSendNotification);
     addAndMakeVisible(m_freqLabel);
@@ -24,9 +23,8 @@ FMComponent::FMComponent(AudioProcessorValueTreeState* vts)
     m_frequency.setSkewFactor(0.1);
     m_frequency.setTextBoxStyle(Slider::NoTextBox, true, 50, 20);
     addAndMakeVisible(m_frequency);
-    m_frequencyAttachment = new SliderAttachment(*(m_valueTreeState),
-                                                        "freq_multiplier",
-                                                        m_frequency);
+    m_frequencyAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState), "freq_multiplier", m_frequency));
 }
 
 OperatorComponent::Operator FMComponent::getType() {

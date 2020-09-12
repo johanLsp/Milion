@@ -33,7 +33,7 @@
 #define DROWAUDIO_LOCKEDPOINTER_H
 
 /** Wrapper for a pointer that automatically locks a provided lock whilst the LockedPointer
-    stays in scope. This is similar using a narrowly scoped ScopedPointer.
+    stays in scope. This is similar using a narrowly scoped std::unique_ptr.
 
     @code
         if ((LockedPointer<MyPointerType, SpinLock> pointer (getObject(), getLock()) != nullptr)

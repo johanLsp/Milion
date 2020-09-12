@@ -66,27 +66,16 @@ EnvelopeComponent::EnvelopeComponent()
 
 void EnvelopeComponent::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_valueTreeState = vst;
-
-    if(m_attackAttachment) delete m_attackAttachment;
-    m_attackAttachment = new SliderAttachment(*(m_valueTreeState),
-                        "env_attack",
-                        m_attackSlider);
-    if(m_attackLevelAttachment) delete m_attackLevelAttachment;
-    m_attackLevelAttachment = new SliderAttachment(*(m_valueTreeState),
-                        "env_attackLevel",
-                        m_attackLevelSlider);
-    if(m_decayAttachment) delete m_decayAttachment;
-    m_decayAttachment = new SliderAttachment(*(m_valueTreeState),
-                        "env_decay",
-                        m_decaySlider);
-    if(m_sustainAttachment) delete m_sustainAttachment;
-    m_sustainAttachment = new SliderAttachment(*(m_valueTreeState),
-                        "env_sustain",
-                        m_sustainSlider);
-    if(m_releaseAttachment) delete m_releaseAttachment;
-    m_releaseAttachment = new SliderAttachment(*(m_valueTreeState),
-                        "env_release",
-                        m_releaseSlider);
+    m_attackAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState), "env_attack", m_attackSlider));
+    m_attackLevelAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState), "env_attackLevel", m_attackLevelSlider));
+    m_decayAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState), "env_decay", m_decaySlider));
+    m_sustainAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState), "env_sustain", m_sustainSlider));
+    m_releaseAttachment.reset(
+        new SliderAttachment(*(m_valueTreeState),  "env_release", m_releaseSlider));
 }
 
 void EnvelopeComponent::resized()

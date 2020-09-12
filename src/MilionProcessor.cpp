@@ -1,36 +1,29 @@
 #include "MilionProcessor.h"
+
+#include <memory>
+
 #include "MilionEditor.h"
+
+using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
+using NodeID =  AudioProcessorGraph::NodeID;
 
 MilionProcessor::MilionProcessor()
     : AudioProcessor(BusesProperties()
                         .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
-    
-    //SysexParser parser;
-    //parser.parse("1_0.syx");
-
-    AudioProcessorGraph::AudioGraphIOProcessor* output =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-    m_graph.addNode(output, 1);
+    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioOutputNode), NodeID(1));
 
     for (int i = 0; i < NUM_OPERATOR; i++) {
         m_operators[i] = new OperatorContainer();
-        AudioProcessorValueTreeState* vst = new AudioProcessorValueTreeState(*m_operators[i], nullptr);
+        AudioProcessorValueTreeState* vst = new AudioProcessorValueTreeState(
+            *m_operators[i], nullptr, "PARAMETERS",
+            { std::make_unique<AudioParameterFloat> (
+                  "operator_type", "Operator Type", NormalisableRange<float> (0, 1, 1), 0) });
         m_operators[i]->setValueTreeState(vst);
-
-        vst->createAndAddParameter("operator_type",       // parameter ID
-                                "Operator Type",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0, 1, 1),    // range
-                                0,         // default value
-                                nullptr,
-                                nullptr);
         vst->addParameterListener("operator_type", this);
-        
         vst->state = ValueTree(Identifier("Milion" + std::to_string(i)));
         m_valueTreeStates.add(vst);
-        m_graph.addNode(m_operators[i], i+2);
+        m_graph.addNode(std::unique_ptr<AudioProcessor>(m_operators[i]), NodeID(i+2));
     }
 }
 
@@ -47,9 +40,10 @@ void MilionProcessor::parameterChanged (const String& parameterID, float newValu
     //prepareToPlay(getSampleRate(), getBlockSize());
     suspendProcessing(true);
     for (int i = 0; i < NUM_OPERATOR; i++) {
-        const float* type = m_valueTreeStates[i]->getRawParameterValue("operator_type");
+        std::atomic<float>* type =
+            m_valueTreeStates[i]->getRawParameterValue("operator_type");
         if (!type) return;
-        switch (static_cast<int>(*type)) {
+        switch (static_cast<int>(type->load())) {
             case 0:
                 m_operators[i]->setOperator(OperatorContainer::Operator::FM);
                 break;
@@ -81,11 +75,11 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
 
     for (int i = m_graph.getNumNodes() - 1; i >= 0; i--)
-        m_graph.disconnectNode(i);
+        m_graph.disconnectNode(NodeID(i));
 
     for (unsigned int i = 0; i < NUM_OPERATOR-1; i++)
-        m_graph.addConnection({ {2+i, 0}, {3+i, 0} });
-    m_graph.addConnection({ {NUM_OPERATOR+1, 0}, {1, 0} });
+        m_graph.addConnection({{NodeID(2+i), 0}, {NodeID(3+i), 0}});
+    m_graph.addConnection({{NodeID(NUM_OPERATOR+1), 0}, {NodeID(1), 0}});
 }
 
 void MilionProcessor::releaseResources() {

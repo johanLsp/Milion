@@ -120,11 +120,11 @@ public:
 
 private:
     //==============================================================================
-    ScopedPointer<BufferingAudioSource> bufferingAudioSource;
-    ScopedPointer<LoopingAudioSource> loopingAudioSource;
-    ScopedPointer<SoundTouchAudioSource> soundTouchAudioSource;
-    ScopedPointer<ReversibleAudioSource> reversibleAudioSource;
-    ScopedPointer<FilteringAudioSource> filteringAudioSource;
+    std::unique_ptr<BufferingAudioSource> bufferingAudioSource;
+    std::unique_ptr<LoopingAudioSource> loopingAudioSource;
+    std::unique_ptr<SoundTouchAudioSource> soundTouchAudioSource;
+    std::unique_ptr<ReversibleAudioSource> reversibleAudioSource;
+    std::unique_ptr<FilteringAudioSource> filteringAudioSource;
 
     SoundTouchProcessor::PlaybackSettings currentSoundtouchSettings;
     bool shouldBeLooping;

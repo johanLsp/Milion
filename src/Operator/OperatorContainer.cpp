@@ -24,75 +24,32 @@ void OperatorContainer::setValueTreeState(AudioProcessorValueTreeState* vst) {
     m_operators[0]->setValueTreeState(vst);
     m_operators[1]->setValueTreeState(vst);
 
-    m_valueTreeState->createAndAddParameter("freq_multiplier",       // parameter ID
-                                "Frequency",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (1.0f, 10.0f, 0.01f, 0.5f),    // range
-                                1.0f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "freq_multiplier", "Frequency", NormalisableRange<float> (1.0f, 10.0f, 0.01f, 0.5f), 1.0f));
 
-    m_valueTreeState->createAndAddParameter("env_attack",       // parameter ID
-                                "Envelope attack time",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.01f, 1.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "env_attack", "Envelope attack time", NormalisableRange<float> (0.01f, 1.0f), 0.2f));
 
-    m_valueTreeState->createAndAddParameter("env_attackLevel",       // parameter ID
-                                "Envelope attackLevel time",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.01f, 1.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "env_attackLevel", "Envelope attack level", NormalisableRange<float> (0.01f, 1.0f), 0.2f));
 
-    m_valueTreeState->createAndAddParameter("env_decay",       // parameter ID
-                                "Envelope decay time",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.01f, 1.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "env_decay", "Envelope decay time", NormalisableRange<float> (0.01f, 1.0f), 0.2f));
 
-    m_valueTreeState->createAndAddParameter("env_sustain",       // parameter ID
-                                "Envelope sustain time",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.01f, 1.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "env_sustain", "Envelope sustain time", NormalisableRange<float> (0.01f, 1.0f), 0.2f));
 
-    m_valueTreeState->createAndAddParameter("env_release",       // parameter ID
-                                "Envelope release time",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.01f, 1.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
-    m_valueTreeState->createAndAddParameter("waveform",       // parameter ID
-                                "Waveform selection",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (1, 7),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "env_release", "Envelope release time", NormalisableRange<float> (0.01f, 1.0f), 0.2f));
 
-    m_valueTreeState->createAndAddParameter("bandwidth",       // parameter ID
-                                "Bandwidth",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (0.1f, 50.0f),    // range
-                                1.0f,         // default value
-                                nullptr,
-                                nullptr);
-                                    m_valueTreeState->createAndAddParameter("skirt",       // parameter ID
-                                "Skirt",       // parameter name
-                                String(),     // parameter label (suffix)
-                                NormalisableRange<float> (1.0f, 10.0f),    // range
-                                0.2f,         // default value
-                                nullptr,
-                                nullptr);
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "waveform", "Envelope sustain time", NormalisableRange<float> (1, 7), 1));
+
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "bandwidth", "Bandwidth", NormalisableRange<float> (0.01f, 50.0f), 1.0f));
+
+    m_valueTreeState->createAndAddParameter(std::make_unique<AudioParameterFloat> (
+        "skirt", "Skirt", NormalisableRange<float> (0.01f, 10.0f), 0.2f));
 }
 
 void OperatorContainer::setOperator(Operator op) {

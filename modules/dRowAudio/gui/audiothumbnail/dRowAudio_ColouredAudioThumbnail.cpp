@@ -80,8 +80,8 @@ struct ColouredAudioThumbnail::MinMaxColourValue
 
     inline void setFloat (const float newMin, const float newMax) noexcept
     {
-        minValue = (char) jlimit (-128, 127, roundFloatToInt (newMin * 127.0f));
-        maxValue = (char) jlimit (-128, 127, roundFloatToInt (newMax * 127.0f));
+        minValue = (char) jlimit (-128, 127, roundToInt (newMin * 127.0f));
+        maxValue = (char) jlimit (-128, 127, roundToInt (newMax * 127.0f));
 
         if (maxValue == minValue)
             maxValue = (char) jmin (127, maxValue + 1);
@@ -265,8 +265,8 @@ public:
 
 private:
     ColouredAudioThumbnail& owner;
-    ScopedPointer <InputSource> source;
-    ScopedPointer <AudioFormatReader> reader;
+    std::unique_ptr <InputSource> source;
+    std::unique_ptr <AudioFormatReader> reader;
     CriticalSection readerLock;
     BiquadFilter filterLow, filterLowMid, filterHighMid, filterHigh;
     HeapBlock<int> tempSampleBuffer, tempFilteredBuffer;
@@ -279,7 +279,7 @@ private:
             InputStream* audioFileStream = source->createInputStream();
 
             if (audioFileStream != 0)
-                reader = owner.formatManagerToUse.createReaderFor (audioFileStream);
+                reader.reset(owner.formatManagerToUse.createReaderFor (audioFileStream));
         }
     }
 
@@ -936,7 +936,7 @@ bool ColouredAudioThumbnail::setDataSource (LevelDataSource* newSource)
 
     if (cache.loadThumb (*this, newSource->hashCode) && isFullyLoaded())
     {
-        source = newSource; // (make sure this isn't done before loadThumb is called)
+        source.reset(newSource); // (make sure this isn't done before loadThumb is called)
 
         source->lengthInSamples = totalSamples;
         source->sampleRate = sampleRate;
@@ -945,7 +945,7 @@ bool ColouredAudioThumbnail::setDataSource (LevelDataSource* newSource)
     }
     else
     {
-        source = newSource; // (make sure this isn't done before loadThumb is called)
+        source.reset(newSource); // (make sure this isn't done before loadThumb is called)
 
         const ScopedLock sl (lock);
         source->initialise (numSamplesFinished);
@@ -1091,7 +1091,7 @@ void ColouredAudioThumbnail::drawColouredChannel (Graphics& g, const Rectangle<i
     const ScopedLock sl (lock);
 
     window->drawColouredChannel (g, area, startTime, endTime, channelNum, verticalZoomFactor,
-                                 sampleRate, numChannels, samplesPerThumbSample, source, channels);
+                                 sampleRate, numChannels, samplesPerThumbSample, source.get(), channels);
 }
 
 void ColouredAudioThumbnail::drawChannels (Graphics& g, const Rectangle<int>& area, double startTimeSeconds,

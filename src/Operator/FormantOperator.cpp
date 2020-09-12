@@ -1,5 +1,10 @@
 #include "FormantOperator.h"
 
+#include <memory>
+
+using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
+using NodeID =  AudioProcessorGraph::NodeID;
+
 FormantOperator::FormantOperator() {
 }
 
@@ -12,20 +17,12 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
 
     m_graph.clear();
-    AudioProcessorGraph::AudioGraphIOProcessor* input =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioInputNode);
-
-    AudioProcessorGraph::AudioGraphIOProcessor* output =
-        new AudioProcessorGraph::AudioGraphIOProcessor(
-            AudioProcessorGraph::AudioGraphIOProcessor::audioOutputNode);
-
-    m_graph.addNode(input, 1);
-    m_graph.addNode(output, 2);
+    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioInputNode), NodeID(1));
+    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioOutputNode), NodeID(2));
 
     for (int i = 0; i < 4; i++) {
         m_filters[i] = new ResonantFilter();
-        m_graph.addNode(m_filters[i], i+3);
+        m_graph.addNode(std::unique_ptr<AudioProcessor>(m_filters[i]), NodeID(i+3));
     }
 
     for (unsigned int i = 0; i < 4; i++) {
@@ -34,8 +31,8 @@ void FormantOperator::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-        m_graph.addConnection({ {1, 0}, {i+3, 0} });
-        m_graph.addConnection({ {i+3, 0}, {2, 0} });
+        m_graph.addConnection({ {NodeID(1), 0}, {NodeID(i+3), 0} });
+        m_graph.addConnection({ {NodeID(i+3), 0}, {NodeID(2), 0} });
     }
 
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);

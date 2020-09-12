@@ -7,7 +7,7 @@
 #include "Utils/SysexParser.h"
 #include "JuceHeader.h"
 
-#define NUM_OPERATOR 2
+#define NUM_OPERATOR 4
 typedef Array<AudioProcessorValueTreeState*> ValueTreeStates;
 
 class MilionProcessor  : public AudioProcessor, 

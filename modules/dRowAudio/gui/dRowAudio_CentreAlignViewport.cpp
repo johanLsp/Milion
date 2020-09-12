@@ -70,7 +70,7 @@ void CentreAlignViewport::setViewedComponent (Component* const newViewedComponen
     if (contentComp.getComponent() != newViewedComponent)
     {
         {
-            ScopedPointer<Component> oldCompDeleter (contentComp);
+            std::unique_ptr<Component> oldCompDeleter (contentComp);
             contentComp = 0;
         }
 

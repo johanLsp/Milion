@@ -73,7 +73,7 @@ public:
     {
         switch (type)
         {
-            case xmlType:       return getStringFromXml (objectXml, true);
+            case xmlType:       return getStringFromXml (objectXml);
             case valueTreeType: return getStringFromValueTree();
             default:            break;
         }
@@ -147,18 +147,18 @@ private:
     ValueTree objectValueTree;
 
     //==============================================================================
-    static String getStringFromXml (const XmlElement* xml, bool includeXmlHeader)
+    static String getStringFromXml (const XmlElement* xml)
     {
         if (xml == nullptr)
             return "invalid XmlElement";
 
-        return String (NewLine::getDefault()) + xml->createDocument (String::empty, false, includeXmlHeader);
+        return String (NewLine::getDefault()) + xml->toString();
     }
 
     String getStringFromValueTree() const
     {
-        ScopedPointer<XmlElement> treeAsXml (objectValueTree.createXml());
-        return treeAsXml == nullptr ? "invalid ValueTree" : getStringFromXml (treeAsXml, false);
+        std::unique_ptr<XmlElement> treeAsXml (objectValueTree.createXml());
+        return treeAsXml == nullptr ? "invalid ValueTree" : getStringFromXml (treeAsXml.get());
     }
 
     //==============================================================================

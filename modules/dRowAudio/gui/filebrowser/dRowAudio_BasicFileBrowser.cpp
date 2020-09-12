@@ -65,10 +65,10 @@ BasicFileBrowser::BasicFileBrowser (int flags_,
         filename = initialFileOrDirectory.getFileName();
     }
 
-    fileList = new DirectoryContentsList (this, thread);
+    fileList.reset(new DirectoryContentsList (this, thread));
 
     FileListComponent* const list = new FileListComponent (*fileList);
-    fileListComponent = list;
+    fileListComponent.reset(list);
     list->setOutlineThickness (0);
     list->getViewport()->setScrollBarThickness (10);
     list->setRowHeight (18);
@@ -81,8 +81,8 @@ BasicFileBrowser::BasicFileBrowser (int flags_,
     fileListComponent->addListener (this);
     list->getViewport()->getVerticalScrollBar().setAutoHide (false);
 
-    resizer = new ResizableCornerComponent (this, &resizeLimits);
-    addAndMakeVisible (resizer);
+    resizer.reset(new ResizableCornerComponent (this, &resizeLimits));
+    addAndMakeVisible (resizer.get());
     resizer->setMouseCursor (MouseCursor::LeftRightResizeCursor);
 
     setRoot (currentRoot);
@@ -93,7 +93,7 @@ BasicFileBrowser::BasicFileBrowser (int flags_,
 BasicFileBrowser::~BasicFileBrowser()
 {
     fileListComponent = nullptr;
-    fileList = nullptr;
+    fileList.reset();
 
     thread.stopThread (10000);
 }
@@ -243,7 +243,7 @@ int BasicFileBrowser::getLongestWidth()
 
 DirectoryContentsDisplayComponent* BasicFileBrowser::getDisplayComponent() const noexcept
 {
-    return fileListComponent;
+    return fileListComponent.get();
 }
 
 //==============================================================================

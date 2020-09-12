@@ -172,8 +172,8 @@ private:
     Atomic<float> progress;
 
     File localFile;
-    ScopedPointer<FileOutputStream> outputStream;
-    ScopedPointer<InputStream> inputStream;
+    std::unique_ptr<FileOutputStream> outputStream;
+    std::unique_ptr<InputStream> inputStream;
     MemoryBlock directoryContentsList;
 
     CriticalSection transferLock;

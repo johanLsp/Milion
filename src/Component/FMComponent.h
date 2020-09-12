@@ -17,9 +17,9 @@ class FMComponent : public OperatorComponent {
  private:
     AudioProcessorValueTreeState* m_valueTreeState;
     ComboBox m_waveform;
-    ScopedPointer<ComboBoxAttachment> m_waveformAttachment;
+    std::unique_ptr<ComboBoxAttachment> m_waveformAttachment;
     Slider m_frequency;
-    ScopedPointer<SliderAttachment> m_frequencyAttachment;
+    std::unique_ptr<SliderAttachment> m_frequencyAttachment;
     Label m_freqLabel;
 };
 

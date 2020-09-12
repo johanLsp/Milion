@@ -25,7 +25,7 @@ class MilionEditor  : public AudioProcessorEditor,
     MidiKeyboardComponent m_midiKeyboard;
 
     TabbedComponent m_tabLayout;
-    ScopedPointer<ComponentContainer> m_containers[NUM_OPERATOR];
+    std::unique_ptr<ComponentContainer> m_containers[NUM_OPERATOR];
     
     ValueTreeStates& m_valueTreeStates;
 

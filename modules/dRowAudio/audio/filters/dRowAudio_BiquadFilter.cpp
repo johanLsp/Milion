@@ -29,10 +29,12 @@
   ==============================================================================
 */
 
-#if JUCE_INTEL
- #define JUCE_SNAP_TO_ZERO(n)    if (! (n < -1.0e-8 || n > 1.0e-8)) n = 0;
-#else
- #define JUCE_SNAP_TO_ZERO(n)
+#ifndef JUCE_SNAP_TO_ZERO
+ #if JUCE_INTEL
+  #define JUCE_SNAP_TO_ZERO(n)    if (! (n < -1.0e-8 || n > 1.0e-8)) n = 0;
+ #else
+  #define JUCE_SNAP_TO_ZERO(n)
+ #endif
 #endif
 
 //==============================================================================

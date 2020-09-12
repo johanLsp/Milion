@@ -18,12 +18,12 @@ class FormantComponent : public OperatorComponent {
     AudioProcessorValueTreeState* m_valueTreeState;
 
     ComboBox m_waveform;
-    ScopedPointer<ComboBoxAttachment> m_waveformAttachment;
+    std::unique_ptr<ComboBoxAttachment> m_waveformAttachment;
     Slider m_bandwidth;
-    ScopedPointer<SliderAttachment> m_bandwidthAttachment;
+    std::unique_ptr<SliderAttachment> m_bandwidthAttachment;
     Label m_bandwidthLabel;
     Slider m_skirt;
-    ScopedPointer<SliderAttachment> m_skirtAttachment;
+    std::unique_ptr<SliderAttachment> m_skirtAttachment;
     Label m_skirtLabel;
 };
 

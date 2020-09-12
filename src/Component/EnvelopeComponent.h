@@ -138,19 +138,19 @@ private:
 
     AudioProcessorValueTreeState* m_valueTreeState;
     Slider m_attackSlider;
-    ScopedPointer<SliderAttachment> m_attackAttachment;
+    std::unique_ptr<SliderAttachment> m_attackAttachment;
 
     Slider m_attackLevelSlider;
-    ScopedPointer<SliderAttachment> m_attackLevelAttachment;
+    std::unique_ptr<SliderAttachment> m_attackLevelAttachment;
 
     Slider m_decaySlider;
-    ScopedPointer<SliderAttachment> m_decayAttachment; 
+    std::unique_ptr<SliderAttachment> m_decayAttachment;
 
     Slider m_sustainSlider;
-    ScopedPointer<SliderAttachment> m_sustainAttachment;
+    std::unique_ptr<SliderAttachment> m_sustainAttachment;
 
     Slider m_releaseSlider;
-    ScopedPointer<SliderAttachment> m_releaseAttachment;
+    std::unique_ptr<SliderAttachment> m_releaseAttachment;
 
 };
 
