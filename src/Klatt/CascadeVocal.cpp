@@ -3,62 +3,6 @@
 using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
 using NodeID =  AudioProcessorGraph::NodeID;
 
-CascadeVocal::CascadeVocal() {
-}
-
-CascadeVocal::~CascadeVocal() {
-}
-
-const String CascadeVocal::getName() const {
-    return "Voicing Source Processor";
-}
-
-void CascadeVocal::releaseResources() {
-}
-
-double CascadeVocal::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool CascadeVocal::acceptsMidi() const {
-    return false;
-}
-
-bool CascadeVocal::producesMidi() const {
-    return false;
-}
-
-AudioProcessorEditor* CascadeVocal::createEditor() {
-}
-
-bool CascadeVocal::hasEditor() const {
-    return false;
-}
-
-int CascadeVocal::getNumPrograms() {
-    return 1;
-}
-
-int CascadeVocal::getCurrentProgram() {
-    return 0;
-}
-
-void CascadeVocal::setCurrentProgram(int index) {
-}
-
-const String CascadeVocal::getProgramName(int index) {
-    return {};
-}
-
-void CascadeVocal::changeProgramName(int index, const String& newName) {
-}
-
-void CascadeVocal::getStateInformation(MemoryBlock& destData) {
-}
-
-void CascadeVocal::setStateInformation(const void* data, int sizeInBytes) {
-}
-
 void CascadeVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
     m_graph.setPlayConfigDetails(

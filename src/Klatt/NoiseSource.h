@@ -3,31 +3,14 @@
 
 #include "RandomGenerator.h"
 #include "DifferenceProcessor.h"
-#include "JuceHeader.h"
+#include "BaseAudioProcessor.h"
 
-class NoiseSource : public AudioProcessor {
+class NoiseSource : public BaseAudioProcessor {
  public:
-    NoiseSource();
-    ~NoiseSource();
+    NoiseSource() = default;
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    const String getName() const override;
-    void releaseResources() override;
-    double getTailLengthSeconds() const override;
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
-    AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
-
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram(int index) override;
-    const String getProgramName(int index) override;
-    void changeProgramName(int index, const String& newName) override;
-
-    void getStateInformation(MemoryBlock& destData) override;
-    void setStateInformation(const void* data, int sizeInBytes) override;
-
+    const String getName() const override { return "Voicing Source Processor"; }
     void setFrequency(int frequency);
 
  private:

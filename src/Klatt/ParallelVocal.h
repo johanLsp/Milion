@@ -4,30 +4,14 @@
 #include "DifferenceProcessor.h"
 #include "DigitalResonator.h"
 #include "GainProcessor.h"
-#include "JuceHeader.h"
+#include "BaseAudioProcessor.h"
 
-class ParallelVocal : public AudioProcessor {
+class ParallelVocal : public BaseAudioProcessor {
  public:
-    ParallelVocal();
-    ~ParallelVocal();
+    ParallelVocal() = default;
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    const String getName() const override;
-    void releaseResources() override;
-    double getTailLengthSeconds() const override;
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
-    AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
-
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram(int index) override;
-    const String getProgramName(int index) override;
-    void changeProgramName(int index, const String& newName) override;
-
-    void getStateInformation(MemoryBlock& destData) override;
-    void setStateInformation(const void* data, int sizeInBytes) override;
+    const String getName() const override { return "Voicing Source Processor"; };
 
  private:
     AudioProcessorGraph m_graph;

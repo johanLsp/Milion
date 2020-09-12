@@ -1,37 +1,19 @@
 #ifndef MILION_MILIONIMPULSEGENERATOR_H_
 #define MILION_MILIONIMPULSEGENERATOR_H_
 
-#include "JuceHeader.h"
+#include "BaseAudioProcessor.h"
 
-class ImpulseGenerator : public AudioProcessor {
+class ImpulseGenerator : public BaseAudioProcessor {
  public:
-    ImpulseGenerator();
-    ~ImpulseGenerator();
+    const String getName() const override { return "Impulse Generator Processor"; }
+    void setFrequency(int frequency) { m_frequency = frequency; }
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override {}
     void processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) override;
-    const String getName() const override;
-    void releaseResources() override;
-    double getTailLengthSeconds() const override;
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
-    AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
-
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram(int index) override;
-    const String getProgramName(int index) override;
-    void changeProgramName(int index, const String& newName) override;
-
-    void getStateInformation(MemoryBlock& destData) override;
-    void setStateInformation(const void* data, int sizeInBytes) override;
-
-    void setFrequency(int frequency);
 
  private:
-    int m_frequency;
-    uint64_t m_currentTick;
+    int m_frequency = 1000;
+    uint64_t m_currentTick = 0;
 };
 
 #endif  // MILION_MILIONIMPULSEGENERATOR_H_

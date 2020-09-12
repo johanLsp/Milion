@@ -1,61 +1,6 @@
 #include "DigitalResonator.h"
 
-DigitalResonator::DigitalResonator() {
-}
-
-DigitalResonator::~DigitalResonator() {
-}
-
-const String DigitalResonator::getName() const {
-    return "Digital Resonator Processor";
-}
-
-void DigitalResonator::releaseResources() {
-}
-
-double DigitalResonator::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool DigitalResonator::acceptsMidi() const {
-    return false;
-}
-
-bool DigitalResonator::producesMidi() const {
-    return false;
-}
-
-AudioProcessorEditor* DigitalResonator::createEditor() {
-
-}
-
-bool DigitalResonator::hasEditor() const {
-    return false;
-}
-
-int DigitalResonator::getNumPrograms() {
-    return 1;
-}
-
-int DigitalResonator::getCurrentProgram() {
-    return 0;
-}
-
-void DigitalResonator::setCurrentProgram(int index) {
-}
-
-const String DigitalResonator::getProgramName(int index) {
-    return {};
-}
-
-void DigitalResonator::changeProgramName(int index, const String& newName) {
-}
-
-void DigitalResonator::getStateInformation(MemoryBlock& destData) {
-}
-
-void DigitalResonator::setStateInformation(const void* data, int sizeInBytes) {
-}
+#include <cmath>
 
 void DigitalResonator::prepareToPlay(double sampleRate, int samplesPerBlock) {
     setCenterFrequency(1000);

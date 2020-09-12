@@ -3,62 +3,6 @@
 using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
 using NodeID =  AudioProcessorGraph::NodeID;
 
-ParallelVocal::ParallelVocal() {
-}
-
-ParallelVocal::~ParallelVocal() {
-}
-
-const String ParallelVocal::getName() const {
-    return "Voicing Source Processor";
-}
-
-void ParallelVocal::releaseResources() {
-}
-
-double ParallelVocal::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool ParallelVocal::acceptsMidi() const {
-    return false;
-}
-
-bool ParallelVocal::producesMidi() const {
-    return false;
-}
-
-AudioProcessorEditor* ParallelVocal::createEditor() {
-}
-
-bool ParallelVocal::hasEditor() const {
-    return false;
-}
-
-int ParallelVocal::getNumPrograms() {
-    return 1;
-}
-
-int ParallelVocal::getCurrentProgram() {
-    return 0;
-}
-
-void ParallelVocal::setCurrentProgram(int index) {
-}
-
-const String ParallelVocal::getProgramName(int index) {
-    return {};
-}
-
-void ParallelVocal::changeProgramName(int index, const String& newName) {
-}
-
-void ParallelVocal::getStateInformation(MemoryBlock& destData) {
-}
-
-void ParallelVocal::setStateInformation(const void* data, int sizeInBytes) {
-}
-
 void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.setPlayConfigDetails(
         2*getTotalNumInputChannels(),
@@ -299,20 +243,4 @@ void ParallelVocal::prepareToPlay(double sampleRate, int samplesPerBlock) {
 
 void ParallelVocal::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
     m_graph.processBlock(buffer, midiMessages);
-    /*
-    m_pImpulseGenerator->processBlock(buffer);
-    m_pRGP->processBlock(buffer);
-
-    AudioSampleBuffer tmpBuffer(m_RGZBuffer.getArrayOfWritePointers(), buffer.getNumChannels(), buffer.getNumSamples());
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        tmpBuffer.copyFrom(ch, 0, buffer, ch, 0, buffer.getNumSamples());
-
-    m_pRGS->processBlock(buffer);
-    m_pRGZ->processBlock(tmpBuffer);
-
-    buffer.applyGain(m_AVS);
-
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        buffer.addFrom(ch, 0, tmpBuffer, ch, 0, buffer.getNumSamples(), m_AV);
-    */
 }

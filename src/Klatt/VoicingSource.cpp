@@ -3,66 +3,9 @@
 using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
 using NodeID =  AudioProcessorGraph::NodeID;
 
-VoicingSource::VoicingSource() {
-}
-
-VoicingSource::~VoicingSource() {
-}
-
-const String VoicingSource::getName() const {
-    return "Voicing Source Processor";
-}
-
-void VoicingSource::releaseResources() {
-}
-
-double VoicingSource::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool VoicingSource::acceptsMidi() const {
-    return false;
-}
-
-bool VoicingSource::producesMidi() const {
-    return false;
-}
-
-AudioProcessorEditor* VoicingSource::createEditor() {
-}
-
-bool VoicingSource::hasEditor() const {
-    return false;
-}
-
-int VoicingSource::getNumPrograms() {
-    return 1;
-}
-
-int VoicingSource::getCurrentProgram() {
-    return 0;
-}
-
-void VoicingSource::setCurrentProgram(int index) {
-}
-
-const String VoicingSource::getProgramName(int index) {
-    return {};
-}
-
-void VoicingSource::changeProgramName(int index, const String& newName) {
-}
-
-void VoicingSource::getStateInformation(MemoryBlock& destData) {
-}
-
-void VoicingSource::setStateInformation(const void* data, int sizeInBytes) {
-}
-
 void VoicingSource::setFrequency(int frequency) {
     m_impulseGenerator->setFrequency(frequency);
 }
-
 
 void VoicingSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.setPlayConfigDetails(
@@ -124,7 +67,7 @@ void VoicingSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
         getTotalNumOutputChannels(),
         sampleRate,
         samplesPerBlock);
-  
+
     m_RGP->setCenterFrequency(0);
     m_RGP->setBandwidth(100);
 
@@ -164,23 +107,6 @@ void VoicingSource::prepareToPlay(double sampleRate, int samplesPerBlock) {
     m_graph.addConnection({{NodeID(8), 1}, {NodeID(2), 1}});
 }
 
-
 void VoicingSource::processBlock(AudioSampleBuffer &buffer, MidiBuffer &midiMessages) {
     m_graph.processBlock(buffer, midiMessages);
-    /*
-    m_pImpulseGenerator->processBlock(buffer);
-    m_pRGP->processBlock(buffer);
-
-    AudioSampleBuffer tmpBuffer(m_RGZBuffer.getArrayOfWritePointers(), buffer.getNumChannels(), buffer.getNumSamples());
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        tmpBuffer.copyFrom(ch, 0, buffer, ch, 0, buffer.getNumSamples());
-
-    m_pRGS->processBlock(buffer);
-    m_pRGZ->processBlock(tmpBuffer);
-
-    buffer.applyGain(m_AVS);
-
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        buffer.addFrom(ch, 0, tmpBuffer, ch, 0, buffer.getNumSamples(), m_AV);
-    */
 }

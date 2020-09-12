@@ -3,62 +3,6 @@
 using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
 using NodeID =  AudioProcessorGraph::NodeID;
 
-NoiseSource::NoiseSource() {
-}
-
-NoiseSource::~NoiseSource() {
-}
-
-const String NoiseSource::getName() const {
-    return "Voicing Source Processor";
-}
-
-void NoiseSource::releaseResources() {
-}
-
-double NoiseSource::getTailLengthSeconds() const {
-    return 0.0;
-}
-
-bool NoiseSource::acceptsMidi() const {
-    return false;
-}
-
-bool NoiseSource::producesMidi() const {
-    return false;
-}
-
-AudioProcessorEditor* NoiseSource::createEditor() {
-}
-
-bool NoiseSource::hasEditor() const {
-    return false;
-}
-
-int NoiseSource::getNumPrograms() {
-    return 1;
-}
-
-int NoiseSource::getCurrentProgram() {
-    return 0;
-}
-
-void NoiseSource::setCurrentProgram(int index) {
-}
-
-const String NoiseSource::getProgramName(int index) {
-    return {};
-}
-
-void NoiseSource::changeProgramName(int index, const String& newName) {
-}
-
-void NoiseSource::getStateInformation(MemoryBlock& destData) {
-}
-
-void NoiseSource::setStateInformation(const void* data, int sizeInBytes) {
-}
-
 void NoiseSource::setFrequency(int frequency) {
     m_randomGenerator->setFrequency(frequency);
 }
