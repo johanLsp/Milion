@@ -11,27 +11,10 @@ MilionProcessor::MilionProcessor()
     : AudioProcessor(BusesProperties()
                         .withOutput("Output", AudioChannelSet::stereo(), true)
                        ) {
-    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioOutputNode), NodeID(1));
-
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        m_operators[i] = new OperatorContainer();
-        AudioProcessorValueTreeState* vst = new AudioProcessorValueTreeState(
-            *m_operators[i], nullptr, "PARAMETERS",
-            { std::make_unique<AudioParameterFloat> (
-                  "operator_type", "Operator Type", NormalisableRange<float> (0, 1, 1), 0) });
-        m_operators[i]->setValueTreeState(vst);
-        vst->addParameterListener("operator_type", this);
-        vst->state = ValueTree(Identifier("Milion" + std::to_string(i)));
-        m_valueTreeStates.add(vst);
-        m_graph.addNode(std::unique_ptr<AudioProcessor>(m_operators[i]), NodeID(i+2));
-    }
 }
 
 MilionProcessor::~MilionProcessor() {
     m_graph.clear();
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        delete m_valueTreeStates[i];
-    }
 }
 
 void MilionProcessor::parameterChanged (const String& parameterID, float newValue) {
@@ -39,19 +22,7 @@ void MilionProcessor::parameterChanged (const String& parameterID, float newValu
     // It just happens to be the same value, but shouldn't be relied upon
     //prepareToPlay(getSampleRate(), getBlockSize());
     suspendProcessing(true);
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        std::atomic<float>* type =
-            m_valueTreeStates[i]->getRawParameterValue("operator_type");
-        if (!type) return;
-        switch (static_cast<int>(type->load())) {
-            case 0:
-                m_operators[i]->setOperator(OperatorContainer::Operator::FM);
-                break;
-            case 1:
-                m_operators[i]->setOperator(OperatorContainer::Operator::Formant);
-                break;
-        }
-    }
+    // Update parameters - nothing to do here.
     suspendProcessing(false);
 }
 
@@ -63,23 +34,117 @@ void MilionProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
         samplesPerBlock);
     m_graph.setProcessingPrecision(AudioProcessor::singlePrecision);
 
-
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        m_operators[i]->setOperator(OperatorContainer::Operator::FM);
-        m_operators[i]->setPlayConfigDetails(
-            getTotalNumOutputChannels(),
-            getTotalNumOutputChannels(),
-            sampleRate,
-            samplesPerBlock);
-    }
     m_graph.prepareToPlay(sampleRate, samplesPerBlock);
 
-    for (int i = m_graph.getNumNodes() - 1; i >= 0; i--)
-        m_graph.disconnectNode(NodeID(i));
+ // Add input and output nodes.
+    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioInputNode), NodeID(1));
+    m_graph.addNode(std::make_unique<AudioGraphIOProcessor>(AudioGraphIOProcessor::audioOutputNode), NodeID(2));
 
-    for (unsigned int i = 0; i < NUM_OPERATOR-1; i++)
-        m_graph.addConnection({{NodeID(2+i), 0}, {NodeID(3+i), 0}});
-    m_graph.addConnection({{NodeID(NUM_OPERATOR+1), 0}, {NodeID(1), 0}});
+    // Add the different stages of the Klatt synthesizer.
+    m_voicingSource = new VoicingSource();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_voicingSource), NodeID(3));
+
+    m_noiseSource = new NoiseSource();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_noiseSource), NodeID(4));
+
+    m_cascadeVocal = new CascadeVocal();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_cascadeVocal), NodeID(5));
+
+    m_parallelVocal = new ParallelVocal();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_parallelVocal), NodeID(6));
+
+    m_AH = new GainProcessor();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_AH), NodeID(7));
+
+    m_AF = new GainProcessor();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_AF), NodeID(8));
+
+    m_DIFF = new DifferenceProcessor();
+    m_graph.addNode(std::unique_ptr<AudioProcessor>(m_DIFF), NodeID(9));
+
+
+    m_voicingSource->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_noiseSource->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_cascadeVocal->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_parallelVocal->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_AH->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_AF->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    m_DIFF->setPlayConfigDetails(
+        getTotalNumOutputChannels(),
+        getTotalNumOutputChannels(),
+        sampleRate,
+        samplesPerBlock);
+
+    // Connect stages together. Connect channel 0 & 1 (stereo).
+    // Input -> VoicingSource
+    m_graph.addConnection({{NodeID(1), 0}, {NodeID(3), 0}});
+    m_graph.addConnection({{NodeID(1), 1}, {NodeID(3), 1}});
+    // Input -> NoiseSource
+    m_graph.addConnection({{NodeID(1), 0}, {NodeID(4), 0}});
+    m_graph.addConnection({{NodeID(1), 1}, {NodeID(4), 1}});
+
+    // NoiseSource -> AH
+    m_graph.addConnection({{NodeID(4), 0}, {NodeID(7), 0}});
+    m_graph.addConnection({{NodeID(4), 1}, {NodeID(7), 1}});
+    // NoiseSource -> AF
+    m_graph.addConnection({{NodeID(4), 0}, {NodeID(8), 0}});
+    m_graph.addConnection({{NodeID(4), 1}, {NodeID(8), 1}});
+
+    // AH -> CascadeVocal
+    //m_graph.addConnection({{NodeID(7), 0}, {NodeID(5), 0}});
+    //m_graph.addConnection({{NodeID(7), 1}, {NodeID(5), 1}});
+    // AF -> ParallelVocal 2-3
+    m_graph.addConnection({{NodeID(8), 0}, {NodeID(6), 2}});
+    m_graph.addConnection({{NodeID(8), 1}, {NodeID(6), 3}});
+
+    // CascadeVocal -> Output
+    //m_graph.addConnection({{NodeID(5), 0}, {NodeID(2), 0}});
+    //m_graph.addConnection({{NodeID(5), 1}, {NodeID(2), 1}});
+
+    // ParallelVocal -> Output
+    //m_graph.addConnection({{NodeID(6), 0}, {NodeID(2), 0}});
+    //m_graph.addConnection({{NodeID(6), 1}, {NodeID(2), 1}});
+
+    // VoicingSource -> CascadeVocal
+    //m_graph.addConnection({{NodeID(3), 0}, {NodeID(5), 0}});
+    //m_graph.addConnection({{NodeID(3), 1}, {NodeID(5), 1}});
+    // VoicingSource -> ParallelVocal 0-1
+    //m_graph.addConnection({{NodeID(3), 0}, {NodeID(6), 0}});
+    //m_graph.addConnection({{NodeID(3), 1}, {NodeID(6), 1}});
+
+    // VoicingSource -> Output
+    m_graph.addConnection({{NodeID(3), 0}, {NodeID(2), 0}});
+    m_graph.addConnection({{NodeID(3), 1}, {NodeID(2), 1}});
 }
 
 void MilionProcessor::releaseResources() {
@@ -121,13 +186,8 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter() {
 }
 
 void MilionProcessor::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        m_operators[i]->handleNoteOn(midiChannel, midiNoteNumber, velocity);
-    }
+  m_voicingSource->setFrequency(MidiMessage::getMidiNoteInHertz(midiNoteNumber));
 }
 
 void MilionProcessor::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) {
-    for (int i = 0; i < NUM_OPERATOR; i++) {
-        m_operators[i]->handleNoteOff(midiChannel, midiNoteNumber, velocity);
-    }
 }

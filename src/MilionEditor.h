@@ -24,9 +24,6 @@ class MilionEditor  : public AudioProcessorEditor,
     MidiKeyboardState m_keyboardState;
     MidiKeyboardComponent m_midiKeyboard;
 
-    TabbedComponent m_tabLayout;
-    std::unique_ptr<ComponentContainer> m_containers[NUM_OPERATOR];
-    
     ValueTreeStates& m_valueTreeStates;
 
     drow::Spectroscope m_spectroscope;

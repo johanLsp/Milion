@@ -1,10 +1,13 @@
 #ifndef MILION_MILIONPROCESSOR_H_
 #define MILION_MILIONPROCESSOR_H_
 
+#include "Klatt/VoicingSource.h"
+#include "Klatt/NoiseSource.h"
+#include "Klatt/CascadeVocal.h"
+#include "Klatt/ParallelVocal.h"
+#include "Klatt/GainProcessor.h"
+#include "Klatt/DifferenceProcessor.h"
 // This should be included at least once somewhere in the project
-#include "Operator/FMOperator.h"
-#include "Operator/OperatorContainer.h"
-#include "Utils/SysexParser.h"
 #include "JuceHeader.h"
 
 #define NUM_OPERATOR 4
@@ -46,7 +49,14 @@ class MilionProcessor  : public AudioProcessor,
 
  private:
     AudioProcessorGraph m_graph;
-    OperatorContainer* m_operators[8];
+    VoicingSource* m_voicingSource;
+    NoiseSource* m_noiseSource;
+    CascadeVocal* m_cascadeVocal;
+    ParallelVocal* m_parallelVocal;
+    GainProcessor* m_AH;
+    GainProcessor* m_AF;
+    DifferenceProcessor* m_DIFF;
+
     ValueTreeStates m_valueTreeStates;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MilionProcessor)
